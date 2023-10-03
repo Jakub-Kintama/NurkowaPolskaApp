@@ -1,2 +1,2 @@
 # NurkowaPolskaApp
-Aplikacja mobilna z mapą raków
+Aplikacja mobilna z mapą raków.

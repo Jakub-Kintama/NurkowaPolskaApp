@@ -1,2 +1,3 @@
 # Project exclude paths
 /Mobile/.gradle/
+/NPA_API/.gradle/

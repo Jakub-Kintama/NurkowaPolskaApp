@@ -9,32 +9,32 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("api/markers")
 class GuestMarkersController {
     @GetMapping
-    fun getAllMarkers(): String{
+    fun getAllMarkers(): String {
         return "get all markers"
     }
 
     @GetMapping("/{id}")
-    fun getMarkerById(@PathVariable id:String): String{
+    fun getMarkerById(@PathVariable id: String): String {
         return "get marker by $id"
     }
 
     @GetMapping("/user/{id}")
-    fun getMarkersByUserId(@PathVariable id:String): String{
+    fun getMarkersByUserId(@PathVariable id: String): String {
         return "get markers by user $id"
     }
 
     @GetMapping("/since/{since}")
-    fun getMarkersSinceDate(@PathVariable since:String): String{
+    fun getMarkersSinceDate(@PathVariable since: String): String {
         return "get markers $since date"
     }
 
     @GetMapping("/since/{since}/to/{to}")
-    fun getMarkersSinceDateToDate(@PathVariable since:String, @PathVariable to: String): String{
+    fun getMarkersSinceDateToDate(@PathVariable since: String, @PathVariable to: String): String {
         return "get markers $since date $to date"
     }
 
     @GetMapping("/year/{year}")
-    fun getMarkersFromYear(@PathVariable year: String): String{
+    fun getMarkersFromYear(@PathVariable year: String): String {
         return "get markers by $year"
     }
 }

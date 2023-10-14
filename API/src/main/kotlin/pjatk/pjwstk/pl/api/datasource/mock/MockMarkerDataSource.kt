@@ -3,13 +3,13 @@ package pjatk.pjwstk.pl.api.datasource.mock
 import org.springframework.stereotype.Repository
 import pjatk.pjwstk.pl.api.datasource.MarkerDataSource
 import pjatk.pjwstk.pl.api.enums.CrayfishType
-import pjatk.pjwstk.pl.api.model.Marker
 import pjatk.pjwstk.pl.api.model.LatLng
 import pjatk.pjwstk.pl.api.model.MapMarker
+import pjatk.pjwstk.pl.api.model.Marker
 import java.util.*
 
 @Repository
-class MockMarkerDataSource: MarkerDataSource {
+class MockMarkerDataSource : MarkerDataSource {
 
     val markers = listOf(
         Marker(MapMarker(1, LatLng(1.1, 1.1), "title 1", "description 1"), 1, CrayfishType.NOBLE, Date(), true),

@@ -1,4 +1,4 @@
-package pjatk.pjwstk.pl.api.controllers.Guest
+package pjatk.pjwstk.pl.api.controllers.guest
 
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

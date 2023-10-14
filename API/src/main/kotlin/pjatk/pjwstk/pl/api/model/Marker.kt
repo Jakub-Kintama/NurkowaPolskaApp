@@ -1,8 +1,12 @@
 package pjatk.pjwstk.pl.api.model
 
-import javax.xml.stream.Location
+import pjatk.pjwstk.pl.api.enums.CrayfishType
+import java.util.*
 
 data class Marker(
-    val location: Location,
-    val title: String,
+    val mapMarker: MapMarker,
+    val userId: Int,
+    val crayfishType: CrayfishType,
+    val date: Date,
+    val verified: Boolean
 )

@@ -1,0 +1,33 @@
+package pjatk.pjwstk.pl.api.datasource.mock
+
+import org.junit.jupiter.api.Test
+import org.assertj.core.api.Assertions.*
+import pjatk.pjwstk.pl.api.enums.CrayfishType
+
+class MockMarkerDataSourceTest {
+
+    private val mockDataSource = MockMarkerDataSource()
+
+    @Test
+    fun `should provide a collection of markers`() {
+        // when
+        val markers = mockDataSource.retrieveMarkers()
+
+        // then
+        assertThat(markers).isNotEmpty
+        assertThat(markers.size).isGreaterThanOrEqualTo(3)
+    }
+
+    @Test
+    fun `should provide some mock data`() {
+        // when
+        val markers = mockDataSource.retrieveMarkers()
+
+        // then
+        assertThat(markers).allMatch { it.mapMarker.id != 0}
+        assertThat(markers).allMatch { it.mapMarker.title.isNotBlank() }
+        assertThat(markers).allMatch { it.mapMarker.description.isNotBlank() }
+        assertThat(markers).allMatch { it.userId != 0 }
+        assertThat(markers).allMatch { it.crayfishType != CrayfishType.UNVERIFIED }
+    }
+}

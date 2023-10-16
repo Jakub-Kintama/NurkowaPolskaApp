@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import pjatk.pjwstk.pl.api.model.Marker
 import pjatk.pjwstk.pl.api.service.MarkerService
+import java.time.LocalDate
 
 @RestController
 @RequestMapping("api/markers")
@@ -21,22 +22,15 @@ class MarkersController(private val service: MarkerService) {
     fun getMarkerById(@PathVariable markerId: Int): Marker = service.getMarkerById(markerId)
 
     @GetMapping("/user/{userId}")
-    fun getMarkersByUserId(@PathVariable userId: String): String {
-        return "get markers by user $userId"
-    }
+    fun getMarkersByUserId(@PathVariable userId: Int): Collection<Marker> = service.getMarkersByUserId(userId)
 
     @GetMapping("/since/{since}")
-    fun getMarkersSinceDate(@PathVariable since: String): String {
-        return "get markers $since date"
-    }
+    fun getMarkersSinceDate(@PathVariable since: LocalDate): Collection<Marker> = service.getMarkersSinceDate(since)
 
     @GetMapping("/since/{since}/to/{to}")
-    fun getMarkersSinceDateToDate(@PathVariable since: String, @PathVariable to: String): String {
-        return "get markers $since date $to date"
-    }
+    fun getMarkersSinceDateToDate(@PathVariable since: LocalDate, @PathVariable to: LocalDate): Collection<Marker> =
+        service.getMarkersSinceDateToDate(since, to)
 
     @GetMapping("/year/{year}")
-    fun getMarkersFromYear(@PathVariable year: String): String {
-        return "get markers by $year"
-    }
+    fun getMarkersByYear(@PathVariable year: Int): Collection<Marker> = service.getMarkersByYear(year)
 }

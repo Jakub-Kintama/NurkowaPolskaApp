@@ -12,10 +12,13 @@ import java.util.*
 class MockMarkerDataSource : MarkerDataSource {
 
     val markers = listOf(
-        Marker(MapMarker(1, LatLng(1.1, 1.1), "title 1", "description 1"), 1, CrayfishType.NOBLE, Date(), true),
-        Marker(MapMarker(2, LatLng(2.2, 2.2), "title 2", "description 2"), 1, CrayfishType.AMERICAN, Date(), false),
-        Marker(MapMarker(3, LatLng(3.3, 3.3), "title 3", "description 3"), 3, CrayfishType.SIGNAL, Date(), true)
+        Marker(1, MapMarker(LatLng(1.1, 1.1), "title 1", "description 1"), 1, CrayfishType.NOBLE, Date(), true),
+        Marker(2, MapMarker(LatLng(2.2, 2.2), "title 2", "description 2"), 2, CrayfishType.AMERICAN, Date(), false),
+        Marker(3, MapMarker(LatLng(3.3, 3.3), "title 3", "description 3"), 3, CrayfishType.SIGNAL, Date(), true)
     )
 
     override fun retrieveMarkers(): Collection<Marker> = markers
+    override fun retrieveMarkerById(markerId: Int): Marker =
+        markers.firstOrNull { it.id == markerId }
+            ?: throw NoSuchElementException("Could not find a marker with id $markerId")    //TODO(temporary)
 }

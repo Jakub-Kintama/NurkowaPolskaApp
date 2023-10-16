@@ -7,4 +7,7 @@ import pjatk.pjwstk.pl.api.model.Marker
 @Service
 class MarkerService(private val dataSource: MarkerDataSource) {
     fun getMarkers(): Collection<Marker> = dataSource.retrieveMarkers()
+
+    fun getMarkerById(markerId: Int): Marker = dataSource.retrieveMarkerById(markerId)
+
 }

@@ -4,6 +4,7 @@ import pjatk.pjwstk.pl.api.enums.CrayfishType
 import java.util.*
 
 data class Marker(
+    val id: Int,
     val mapMarker: MapMarker,
     val userId: Int,
     val crayfishType: CrayfishType,

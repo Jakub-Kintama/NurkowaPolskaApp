@@ -1,4 +1,4 @@
-package pjatk.pjwstk.pl.api.controllers.admin
+package pjatk.pjwstk.pl.api.controllers
 
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping

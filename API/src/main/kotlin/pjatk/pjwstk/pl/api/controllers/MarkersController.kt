@@ -1,26 +1,28 @@
-package pjatk.pjwstk.pl.api.controllers.guest
+package pjatk.pjwstk.pl.api.controllers
 
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
 import pjatk.pjwstk.pl.api.model.Marker
 import pjatk.pjwstk.pl.api.service.MarkerService
 
 @RestController
 @RequestMapping("api/markers")
-class GuestMarkersController(private val service: MarkerService) {
+class MarkersController(private val service: MarkerService) {
+
+    @ExceptionHandler(NoSuchElementException::class)
+    fun handleNotFound(e: NoSuchElementException): ResponseEntity<String> =
+        ResponseEntity(e.message, HttpStatus.NOT_FOUND)
+
     @GetMapping
     fun getMarkers(): Collection<Marker> = service.getMarkers()
 
-    @GetMapping("/{id}")
-    fun getMarkerById(@PathVariable id: String): String {
-        return "get marker by $id"
-    }
+    @GetMapping("/{markerId}")
+    fun getMarkerById(@PathVariable markerId: Int): Marker = service.getMarkerById(markerId)
 
-    @GetMapping("/user/{id}")
-    fun getMarkersByUserId(@PathVariable id: String): String {
-        return "get markers by user $id"
+    @GetMapping("/user/{userId}")
+    fun getMarkersByUserId(@PathVariable userId: String): String {
+        return "get markers by user $userId"
     }
 
     @GetMapping("/since/{since}")

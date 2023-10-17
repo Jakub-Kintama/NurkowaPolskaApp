@@ -34,6 +34,9 @@ internal class MarkersControllerTest(
                 .andExpect {
                     status { isOk() }
                     content { contentType(MediaType.APPLICATION_JSON) }
+                    jsonPath("$[0].id") { value(1) }
+                    jsonPath("$[1].id") { value(2) }
+                    jsonPath("$[2].id") { value(3) }
                     jsonPath("$[0].mapMarker.position.lat") { value(1.1) }
                 }
         }

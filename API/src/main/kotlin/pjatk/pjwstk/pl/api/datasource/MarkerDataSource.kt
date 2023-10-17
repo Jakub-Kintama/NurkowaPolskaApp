@@ -13,4 +13,5 @@ interface MarkerDataSource {
     fun retrieveMarkersSinceDateToDate(since: LocalDate, to: LocalDate): Collection<Marker>
     fun retrieveMarkersByYear(year: Int): Collection<Marker>
     fun createMarker(marker: Marker): Marker
+    fun updateMarker(marker: Marker): Marker
 }

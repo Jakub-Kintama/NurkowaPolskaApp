@@ -10,6 +10,10 @@ import pjatk.pjwstk.pl.api.service.AdminMarkerService
 @RequestMapping("api/marker")
 class AdminMarkersController(private val service: AdminMarkerService) {
 
+    @ExceptionHandler(NoSuchElementException::class)
+    fun handleNotFound(e: NoSuchElementException): ResponseEntity<String> =
+        ResponseEntity(e.message, HttpStatus.NOT_FOUND)
+
     @ExceptionHandler(IllegalArgumentException::class)
     fun handleBadRequest(e: IllegalArgumentException): ResponseEntity<String> =
         ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
@@ -17,4 +21,7 @@ class AdminMarkersController(private val service: AdminMarkerService) {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun addMarker(@RequestBody marker: Marker): Marker = service.addMarker(marker)
+
+    @PatchMapping
+    fun updateMarker(@RequestBody marker: Marker): Marker = service.updateMarker(marker)
 }

@@ -6,7 +6,6 @@ import pjatk.pjwstk.pl.api.enums.CrayfishType
 import pjatk.pjwstk.pl.api.model.LatLng
 import pjatk.pjwstk.pl.api.model.MapMarker
 import pjatk.pjwstk.pl.api.model.Marker
-import java.lang.IllegalArgumentException
 import java.time.LocalDate
 
 @Repository
@@ -59,10 +58,20 @@ class MockMarkerDataSource : MarkerDataSource {
 
     override fun retrieveMarkersByYear(year: Int): Collection<Marker> = markers.filter { it.date.year == year }
     override fun createMarker(marker: Marker): Marker {
-        if (markers.any { it.id == marker.id }){
+        if (markers.any { it.id == marker.id }) {
             throw IllegalArgumentException("Marker with id ${marker.id} already exists.")
         }
         markers.add(marker)
+        return marker
+    }
+
+    override fun updateMarker(marker: Marker): Marker {
+        val currentMarker = markers.firstOrNull { it.id == marker.id }
+            ?: throw NoSuchElementException("Could not find a marker with id ${marker.id}.")
+
+        markers.remove(currentMarker)
+        markers.add(marker)
+
         return marker
     }
 }

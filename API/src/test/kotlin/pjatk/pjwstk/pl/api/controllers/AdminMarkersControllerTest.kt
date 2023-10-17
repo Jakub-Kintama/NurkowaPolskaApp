@@ -5,11 +5,14 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.TestInstance.Lifecycle
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.patch
 import org.springframework.test.web.servlet.post
 import pjatk.pjwstk.pl.api.enums.CrayfishType
 import pjatk.pjwstk.pl.api.model.LatLng
@@ -28,7 +31,7 @@ internal class AdminMarkersControllerTest @Autowired constructor(
 
     @Nested
     @DisplayName("POST /api/marker")
-    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @TestInstance(Lifecycle.PER_CLASS)
     inner class AddMarker {
 
         @Test
@@ -51,23 +54,21 @@ internal class AdminMarkersControllerTest @Autowired constructor(
 
             // then
             performPost
+                .andDo { print() }
                 .andExpect {
                     status { isCreated() }
-                    content { contentType(MediaType.APPLICATION_JSON) }
-                    jsonPath("$.id") { value(newMarker.id) }
-                    jsonPath("$.mapMarker.position.lat") { value(newMarker.mapMarker.position.lat) }
-                    jsonPath("$.mapMarker.position.lng") { value(newMarker.mapMarker.position.lng) }
-                    jsonPath("$.mapMarker.title") { value(newMarker.mapMarker.title) }
-                    jsonPath("$.mapMarker.description") { value(newMarker.mapMarker.description) }
-                    jsonPath("$.userId") { value(newMarker.userId) }
-                    jsonPath("$.crayfishType") { value(newMarker.crayfishType.toString()) }
-                    jsonPath("$.date") { value(newMarker.date.toString()) }
-                    jsonPath("$.verified") { value(newMarker.verified) }
+                    content {
+                        contentType(MediaType.APPLICATION_JSON)
+                        json(objectMapper.writeValueAsString(newMarker))
+                    }
                 }
+
+            mockMvc.get("/api/markers/${newMarker.id}")
+                .andExpect { content { json(objectMapper.writeValueAsString(newMarker)) } }
         }
 
         @Test
-        fun `should return BAD REQUEST marker with given id already exist`(){
+        fun `should return BAD REQUEST if marker with given id already exist`() {
             // given
             val invalidMarker = Marker(
                 1,
@@ -75,7 +76,7 @@ internal class AdminMarkersControllerTest @Autowired constructor(
                 1,
                 CrayfishType.SIGNAL,
                 LocalDate.now(),
-                false
+                true
             )
 
             // when
@@ -88,6 +89,68 @@ internal class AdminMarkersControllerTest @Autowired constructor(
             performPost
                 .andDo { print() }
                 .andExpect { status { isBadRequest() } }
+        }
+    }
+
+    @Nested
+    @DisplayName("PATCH /api/marker")
+    @TestInstance(Lifecycle.PER_CLASS)
+    inner class PatchExistingMarker {
+        @Test
+        fun `should update existing marker`() {
+            // given
+            val updatedMarker = Marker(
+                2,
+                MapMarker(LatLng(2.2, 2.2), "title 2", "description 2"),
+                2,
+                CrayfishType.AMERICAN,
+                LocalDate.parse("2023-10-13"),
+                true
+            )
+
+            // when
+            val performPatch = mockMvc.patch(baseUrl) {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(updatedMarker)
+            }
+
+            // then
+            performPatch
+                .andDo { print() }
+                .andExpect {
+                    status { isOk() }
+                    content {
+                        contentType(MediaType.APPLICATION_JSON)
+                        json(objectMapper.writeValueAsString(updatedMarker))
+                    }
+                }
+
+            mockMvc.get("/api/markers/${updatedMarker.id}")
+                .andExpect { content { json(objectMapper.writeValueAsString(updatedMarker)) } }
+        }
+
+        @Test
+        fun `should return BAD REQUEST if marker with given id does not exist`() {
+            // given
+            val invalidMarker = Marker(
+                0,
+                MapMarker(LatLng(2.2, 2.2), "title 2", "description 2"),
+                2,
+                CrayfishType.AMERICAN,
+                LocalDate.parse("2023-10-13"),
+                true
+            )
+
+            // when
+            val performPatch = mockMvc.patch(baseUrl) {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(invalidMarker)
+            }
+
+            // then
+            performPatch
+                .andDo { print() }
+                .andExpect { status { isNotFound() } }
         }
     }
 }

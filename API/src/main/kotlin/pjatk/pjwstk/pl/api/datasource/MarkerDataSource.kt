@@ -14,4 +14,5 @@ interface MarkerDataSource {
     fun retrieveMarkersByYear(year: Int): Collection<Marker>
     fun createMarker(marker: Marker): Marker
     fun updateMarker(marker: Marker): Marker
+    fun deleteMarker(markerId: Int)
 }

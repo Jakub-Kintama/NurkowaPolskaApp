@@ -74,4 +74,11 @@ class MockMarkerDataSource : MarkerDataSource {
 
         return marker
     }
+
+    override fun deleteMarker(markerId: Int) {
+        val currentMarker = markers.firstOrNull { it.id == markerId }
+            ?: throw NoSuchElementException("Could not find a marker with id ${markerId}.")
+
+        markers.remove(currentMarker)
+    }
 }

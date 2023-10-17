@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.get
-import org.springframework.test.web.servlet.patch
-import org.springframework.test.web.servlet.post
+import org.springframework.test.web.servlet.*
 import pjatk.pjwstk.pl.api.enums.CrayfishType
 import pjatk.pjwstk.pl.api.model.LatLng
 import pjatk.pjwstk.pl.api.model.MapMarker
@@ -151,6 +148,40 @@ internal class AdminMarkersControllerTest @Autowired constructor(
             performPatch
                 .andDo { print() }
                 .andExpect { status { isNotFound() } }
+        }
+    }
+
+    @Nested
+    @DisplayName("PATCH /api/marker/{markerId}")
+    @TestInstance(Lifecycle.PER_CLASS)
+    inner class deleteExistingMarker {
+        @Test
+        fun `should delete marker with given id`() {
+            // given
+            val markerId = 3
+
+            // when/then
+            mockMvc.delete("$baseUrl/$markerId")
+                .andDo { print() }
+                .andExpect {
+                    status { isNoContent() }
+                }
+
+            mockMvc.get("/api/markers/${markerId}")
+                .andExpect { status { isNotFound() } }
+        }
+
+        @Test
+        fun `should return NOT FOUND if marker with given id does not exist`() {
+            // given
+            val invalidMarkerId = 0
+
+            // when/then
+            mockMvc.delete("$baseUrl/$invalidMarkerId")
+                .andDo { print() }
+                .andExpect {
+                    status { isNotFound() }
+                }
         }
     }
 }

@@ -24,4 +24,8 @@ class AdminMarkersController(private val service: AdminMarkerService) {
 
     @PatchMapping
     fun updateMarker(@RequestBody marker: Marker): Marker = service.updateMarker(marker)
+
+    @DeleteMapping("/{markerId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteMarker(@PathVariable markerId: Int): Unit = service.deleteMarker(markerId)
 }

@@ -15,17 +15,16 @@ import org.springframework.test.web.servlet.get
 
 @SpringBootTest
 @AutoConfigureMockMvc
-internal class MarkersControllerTest {
-
-    @Autowired
-    lateinit var mockMvc: MockMvc
+internal class MarkersControllerTest(
+    @Autowired val mockMvc: MockMvc
+) {
 
     val baseUrl = "/api/markers"
 
     @Nested
-    @DisplayName("getMarkers()")
+    @DisplayName("GET /api/markers")
     @TestInstance(Lifecycle.PER_CLASS)
-    inner class GetBanks {
+    inner class GetMarkers {
 
         @Test
         fun `should return all markers`() {
@@ -42,7 +41,7 @@ internal class MarkersControllerTest {
     }
 
     @Nested
-    @DisplayName("getMarkerById()")
+    @DisplayName("GET /api/markers/{markerId}")
     @TestInstance(Lifecycle.PER_CLASS)
     inner class GetMarkerById {
 
@@ -75,7 +74,7 @@ internal class MarkersControllerTest {
     }
 
     @Nested
-    @DisplayName("getMarkerByUserId()")
+    @DisplayName("GET /api/markers/user/{userId}")
     @TestInstance(Lifecycle.PER_CLASS)
     inner class GetMarkerByUserId {
         @Test
@@ -95,7 +94,7 @@ internal class MarkersControllerTest {
     }
 
     @Nested
-    @DisplayName("getMarkersSinceDate()")
+    @DisplayName("GET /api/markers/since/{since}")
     @TestInstance(Lifecycle.PER_CLASS)
     inner class GetMarkersSinceDate {
         @Test
@@ -115,7 +114,7 @@ internal class MarkersControllerTest {
     }
 
     @Nested
-    @DisplayName("getMarkersSinceDateToDate()")
+    @DisplayName("GET /api/markers/since/{since}/to/{to}")
     @TestInstance(Lifecycle.PER_CLASS)
     inner class GetMarkersSinceDateToDate {
         @Test
@@ -130,17 +129,26 @@ internal class MarkersControllerTest {
                 .andExpect {
                     status { isOk() }
                     content { contentType(MediaType.APPLICATION_JSON) }
-                    jsonPath("$[*].date") { value(Matchers.everyItem(Matchers.allOf(Matchers.greaterThanOrEqualTo(since), Matchers.lessThanOrEqualTo(to)))) }
+                    jsonPath("$[*].date") {
+                        value(
+                            Matchers.everyItem(
+                                Matchers.allOf(
+                                    Matchers.greaterThanOrEqualTo(since),
+                                    Matchers.lessThanOrEqualTo(to)
+                                )
+                            )
+                        )
+                    }
                 }
         }
     }
 
     @Nested
-    @DisplayName("getMarkersFromYear()")
+    @DisplayName("GET /api/markers/year{year}")
     @TestInstance(Lifecycle.PER_CLASS)
     inner class GetMarkersByYear {
         @Test
-        fun `should return markers By given year`(){
+        fun `should return markers By given year`() {
             // given
             val year = "2023"
 

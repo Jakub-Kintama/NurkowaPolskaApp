@@ -11,6 +11,8 @@ class MarkerService(private val dataSource: MarkerDataSource) {
     fun getMarkerById(markerId: Int): Marker = dataSource.retrieveMarkerById(markerId)
     fun getMarkersByUserId(userId: Int): Collection<Marker> = dataSource.retrieveMarkersByUserId(userId)
     fun getMarkersSinceDate(since: LocalDate): Collection<Marker> = dataSource.retrieveMarkersSinceDate(since)
-    fun getMarkersSinceDateToDate(since: LocalDate, to: LocalDate): Collection<Marker> = dataSource.retrieveMarkersSinceDateToDate(since, to)
+    fun getMarkersSinceDateToDate(since: LocalDate, to: LocalDate): Collection<Marker> =
+        dataSource.retrieveMarkersSinceDateToDate(since, to)
+
     fun getMarkersByYear(year: Int): Collection<Marker> = dataSource.retrieveMarkersByYear(year)
 }

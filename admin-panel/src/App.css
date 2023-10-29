@@ -1,26 +1,80 @@
-.topnav {
+button {
+  white-space: nowrap;
+  border: none;
+  background-color: #333;
+  color: white;
+  padding: 7px;
+}
+button:hover {
+  cursor: pointer;
+}
+.App {
+  width: 100%;
+  text-align: center;
+}
+.Topnav {
   display: flex;
   width: 100%;
   height: 50px;
   background-color: #333;
 }
-.topnavButton {
+.TopnavButton {
   height: 100%;
-  white-space: nowrap;
   font-size: 18px;
-  border: none;
-  background-color: #333;
-  color: white;
 }
-.topnavButton:hover {
+.TopnavButton:hover {
   background-color: #4e4e4e;
-  cursor: pointer;
 }
 #homeButton {
   margin-right: auto;
   margin-left: 5px;
 }
 #exportButton {
-  font-size: 18px;
   margin-right: 5px;
+}
+.PanelPart {
+  margin-top: 40px;
+}
+.AdminTable {
+  min-width: 40%;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid;
+  border-collapse: collapse;
+}
+.LogoutButton {
+  float: right;
+  margin-left: auto;
+  margin-right: 5px;
+}
+.AdminTable th,
+td {
+  border: 1px solid;
+  padding: 7px;
+}
+.TableButton {
+  width: 100%;
+  height: 30px;
+}
+.Popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.PopupInner {
+  position: relative;
+  padding: 32px;
+  width: 80%;
+  background-color: white;
+}
+.CloseButton {
+  position: absolute;
+  top: 16px;
+  right: 16px;
 }

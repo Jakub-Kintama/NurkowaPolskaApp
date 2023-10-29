@@ -1,16 +1,22 @@
+import React, {useState, useEffect} from 'react';
 import './App.css';
+import Home from './components/Home'
 
 function App() {
-  return (
-    <div className="App">
-      <div className="topnav">
-        <button className='topnavButton' id='homeButton'>Powrót</button>
-        <button className='topnavButton' id='exportButton'>Eksportuj znaczniki</button>
-      </div>
-      <div className=''>
+  const [data, setData] = useState([]);
 
-      </div>
-    </div>
+  useEffect(() => {
+    fetch('http://localhost:8000/db')
+    .then(res => {
+      return res.json();
+    })
+    .then((data) => {
+      setData(data);
+    })
+  }, []);
+
+  return (
+    <Home/>
   );
 }
 

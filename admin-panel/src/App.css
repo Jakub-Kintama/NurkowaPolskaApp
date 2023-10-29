@@ -1,0 +1,26 @@
+.topnav {
+  display: flex;
+  width: 100%;
+  height: 50px;
+  background-color: #333;
+}
+.topnavButton {
+  height: 100%;
+  white-space: nowrap;
+  font-size: 18px;
+  border: none;
+  background-color: #333;
+  color: white;
+}
+.topnavButton:hover {
+  background-color: #4e4e4e;
+  cursor: pointer;
+}
+#homeButton {
+  margin-right: auto;
+  margin-left: 5px;
+}
+#exportButton {
+  font-size: 18px;
+  margin-right: 5px;
+}

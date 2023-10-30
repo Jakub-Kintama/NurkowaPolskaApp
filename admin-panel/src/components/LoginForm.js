@@ -5,11 +5,9 @@ export default function LoginForm( {setIsAdmin} ) {
         setIsAdmin(true);
     }
     return (
-        <>
         <div className='LoginForm'>
             <p>Aby zobaczyć listę osób uprawnionych musisz się zalogować</p>
             <img onClick={clickHandler} src='/placeholder.png' alt='Zaloguj się poprzez konto Google'></img>
         </div>
-        </>
     );
 }

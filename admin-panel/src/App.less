@@ -8,25 +8,30 @@ button {
     padding: 7px;
 }
 
-button:hover {
-    cursor: pointer;
-}
-
-.App {
-    width: 100%;
-    text-align: center;
-}
-
-.Topnav {
-    display: flex;
-    width: 100%;
-    height: 50px;
-    background-color: @mainColor;
-}
-
 .TopnavButton {
     height: 100%;
     font-size: 18px;
+}
+
+.TableButton {
+    width: 100%;
+    height: 30px;
+}
+
+.CloseButton {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+}
+
+.LogoutButton {
+    position: absolute;
+    top: 66px;
+    right: 16px;
+}
+
+button:hover {
+    cursor: pointer;
 }
 
 .TopnavButton:hover {
@@ -42,11 +47,7 @@ button:hover {
     margin-right: 5px
 }
 
-.PanelPart {
-    margin-top: 40px;
-}
-
-.AdminTable{
+table {
     min-width: 40%;
     margin-left: auto;
     margin-right: auto;
@@ -54,20 +55,25 @@ button:hover {
     border-collapse: collapse;
 }
 
-.LogoutButton {
-    float: right;
-    margin-left: auto;
-    margin-right: 5px;
-}
-
-.AdminTable th,td {
+table th,td {
     border: 1px solid;
     padding: 7px;
 }
 
-.TableButton {
+.App {
     width: 100%;
-    height: 30px;
+    text-align: center;
+}
+
+.Topnav {
+    display: flex;
+    width: 100%;
+    height: 50px;
+    background-color: @mainColor;
+}
+
+.PanelPart {
+    margin-top: 40px;
 }
 
 .Popup {
@@ -90,8 +96,6 @@ button:hover {
     background-color: white;
 }
 
-.CloseButton {
-    position: absolute;
-    top: 16px;
-    right: 16px;
+.ListContainer {
+    display: block;
 }

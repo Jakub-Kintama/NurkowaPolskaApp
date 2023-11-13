@@ -1,12 +1,29 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import LoginForm from "./LoginForm";
 import MarkerList from "./MarkerList";
 import AdminMarkerList from "./AdminMarkerList";
 import AdminList from "./AdminList";
+import axios from 'axios';
 
 export default function Home() {
 
     const [isAdmin, setIsAdmin] = useState(false);
+    const [markers, setMarkers] = useState([]);
+
+    const apiUrl = 'http://localhost:8080/api/markers'
+
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const response = await axios.get(apiUrl);
+    
+            setMarkers(response.data);
+          } catch (error) {
+            console.error('Error while fetching data:', error);
+          }
+        };
+        fetchData();
+      }, []);
     
     return (
         <>

@@ -1,12 +1,13 @@
 package pjatk.pjwstk.pl.api.service
 
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 import pjatk.pjwstk.pl.api.datasource.MarkerDataSource
 import pjatk.pjwstk.pl.api.model.Marker
 import java.time.LocalDate
 
 @Service
-class MarkerService(private val dataSource: MarkerDataSource) {
+class MarkerService(@Qualifier("mock") private val dataSource: MarkerDataSource) {
     fun getMarkers(): Collection<Marker> = dataSource.retrieveMarkers()
     fun getMarkerById(markerId: Int): Marker = dataSource.retrieveMarkerById(markerId)
     fun getMarkersByUserId(userId: Int): Collection<Marker> = dataSource.retrieveMarkersByUserId(userId)

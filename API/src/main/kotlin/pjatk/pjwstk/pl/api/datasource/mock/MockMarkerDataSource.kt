@@ -8,7 +8,7 @@ import pjatk.pjwstk.pl.api.model.MapMarker
 import pjatk.pjwstk.pl.api.model.Marker
 import java.time.LocalDate
 
-@Repository
+@Repository("mock")
 class MockMarkerDataSource : MarkerDataSource {
 
     val markers = mutableListOf(

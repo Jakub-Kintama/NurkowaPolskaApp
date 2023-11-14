@@ -1,4 +1,17 @@
 <resources>
+    <string name="google_map_api_key">AIzaSyA7-QuAh2dbDsNEXcFftMpVDyi0EAUUqpg</string>
+    <string name="your_web_client_id">891152688913-s0vfsqun3gt3s0sa4k39elv4csb0tu96.apps.googleusercontent.com</string>
+    <string name="map_id">"54a125cc0263c7a7"</string>
     <string name="app_name">NurkowaPolskaApp</string>
     <string name="testImage">testImage</string>
+    <string name="username">Użytkownik</string>
+    <string name="username_placeholder">Podaj nazwę użytkownika</string>
+    <string name="password">Hasło</string>
+    <string name="password_placeholder">Podaj hasło użytkownika</string>
+    <string name="reporting_crayfish">Zgłaszanie Raka</string>
+    <string name="first_aid_header">Numery Alarmowe:</string>
+    <string name="title_activity_call_emergency_service">CallEmergencyService</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>

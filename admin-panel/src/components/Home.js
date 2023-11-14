@@ -16,8 +16,9 @@ export default function Home() {
         const fetchData = async () => {
           try {
             const response = await axios.get(apiUrl);
-    
+            console.log(response.data);
             setMarkers(response.data);
+            console.log(typeof markers);
           } catch (error) {
             console.error('Error while fetching data:', error);
           }
@@ -42,7 +43,7 @@ export default function Home() {
                 )}
                 {!isAdmin && (
                     <>
-                    <MarkerList/>
+                    <MarkerList markers={markers}/>
                     <LoginForm setIsAdmin={setIsAdmin}/>
                     </>
                 )}

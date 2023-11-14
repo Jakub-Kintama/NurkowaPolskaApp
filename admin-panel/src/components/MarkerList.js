@@ -1,21 +1,29 @@
 import React from "react";
 
-export default function MarkerList(markers) {
+export default function MarkerList({markers}) {
     return(
     <div className="MarkerList">
         <h2>Lista znaczników:</h2>
         <table className="MarkerTable">
-            <tr>
-                <th>Koordynaty</th>
-                <th>Typ</th>
-                <th>Status</th>
-            </tr>
-            <tr>
-                <td>52°24'04.7"N 16°54'58.6"E</td>
-                <td>Zatwierdzony</td>
-                <td>Rak Amerykański</td>
-                <td><button className="TableButton">Szczegóły</button></td>
-            </tr>
+            <thead>
+                <tr>
+                    <th>Koordynaty</th>
+                    <th>Typ</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {markers.map( (marker) => (
+                    <>
+                    <tr key={marker.id}>
+                        <td>{marker.mapMarker.position.lat}, {marker.mapMarker.position.lng}</td>
+                        <td>{marker.crayfishType}</td>
+                        <td>{marker.verified ? "Zweryfikowany" : "Niezweryfikowany" }</td>
+                        <td><button className="TableButton">Szczegóły</button></td>
+                    </tr>
+                    </>
+                ))}
+            </tbody>
             
         </table>            
     </div>

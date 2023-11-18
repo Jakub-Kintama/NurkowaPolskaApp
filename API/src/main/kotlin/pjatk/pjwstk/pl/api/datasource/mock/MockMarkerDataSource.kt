@@ -17,7 +17,7 @@ class MockMarkerDataSource : MarkerDataSource {
             MapMarker(LatLng(1.1, 1.1), "title 1", "description 1"),
             1,
             CrayfishType.NOBLE,
-            LocalDate.parse("2023-10-10"),
+            LocalDate.of(2023,10,10),
             true
         ),
         Marker(
@@ -25,7 +25,7 @@ class MockMarkerDataSource : MarkerDataSource {
             MapMarker(LatLng(2.2, 2.2), "title 2", "description 2"),
             2,
             CrayfishType.AMERICAN,
-            LocalDate.parse("2023-10-13"),
+            LocalDate.of(2023,10,13),
             false
         ),
         Marker(
@@ -33,7 +33,7 @@ class MockMarkerDataSource : MarkerDataSource {
             MapMarker(LatLng(3.3, 3.3), "title 3", "description 3"),
             3,
             CrayfishType.SIGNAL,
-            LocalDate.parse("2023-10-16"),
+            LocalDate.of(2023,10,16),
             true
         ),
         Marker(
@@ -41,7 +41,7 @@ class MockMarkerDataSource : MarkerDataSource {
             MapMarker(LatLng(4.4, 4.4), "title 4", "description 4"),
             3,
             CrayfishType.GALICIAN,
-            LocalDate.parse("2023-10-17"),
+            LocalDate.of(2023,10,17),
             true
         )
     )

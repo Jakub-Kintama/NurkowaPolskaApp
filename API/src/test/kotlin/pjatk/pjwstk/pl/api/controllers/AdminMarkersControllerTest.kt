@@ -61,7 +61,7 @@ internal class AdminMarkersControllerTest @Autowired constructor(
                 }
 
             mockMvc.get("/api/markers/${newMarker.id}")
-                .andExpect { content { json(objectMapper.writeValueAsString(newMarker)) } }
+                .andExpect { content { newMarker } }
         }
 
         @Test

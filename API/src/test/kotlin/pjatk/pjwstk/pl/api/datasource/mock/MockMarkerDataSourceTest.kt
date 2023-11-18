@@ -25,9 +25,9 @@ internal class MockMarkerDataSourceTest {
 
         // then
         assertThat(markers).allMatch { it is Marker }
-        assertThat(markers).allMatch { it.id != 0 }
+        assertThat(markers).allMatch { it.id != null }
         assertThat(markers).allMatch { it.mapMarker.title.isNotBlank() }
         assertThat(markers).allMatch { it.mapMarker.description.isNotBlank() }
-        assertThat(markers).allMatch { it.userId != 0 }
+        assertThat(markers).allMatch { it.userEmail != "" }
     }
 }

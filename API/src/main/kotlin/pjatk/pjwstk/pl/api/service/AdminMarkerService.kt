@@ -9,5 +9,5 @@ import pjatk.pjwstk.pl.api.model.Marker
 class AdminMarkerService(@Qualifier("mock") private val dataSource: MarkerDataSource) {
     fun addMarker(marker: Marker): Marker = dataSource.createMarker(marker)
     fun updateMarker(marker: Marker): Marker = dataSource.updateMarker(marker)
-    fun deleteMarker(markerId: Int): Unit = dataSource.deleteMarker(markerId)
+    fun deleteMarker(markerId: String): Unit = dataSource.deleteMarker(markerId)
 }

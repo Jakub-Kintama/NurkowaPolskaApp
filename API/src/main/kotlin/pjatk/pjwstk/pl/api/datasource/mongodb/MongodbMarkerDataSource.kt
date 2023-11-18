@@ -4,18 +4,19 @@ import org.springframework.stereotype.Repository
 import pjatk.pjwstk.pl.api.datasource.MarkerDataSource
 import pjatk.pjwstk.pl.api.model.Marker
 import java.time.LocalDate
+import java.util.*
 
-@Repository("docker")
+@Repository("mongodb")
 class MongodbMarkerDataSource : MarkerDataSource {
     override fun retrieveMarkers(): Collection<Marker> {
         TODO("Not yet implemented")
     }
 
-    override fun retrieveMarkerById(markerId: Int): Marker {
+    override fun retrieveMarkerById(markerId: String): Marker {
         TODO("Not yet implemented")
     }
 
-    override fun retrieveMarkersByUserId(userId: Int): Collection<Marker> {
+    override fun retrieveMarkersByUserEmail(userEmail: String): Collection<Marker> {
         TODO("Not yet implemented")
     }
 
@@ -39,7 +40,7 @@ class MongodbMarkerDataSource : MarkerDataSource {
         TODO("Not yet implemented")
     }
 
-    override fun deleteMarker(markerId: Int) {
+    override fun deleteMarker(markerId: String) {
         TODO("Not yet implemented")
     }
 

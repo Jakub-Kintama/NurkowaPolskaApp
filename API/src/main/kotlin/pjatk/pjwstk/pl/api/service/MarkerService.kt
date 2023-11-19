@@ -7,7 +7,7 @@ import pjatk.pjwstk.pl.api.model.Marker
 import java.time.LocalDate
 
 @Service
-class MarkerService(@Qualifier("mock") private val dataSource: MarkerDataSource) {
+class MarkerService(@Qualifier("mongodb") private val dataSource: MarkerDataSource) {
     fun getMarkers(): Collection<Marker> = dataSource.retrieveMarkers()
     fun getMarkerById(markerId: String): Marker = dataSource.retrieveMarkerById(markerId)
     fun getMarkersByUserEmail(userEmail: String): Collection<Marker> = dataSource.retrieveMarkersByUserEmail(userEmail)

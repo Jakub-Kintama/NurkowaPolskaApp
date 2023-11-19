@@ -1,6 +1,6 @@
 package pjatk.pjwstk.pl.api.datasource.mongodb
 
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import pjatk.pjwstk.pl.api.model.Marker
 
@@ -14,8 +14,8 @@ class MongodbMarkerDataSourceTest {
         val markers = mongodbMarkerDataSource.retrieveMarkers()
 
         // then
-        Assertions.assertThat(markers).isNotEmpty
-        Assertions.assertThat(markers.size).isGreaterThanOrEqualTo(3)
+        assertThat(markers).isNotEmpty
+        assertThat(markers.size).isGreaterThanOrEqualTo(3)
     }
 
     @Test
@@ -24,10 +24,10 @@ class MongodbMarkerDataSourceTest {
         val markers = mongodbMarkerDataSource.retrieveMarkers()
 
         // then
-        Assertions.assertThat(markers).allMatch { it is Marker }
-        Assertions.assertThat(markers).allMatch { it.id != null }
-        Assertions.assertThat(markers).allMatch { it.mapMarker.title.isNotBlank() }
-        Assertions.assertThat(markers).allMatch { it.mapMarker.description.isNotBlank() }
-        Assertions.assertThat(markers).allMatch { it.userEmail != "" }
+        assertThat(markers).allMatch { it is Marker }
+        assertThat(markers).allMatch { it.id != null }
+        assertThat(markers).allMatch { it.mapMarker.title.isNotBlank() }
+        assertThat(markers).allMatch { it.mapMarker.description.isNotBlank() }
+        assertThat(markers).allMatch { it.userEmail != "" }
     }
 }

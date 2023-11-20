@@ -17,7 +17,7 @@ export default function MarkerTable({markers}) {
                     <>
                     <tr key={marker.id}>
                         <td>{marker.mapMarker.position.lat}, {marker.mapMarker.position.lng}</td>
-                        <td>{marker.crayfishType}</td>
+                        <td>{marker.CrayfishType}</td>
                         <td>{marker.verified ? "Zweryfikowany" : "Niezweryfikowany" }</td>
                         <td><button className="TableButton">Szczegóły</button></td>
                     </tr>

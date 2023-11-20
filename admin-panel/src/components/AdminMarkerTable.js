@@ -14,7 +14,7 @@ export default function AdminMarkerTable({markers}) {
                 <>
                 <tr key={marker.id}>
                     <td>{marker.date}</td>
-                    <td>{marker.crayfishType}</td>
+                    <td>{marker.CrayfishType}</td>
                     <td>{marker.verified ? "Zweryfikowany" : "Niezweryfikowany" }</td>
                     <td><button className="TableButton">Szczegóły</button></td>
                 </tr>

@@ -11,7 +11,7 @@ internal class MarkerServiceTest {
     private val markerService = MarkerService(dataSource)
 
     @Test
-    fun `should call its data source to retrieve banks`() {
+    fun `should call its data source to retrieve markers`() {
         // when
         markerService.getMarkers()
 

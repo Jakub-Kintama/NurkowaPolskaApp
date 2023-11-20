@@ -6,8 +6,8 @@ import pjatk.pjwstk.pl.api.datasource.MarkerDataSource
 import pjatk.pjwstk.pl.api.model.Marker
 
 @Service
-class AdminMarkerService(@Qualifier("mock") private val dataSource: MarkerDataSource) {
+class AdminMarkerService(@Qualifier("mongodb") private val dataSource: MarkerDataSource) {
     fun addMarker(marker: Marker): Marker = dataSource.createMarker(marker)
     fun updateMarker(marker: Marker): Marker = dataSource.updateMarker(marker)
-    fun deleteMarker(markerId: Int): Unit = dataSource.deleteMarker(markerId)
+    fun deleteMarker(markerId: String): Unit = dataSource.deleteMarker(markerId)
 }

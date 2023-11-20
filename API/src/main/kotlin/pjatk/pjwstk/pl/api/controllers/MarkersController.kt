@@ -19,10 +19,10 @@ class MarkersController(private val service: MarkerService) {
     fun getMarkers(): Collection<Marker> = service.getMarkers()
 
     @GetMapping("/{markerId}")
-    fun getMarkerById(@PathVariable markerId: Int): Marker = service.getMarkerById(markerId)
+    fun getMarkerById(@PathVariable markerId: String): Marker = service.getMarkerById(markerId)
 
-    @GetMapping("/user/{userId}")
-    fun getMarkersByUserId(@PathVariable userId: Int): Collection<Marker> = service.getMarkersByUserId(userId)
+    @GetMapping("/user/{userEmail}")
+    fun getMarkersByUserEmail(@PathVariable userEmail: String): Collection<Marker> = service.getMarkersByUserEmail(userEmail)
 
     @GetMapping("/since/{since}")
     fun getMarkersSinceDate(@PathVariable since: LocalDate): Collection<Marker> = service.getMarkersSinceDate(since)

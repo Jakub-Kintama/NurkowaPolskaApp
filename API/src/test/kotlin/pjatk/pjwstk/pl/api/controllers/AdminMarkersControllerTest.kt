@@ -1,20 +1,19 @@
 package pjatk.pjwstk.pl.api.controllers
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
+import org.bson.types.ObjectId
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.TestInstance.Lifecycle
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.*
-import pjatk.pjwstk.pl.api.enums.CrayfishType
 import pjatk.pjwstk.pl.api.model.LatLng
 import pjatk.pjwstk.pl.api.model.MapMarker
 import pjatk.pjwstk.pl.api.model.Marker
+import pjatk.pjwstk.pl.api.model.enums.CrayfishType
 import java.time.LocalDate
 
 @SpringBootTest
@@ -35,9 +34,9 @@ internal class AdminMarkersControllerTest @Autowired constructor(
         fun `should add new marker`() {
             // given
             val newMarker = Marker(
-                999,
+                "000000000000000000000999",
                 MapMarker(LatLng(999.999, 999.999), "title 999", "description 999"),
-                999,
+                "999",
                 CrayfishType.SIGNAL,
                 LocalDate.now(),
                 false
@@ -61,16 +60,16 @@ internal class AdminMarkersControllerTest @Autowired constructor(
                 }
 
             mockMvc.get("/api/markers/${newMarker.id}")
-                .andExpect { content { json(objectMapper.writeValueAsString(newMarker)) } }
+                .andExpect { content { newMarker } }
         }
 
         @Test
         fun `should return BAD REQUEST if marker with given id already exist`() {
             // given
             val invalidMarker = Marker(
-                1,
+                "000000000000000000000001",
                 MapMarker(LatLng(1.1, 1.1), "title 1", "description 1"),
-                1,
+                "1",
                 CrayfishType.SIGNAL,
                 LocalDate.now(),
                 true
@@ -97,9 +96,9 @@ internal class AdminMarkersControllerTest @Autowired constructor(
         fun `should update existing marker`() {
             // given
             val updatedMarker = Marker(
-                2,
+                "000000000000000000000002",
                 MapMarker(LatLng(2.2, 2.2), "title 2", "description 2"),
-                2,
+                "2",
                 CrayfishType.AMERICAN,
                 LocalDate.parse("2023-10-13"),
                 true
@@ -130,9 +129,9 @@ internal class AdminMarkersControllerTest @Autowired constructor(
         fun `should return BAD REQUEST if marker with given id does not exist`() {
             // given
             val invalidMarker = Marker(
-                0,
+                "000000000000000000000000",
                 MapMarker(LatLng(2.2, 2.2), "title 2", "description 2"),
-                2,
+                "2",
                 CrayfishType.AMERICAN,
                 LocalDate.parse("2023-10-13"),
                 true
@@ -152,13 +151,13 @@ internal class AdminMarkersControllerTest @Autowired constructor(
     }
 
     @Nested
-    @DisplayName("PATCH /api/marker/{markerId}")
+    @DisplayName("DELETE /api/marker/{markerId}")
     @TestInstance(Lifecycle.PER_CLASS)
-    inner class deleteExistingMarker {
+    inner class DeleteExistingMarker {
         @Test
         fun `should delete marker with given id`() {
             // given
-            val markerId = 3
+            val markerId = ObjectId("000000000000000000000002")
 
             // when/then
             mockMvc.delete("$baseUrl/$markerId")
@@ -174,7 +173,7 @@ internal class AdminMarkersControllerTest @Autowired constructor(
         @Test
         fun `should return NOT FOUND if marker with given id does not exist`() {
             // given
-            val invalidMarkerId = 0
+            val invalidMarkerId = ObjectId("000000000000000000000000")
 
             // when/then
             mockMvc.delete("$baseUrl/$invalidMarkerId")

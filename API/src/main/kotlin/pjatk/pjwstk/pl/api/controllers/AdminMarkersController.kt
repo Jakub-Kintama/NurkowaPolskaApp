@@ -27,5 +27,5 @@ class AdminMarkersController(private val service: AdminMarkerService) {
 
     @DeleteMapping("/{markerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteMarker(@PathVariable markerId: Int): Unit = service.deleteMarker(markerId)
+    fun deleteMarker(@PathVariable markerId: String): Unit = service.deleteMarker(markerId)
 }

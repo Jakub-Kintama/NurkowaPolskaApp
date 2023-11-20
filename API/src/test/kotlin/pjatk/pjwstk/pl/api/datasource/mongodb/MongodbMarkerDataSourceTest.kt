@@ -1,12 +1,30 @@
 package pjatk.pjwstk.pl.api.datasource.mongodb
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito
+import org.springframework.data.mongodb.core.MongoTemplate
+import pjatk.pjwstk.pl.api.model.LatLng
+import pjatk.pjwstk.pl.api.model.MapMarker
 import pjatk.pjwstk.pl.api.model.Marker
+import pjatk.pjwstk.pl.api.model.enums.CrayfishType
+import java.time.LocalDate
 
 class MongodbMarkerDataSourceTest {
+    private val mongoTemplate = Mockito.mock(MongoTemplate::class.java)
+    private val mongodbMarkerDataSource = MongodbMarkerDataSource(mongoTemplate)
 
-    private val mongodbMarkerDataSource = MongodbMarkerDataSource()
+    private val expectedMarkers = listOf(
+        Marker("1", MapMarker(LatLng(1.1, 1.1), "title 1", "description 1"), "user1", CrayfishType.NOBLE, LocalDate.of(2023, 10, 10), true),
+        Marker("2", MapMarker(LatLng(2.2, 2.2), "title 2", "description 2"), "user2", CrayfishType.AMERICAN, LocalDate.of(2023, 10, 13), false),
+        Marker("3", MapMarker(LatLng(3.3, 3.3), "title 3", "description 3"), "user3", CrayfishType.SIGNAL, LocalDate.of(2023, 10, 16), true)
+    )
+
+    @BeforeEach
+    fun setUp() {
+        Mockito.`when`(mongoTemplate.findAll(Marker::class.java)).thenReturn(expectedMarkers)
+    }
 
     @Test
     fun `should provide a collection of markers`() {
@@ -15,7 +33,7 @@ class MongodbMarkerDataSourceTest {
 
         // then
         assertThat(markers).isNotEmpty
-        assertThat(markers.size).isGreaterThanOrEqualTo(3)
+        assertThat(markers.count()).isGreaterThanOrEqualTo(3)
     }
 
     @Test
@@ -24,10 +42,12 @@ class MongodbMarkerDataSourceTest {
         val markers = mongodbMarkerDataSource.retrieveMarkers()
 
         // then
-        assertThat(markers).allMatch { it is Marker }
-        assertThat(markers).allMatch { it.id != null }
-        assertThat(markers).allMatch { it.mapMarker.title.isNotBlank() }
-        assertThat(markers).allMatch { it.mapMarker.description.isNotBlank() }
-        assertThat(markers).allMatch { it.userEmail != "" }
+        assertThat(markers).allSatisfy {
+            assertThat(it.id).isNotBlank
+            assertThat(it.mapMarker.title).isNotBlank
+            assertThat(it.mapMarker.description).isNotBlank
+            assertThat(it.userEmail).isNotBlank
+            assertThat(it.date).isNotNull()
+        }
     }
 }

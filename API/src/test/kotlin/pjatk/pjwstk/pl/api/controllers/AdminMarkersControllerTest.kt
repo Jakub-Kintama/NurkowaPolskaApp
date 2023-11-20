@@ -2,20 +2,18 @@ package pjatk.pjwstk.pl.api.controllers
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.bson.types.ObjectId
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.TestInstance.Lifecycle
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.*
-import pjatk.pjwstk.pl.api.model.enums.CrayfishType
 import pjatk.pjwstk.pl.api.model.LatLng
 import pjatk.pjwstk.pl.api.model.MapMarker
 import pjatk.pjwstk.pl.api.model.Marker
+import pjatk.pjwstk.pl.api.model.enums.CrayfishType
 import java.time.LocalDate
 
 @SpringBootTest
@@ -153,13 +151,13 @@ internal class AdminMarkersControllerTest @Autowired constructor(
     }
 
     @Nested
-    @DisplayName("PATCH /api/marker/{markerId}")
+    @DisplayName("DELETE /api/marker/{markerId}")
     @TestInstance(Lifecycle.PER_CLASS)
     inner class DeleteExistingMarker {
         @Test
         fun `should delete marker with given id`() {
             // given
-            val markerId = ObjectId("000000000000000000000003")
+            val markerId = ObjectId("000000000000000000000002")
 
             // when/then
             mockMvc.delete("$baseUrl/$markerId")

@@ -1,8 +1,10 @@
 package pjatk.pjwstk.pl.api.datasource
 
+import org.springframework.context.annotation.Primary
+import org.springframework.context.annotation.Profile
+import org.springframework.stereotype.Repository
 import pjatk.pjwstk.pl.api.model.Marker
 import java.time.LocalDate
-
 
 interface MarkerDataSource {
     fun retrieveMarkers(): Collection<Marker>

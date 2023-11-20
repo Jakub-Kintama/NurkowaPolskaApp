@@ -2,14 +2,14 @@ import React, {useState} from "react";
 import AddPopup from "./AddPopup";
 import EditPopup from "./EditPopup";
 
-export default function AdminList() {
+export default function AdminTable({markers}) {
 
     const [AddPopupButton, setAddPopupButton] = useState(false);
     const [EditPopupButton, setEditPopupButton] = useState(false);
     const [adminDetails, setAdminDetails] = useState([])
 
     return(
-        <div className='AdminList'>
+        <div>
             <h2>Lista osób uprawnionych:</h2>
             <table className="AdminTable">
                 <tr>

@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from "react";
 import LoginForm from "./LoginForm";
-import MarkerList from "./MarkerList";
-import AdminMarkerList from "./AdminMarkerList";
-import AdminList from "./AdminList";
+import MarkerTable from "./MarkerTable";
+import AdminView from "./AdminView";
 import axios from 'axios';
 
 export default function Home() {
@@ -16,9 +15,7 @@ export default function Home() {
         const fetchData = async () => {
           try {
             const response = await axios.get(apiUrl);
-            console.log(response.data);
             setMarkers(response.data);
-            console.log(typeof markers);
           } catch (error) {
             console.error('Error while fetching data:', error);
           }
@@ -37,13 +34,12 @@ export default function Home() {
                 {isAdmin && (
                     <div className="ListContainer">
                         <button onClick={ () => setIsAdmin(false) } className="LogoutButton">Wyloguj</button><br/>
-                        <AdminMarkerList/>
-                        <AdminList/>
+                        <AdminView markers={markers}/>
                     </div>
                 )}
                 {!isAdmin && (
                     <>
-                    <MarkerList markers={markers}/>
+                    <MarkerTable markers={markers}/>
                     <LoginForm setIsAdmin={setIsAdmin}/>
                     </>
                 )}

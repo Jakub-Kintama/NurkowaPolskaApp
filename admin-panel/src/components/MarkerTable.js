@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function MarkerList({markers}) {
+export default function MarkerTable({markers}) {
     return(
     <div className="MarkerList">
         <h2>Lista znaczników:</h2>

@@ -6,7 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -17,7 +18,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.credentials.CredentialManager
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -26,6 +29,7 @@ import com.example.nurkowapolskaapp.app.functions.Insurance
 import com.example.nurkowapolskaapp.app.functions.maps.AddMarker
 import com.example.nurkowapolskaapp.app.functions.maps.MarkersMap
 import com.example.nurkowapolskaapp.ui.theme.NurkowaPolskaAppTheme
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 
 
 class MainActivity : ComponentActivity() {
@@ -46,6 +50,13 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppScaffold() {
     val navController = rememberNavController()
+    val context = LocalContext.current
+    val credentialManager = CredentialManager.create(context)
+    val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
+        .setFilterByAuthorizedAccounts(true)
+        .setServerClientId(R.string.your_web_client_id.toString())
+        .build()
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -55,12 +66,21 @@ fun AppScaffold() {
                 ),
                 title = { Text(text = "Default") },
                 navigationIcon = {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(Icons.Filled.Menu, null)
+                    IconButton(onClick = {
+                        navController.navigate("homepage") {
+                            popUpTo(navController.graph.id) {
+                                inclusive = true
+                            }
+                        }
+                    }) {
+                        Icon(Icons.Filled.Home, null)
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = {
+                        /*Google Sign in TODO*/
+                    }) {
+                        Icon(Icons.Filled.Person, null)
                     }
                 }
             )

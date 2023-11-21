@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.utils.loadPropertyFromResources
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -21,7 +19,6 @@ android {
             useSupportLibrary = true
         }
     }
-
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -50,8 +47,9 @@ android {
         }
     }
 }
-
 dependencies {
+    // Secrets
+    implementation("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1")
     // CredentialManager
     implementation("androidx.credentials:credentials:1.2.0")
     // GoogleSign

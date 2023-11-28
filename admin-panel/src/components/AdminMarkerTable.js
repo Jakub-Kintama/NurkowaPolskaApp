@@ -1,10 +1,13 @@
 import React, {useState} from "react";
 import DetailsPopup from "./DetailsPopup";
+import { crayfishTypeSwitch } from "./functions";
 
 export default function AdminMarkerTable({markers}) {
 
     const [DetailsPopupButton, setDetailsPopupButton] = useState(false);
-    const [markerDetails, setMarkerDetails] = useState([])
+    const [markerDetails, setMarkerDetails] = useState([]);
+
+    const headers = ["Data", "Typ", "Status"];
 
     return(
     <div className="AdminMarkerList">
@@ -12,26 +15,24 @@ export default function AdminMarkerTable({markers}) {
         <table className="MarkerTable">
             <thead>
             <tr>
-                <th>Data</th>
-                <th>Typ</th>
-                <th>Status</th>
+                {headers.map( (header, index) => (
+                    <th key={index}>{header}</th>
+                ))
+                }
             </tr>
             </thead>
             <tbody>
-            {markers.map( (marker, key) => (
-                <>
-                <tr key={key}>
-                    <td key={key+1}>{marker.date}</td>
-                    <td key={key+2}>{marker.CrayfishType}</td>
-                    <td key={key+3}>{marker.verified ? "Zweryfikowany" : "Niezweryfikowany" }</td>
-                    <td key={key+4}><button className="TableButton" onClick={ () => {setDetailsPopupButton(true); setMarkerDetails([marker._id, marker.mapMarker.position.lat,marker.mapMarker.position.lng, marker.date, marker.CrayfishType, marker.mapMarker.title, marker.mapMarker.description, marker.userEmail])}}>Szczegóły</button></td>
+            {markers.map( (marker, index) => (
+                <tr key={index}>
+                    <td key={index}>{marker.date}</td>
+                    <td key={index + 1}>{crayfishTypeSwitch(marker.CrayfishType)}</td>
+                    <td key={index + 2}>{marker.verified ? "Zweryfikowany" : "Niezweryfikowany" }</td>
+                    <td key={index + 3}><button className="TableButton" onClick={ () => {setDetailsPopupButton(true); setMarkerDetails([marker._id, marker.mapMarker.position.lat,marker.mapMarker.position.lng, marker.date, marker.CrayfishType, marker.mapMarker.title, marker.mapMarker.description, marker.userEmail])}}>Szczegóły</button></td>
                 </tr>
-                <DetailsPopup trigger={DetailsPopupButton} setTrigger={setDetailsPopupButton} marker={markerDetails}/>
-                </>
             ))}
-            </tbody>
-            
-        </table>            
+            </tbody>  
+        </table>   
+        <DetailsPopup trigger={DetailsPopupButton} setTrigger={setDetailsPopupButton} marker={markerDetails}/>         
     </div>
     )
 }

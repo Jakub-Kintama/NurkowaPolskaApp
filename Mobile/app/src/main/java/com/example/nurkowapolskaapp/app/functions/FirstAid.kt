@@ -40,7 +40,7 @@ fun FirstAidInfo() {
         Text(text = "Instrukcja Pierwszej Pomocy", fontSize = 20.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(30.dp))
         Text(text = "Jakaś przykładowa instrukcja pierwszej pomocy")
-        ImageFirstAid(R.drawable.pierwsza_pomoc_placeholder)
+        ImageFirstAid(R.drawable.placeholder_image)
     }
 }
 

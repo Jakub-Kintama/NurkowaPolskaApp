@@ -1,13 +1,13 @@
 package pjatk.pjwstk.pl.api.datasource.mongodb
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.annotation.Profile
 import org.springframework.data.mongodb.core.FindAndReplaceOptions
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.stereotype.Repository
 import pjatk.pjwstk.pl.api.datasource.MarkerDataSource
+import pjatk.pjwstk.pl.api.model.Admin
 import pjatk.pjwstk.pl.api.model.Marker
 import java.io.IOException
 import java.time.LocalDate
@@ -94,5 +94,33 @@ class MongodbMarkerDataSource(
             ?: throw NoSuchElementException("Could not find a marker with id $markerId.")
 
         mongoTemplate.remove(existingMarker)
+    }
+
+    override fun retrieveAdmins(): Collection<Admin> {
+        val admins = mongoTemplate.findAll(Admin::class.java)
+        return admins.ifEmpty {
+            throw IOException("Could not fetch admins from the database")
+        }
+    }
+
+    override fun retrieveAdminById(adminId: String): Admin {
+        return mongoTemplate.findById(adminId, Admin::class.java)
+            ?: throw NoSuchElementException("Could not find a admin with id $adminId.")
+    }
+
+    override fun createAdmin(admin: Admin): Admin {
+        val adminId = admin.id
+        if (mongoTemplate.exists(Query.query(Criteria.where("_id").`is`(adminId)), Marker::class.java)) {
+            throw IllegalArgumentException("Marker with id $adminId already exists.")
+        }
+        return mongoTemplate.save(admin)
+    }
+
+    override fun deleteAdmin(adminId: String) {
+        val query = Query.query(Criteria.where("id").`is`(adminId))
+        val existingAdmin = mongoTemplate.findOne(query, Admin::class.java)
+            ?: throw NoSuchElementException("Could not find a admin with id $adminId.")
+
+        mongoTemplate.remove(existingAdmin)
     }
 }

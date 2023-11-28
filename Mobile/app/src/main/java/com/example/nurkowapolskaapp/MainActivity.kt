@@ -18,18 +18,20 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.credentials.CredentialManager
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.nurkowapolskaapp.app.functions.FirstAid
 import com.example.nurkowapolskaapp.app.functions.Insurance
 import com.example.nurkowapolskaapp.app.functions.maps.AddMarker
+import com.example.nurkowapolskaapp.app.functions.maps.CrayfishesType
+import com.example.nurkowapolskaapp.app.functions.maps.Marker
 import com.example.nurkowapolskaapp.app.functions.maps.MarkersMap
+import com.example.nurkowapolskaapp.app.functions.maps.MarkersType
+import com.example.nurkowapolskaapp.app.functions.maps.TestMap
+import com.example.nurkowapolskaapp.app.functions.maps.markers
 import com.example.nurkowapolskaapp.ui.theme.NurkowaPolskaAppTheme
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 
 
 class MainActivity : ComponentActivity() {
@@ -50,12 +52,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppScaffold() {
     val navController = rememberNavController()
-    val context = LocalContext.current
-    val credentialManager = CredentialManager.create(context)
-    val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
-        .setFilterByAuthorizedAccounts(true)
-        .setServerClientId(R.string.your_web_client_id.toString())
-        .build()
 
     Scaffold(
         topBar = {
@@ -90,10 +86,11 @@ fun AppScaffold() {
         {
             NavHost(navController, startDestination = "homepage") {
                 composable("homepage") { Homepage(navController) }
-                composable("mapOfMarkers") { MarkersMap(navController) }
+                composable("mapOfMarkers") { TestMap(navController) }
                 composable("insurance") { Insurance(navController) }
                 composable("firstAid") { FirstAid(navController) }
                 composable("addMarker") { AddMarker(navController) }
+                composable("markersMap") { MarkersMap() }
             }
         }
     }

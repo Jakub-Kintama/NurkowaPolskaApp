@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
-import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.*
+import pjatk.pjwstk.pl.api.model.Admin
 import pjatk.pjwstk.pl.api.model.LatLng
 import pjatk.pjwstk.pl.api.model.MapMarker
 import pjatk.pjwstk.pl.api.model.Marker
@@ -182,5 +182,118 @@ internal class AdminMarkersControllerTest @Autowired constructor(
                     status { isNotFound() }
                 }
         }
+    }
+
+    @Nested
+    @DisplayName("GET /api/admin")
+    @TestInstance(Lifecycle.PER_CLASS)
+    inner class GetAdmins {
+        @Test
+        fun `should return all admins`() {
+            // when/then
+            mockMvc.get("/api/admins")
+                .andDo { print() }
+                .andExpect {
+                    status { isOk() }
+                    content { contentType(MediaType.APPLICATION_JSON) }
+                    jsonPath("$[0].id") { value("lol111@gmail.com") }
+                    jsonPath("$[1].id") { value("xd222@wp.pl") }
+                }
+        }
+    }
+
+    @Nested
+    @DisplayName("POST /api/admin")
+    @TestInstance(Lifecycle.PER_CLASS)
+    inner class AddAdmin {
+        @Test
+        fun `should add new admin`() {
+            // given
+            val newAdmin = Admin("damn123@gmail.com")
+
+            // when
+            val performPost = mockMvc.post("/api/admin") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(newAdmin)
+            }
+
+            // then
+            performPost
+                .andDo { print() }
+                .andExpect {
+                    status { isCreated() }
+                    content {
+                        contentType(MediaType.APPLICATION_JSON)
+                        json(objectMapper.writeValueAsString(newAdmin))
+                    }
+                }
+
+            mockMvc.get("/api/admin/${newAdmin.id}")
+                .andExpect { content { newAdmin } }
+        }
+
+        @Test
+        fun `should return BAD REQUEST if admin with given id already exist`() {
+            // given
+            val invalidAdmin = Admin("xd222@wp.pl")
+
+            // when
+            val performPost = mockMvc.post(baseUrl) {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(invalidAdmin)
+            }
+
+            // then
+            performPost
+                .andDo { print() }
+                .andExpect { status { isBadRequest() } }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE /api/admin/{adminId}")
+    @TestInstance(Lifecycle.PER_CLASS)
+    inner class DeleteExistingAdmin {
+        @Test
+        fun `should delete admin with given id`() {
+            // given
+            val adminId = "wow333@pjwstk.edu.pl"
+
+            // when/then
+            mockMvc.delete("/api/admin/$adminId")
+                .andDo { print() }
+                .andExpect {
+                    status { isNoContent() }
+                }
+
+            mockMvc.get("/api/admin/${adminId}")
+                .andExpect { status { isNotFound() } }
+        }
+
+        @Test
+        fun `should return NOT FOUND if admin with given id does not exist`() {
+            // given
+            val invalidAdminId = "000@00.00"
+
+            // when/then
+            mockMvc.delete("$baseUrl/$invalidAdminId")
+                .andDo { print() }
+                .andExpect {
+                    status { isNotFound() }
+                }
+        }
+    }
+
+    @Test
+    fun `should return NOT FOUND if admin with given id does not exist`() {
+        // given
+        val invalidAdminId = "404@xd"
+
+        // when/then
+        mockMvc.delete("$baseUrl/$invalidAdminId")
+            .andDo { print() }
+            .andExpect {
+                status { isNotFound() }
+            }
     }
 }

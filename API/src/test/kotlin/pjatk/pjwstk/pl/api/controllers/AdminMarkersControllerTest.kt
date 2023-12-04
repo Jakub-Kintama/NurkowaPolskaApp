@@ -1,20 +1,19 @@
 package pjatk.pjwstk.pl.api.controllers
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
+import org.bson.types.ObjectId
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.TestInstance.Lifecycle
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.*
-import pjatk.pjwstk.pl.api.enums.CrayfishType
+import pjatk.pjwstk.pl.api.model.Admin
 import pjatk.pjwstk.pl.api.model.LatLng
 import pjatk.pjwstk.pl.api.model.MapMarker
 import pjatk.pjwstk.pl.api.model.Marker
+import pjatk.pjwstk.pl.api.model.enums.CrayfishType
 import java.time.LocalDate
 
 @SpringBootTest
@@ -35,9 +34,9 @@ internal class AdminMarkersControllerTest @Autowired constructor(
         fun `should add new marker`() {
             // given
             val newMarker = Marker(
-                999,
+                "000000000000000000000999",
                 MapMarker(LatLng(999.999, 999.999), "title 999", "description 999"),
-                999,
+                "999",
                 CrayfishType.SIGNAL,
                 LocalDate.now(),
                 false
@@ -61,16 +60,16 @@ internal class AdminMarkersControllerTest @Autowired constructor(
                 }
 
             mockMvc.get("/api/markers/${newMarker.id}")
-                .andExpect { content { json(objectMapper.writeValueAsString(newMarker)) } }
+                .andExpect { content { newMarker } }
         }
 
         @Test
         fun `should return BAD REQUEST if marker with given id already exist`() {
             // given
             val invalidMarker = Marker(
-                1,
+                "000000000000000000000001",
                 MapMarker(LatLng(1.1, 1.1), "title 1", "description 1"),
-                1,
+                "1",
                 CrayfishType.SIGNAL,
                 LocalDate.now(),
                 true
@@ -97,9 +96,9 @@ internal class AdminMarkersControllerTest @Autowired constructor(
         fun `should update existing marker`() {
             // given
             val updatedMarker = Marker(
-                2,
+                "000000000000000000000002",
                 MapMarker(LatLng(2.2, 2.2), "title 2", "description 2"),
-                2,
+                "2",
                 CrayfishType.AMERICAN,
                 LocalDate.parse("2023-10-13"),
                 true
@@ -130,9 +129,9 @@ internal class AdminMarkersControllerTest @Autowired constructor(
         fun `should return BAD REQUEST if marker with given id does not exist`() {
             // given
             val invalidMarker = Marker(
-                0,
+                "000000000000000000000000",
                 MapMarker(LatLng(2.2, 2.2), "title 2", "description 2"),
-                2,
+                "2",
                 CrayfishType.AMERICAN,
                 LocalDate.parse("2023-10-13"),
                 true
@@ -152,13 +151,13 @@ internal class AdminMarkersControllerTest @Autowired constructor(
     }
 
     @Nested
-    @DisplayName("PATCH /api/marker/{markerId}")
+    @DisplayName("DELETE /api/marker/{markerId}")
     @TestInstance(Lifecycle.PER_CLASS)
-    inner class deleteExistingMarker {
+    inner class DeleteExistingMarker {
         @Test
         fun `should delete marker with given id`() {
             // given
-            val markerId = 3
+            val markerId = ObjectId("000000000000000000000002")
 
             // when/then
             mockMvc.delete("$baseUrl/$markerId")
@@ -174,7 +173,7 @@ internal class AdminMarkersControllerTest @Autowired constructor(
         @Test
         fun `should return NOT FOUND if marker with given id does not exist`() {
             // given
-            val invalidMarkerId = 0
+            val invalidMarkerId = ObjectId("000000000000000000000000")
 
             // when/then
             mockMvc.delete("$baseUrl/$invalidMarkerId")
@@ -183,5 +182,118 @@ internal class AdminMarkersControllerTest @Autowired constructor(
                     status { isNotFound() }
                 }
         }
+    }
+
+    @Nested
+    @DisplayName("GET /api/admin")
+    @TestInstance(Lifecycle.PER_CLASS)
+    inner class GetAdmins {
+        @Test
+        fun `should return all admins`() {
+            // when/then
+            mockMvc.get("/api/admins")
+                .andDo { print() }
+                .andExpect {
+                    status { isOk() }
+                    content { contentType(MediaType.APPLICATION_JSON) }
+                    jsonPath("$[0].id") { value("lol111@gmail.com") }
+                    jsonPath("$[1].id") { value("xd222@wp.pl") }
+                }
+        }
+    }
+
+    @Nested
+    @DisplayName("POST /api/admin")
+    @TestInstance(Lifecycle.PER_CLASS)
+    inner class AddAdmin {
+        @Test
+        fun `should add new admin`() {
+            // given
+            val newAdmin = Admin("damn123@gmail.com")
+
+            // when
+            val performPost = mockMvc.post("/api/admin") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(newAdmin)
+            }
+
+            // then
+            performPost
+                .andDo { print() }
+                .andExpect {
+                    status { isCreated() }
+                    content {
+                        contentType(MediaType.APPLICATION_JSON)
+                        json(objectMapper.writeValueAsString(newAdmin))
+                    }
+                }
+
+            mockMvc.get("/api/admin/${newAdmin.id}")
+                .andExpect { content { newAdmin } }
+        }
+
+        @Test
+        fun `should return BAD REQUEST if admin with given id already exist`() {
+            // given
+            val invalidAdmin = Admin("xd222@wp.pl")
+
+            // when
+            val performPost = mockMvc.post(baseUrl) {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(invalidAdmin)
+            }
+
+            // then
+            performPost
+                .andDo { print() }
+                .andExpect { status { isBadRequest() } }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE /api/admin/{adminId}")
+    @TestInstance(Lifecycle.PER_CLASS)
+    inner class DeleteExistingAdmin {
+        @Test
+        fun `should delete admin with given id`() {
+            // given
+            val adminId = "wow333@pjwstk.edu.pl"
+
+            // when/then
+            mockMvc.delete("/api/admin/$adminId")
+                .andDo { print() }
+                .andExpect {
+                    status { isNoContent() }
+                }
+
+            mockMvc.get("/api/admin/${adminId}")
+                .andExpect { status { isNotFound() } }
+        }
+
+        @Test
+        fun `should return NOT FOUND if admin with given id does not exist`() {
+            // given
+            val invalidAdminId = "000@00.00"
+
+            // when/then
+            mockMvc.delete("$baseUrl/$invalidAdminId")
+                .andDo { print() }
+                .andExpect {
+                    status { isNotFound() }
+                }
+        }
+    }
+
+    @Test
+    fun `should return NOT FOUND if admin with given id does not exist`() {
+        // given
+        val invalidAdminId = "404@xd"
+
+        // when/then
+        mockMvc.delete("$baseUrl/$invalidAdminId")
+            .andDo { print() }
+            .andExpect {
+                status { isNotFound() }
+            }
     }
 }

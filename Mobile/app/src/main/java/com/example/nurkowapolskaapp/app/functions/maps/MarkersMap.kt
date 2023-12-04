@@ -157,19 +157,19 @@ fun CustomMarkerInfoWindow(marker: Marker) {
                 .fillMaxWidth()
             when(marker.markerType) {
                 MarkersType.CRAYFISH -> Image(
-                    painter = painterResource(id = R.drawable.crayfish),
+                    painter = painterResource(id = R.drawable.placeholder_crayfish),
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
                     modifier = imageModifier
                 )
                 MarkersType.DANGER -> Image(
-                    painter = painterResource(id = R.drawable.warning),
+                    painter = painterResource(id = R.drawable.placeholder_danger),
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
                     modifier = imageModifier
                 )
                 MarkersType.POLLUTION -> Image(
-                    painter = painterResource(id = R.drawable.hazard),
+                    painter = painterResource(id = R.drawable.placeholder_pollution),
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
                     modifier = imageModifier
@@ -214,7 +214,7 @@ fun ExtendedInfoWindow(
                     Box(modifier = Modifier.padding(14.dp)) {
                         Column {
                             Image(
-                                painterResource(R.drawable.noble_zdenek_macat_shutterstock_example),
+                                painterResource(R.drawable.placeholder_image),
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier

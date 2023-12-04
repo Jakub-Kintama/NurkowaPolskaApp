@@ -51,7 +51,7 @@ internal class MarkersControllerTest(
         @Test
         fun `should return marker with given id`() {
             // given
-            val markerId = 3
+            val markerId = "000000000000000000000003"
 
             // when/then
             mockMvc.get("$baseUrl/$markerId")
@@ -67,7 +67,7 @@ internal class MarkersControllerTest(
         @Test
         fun `should return NOT FOUND if marker does not exist`() {
             // given
-            val markerId = 99999
+            val markerId = "000000000000000000000000"
 
             // when/then
             mockMvc.get("$baseUrl/$markerId")

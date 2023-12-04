@@ -49,7 +49,7 @@ class MockMarkerDataSource : MarkerDataSource {
             "lol111@gmail.com"
         ), Admin(
             "xd222@wp.pl"
-        ),Admin(
+        ), Admin(
             "wow333@pjwstk.edu.pl"
         )
     )
@@ -58,7 +58,9 @@ class MockMarkerDataSource : MarkerDataSource {
     override fun retrieveMarkerById(markerId: String): Marker = markers.firstOrNull { it.id == markerId }
         ?: throw NoSuchElementException("Could not find a marker with id ${markerId}.")
 
-    override fun retrieveMarkersByUserEmail(userEmail: String): Collection<Marker> = markers.filter { it.userEmail == userEmail }
+    override fun retrieveMarkersByUserEmail(userEmail: String): Collection<Marker> =
+        markers.filter { it.userEmail == userEmail }
+
     override fun retrieveMarkersSinceDate(since: LocalDate): Collection<Marker> = markers.filter { it.date >= since }
     override fun retrieveMarkersSinceDateToDate(since: LocalDate, to: LocalDate): Collection<Marker> =
         markers.filter { it.date in since..to }
@@ -92,7 +94,7 @@ class MockMarkerDataSource : MarkerDataSource {
     override fun retrieveAdmins(): Collection<Admin> = admins
 
     override fun retrieveAdminById(adminId: String): Admin = admins.firstOrNull { it.id === adminId }
-    ?: throw NoSuchElementException("Could not find a marker with id ${adminId}.")
+        ?: throw NoSuchElementException("Could not find a marker with id ${adminId}.")
 
     override fun createAdmin(admin: Admin): Admin {
         if (admins.any { it.id == admin.id }) {

@@ -24,7 +24,7 @@ services:
       - mongodb:mongodb
 
 volumes:
-  data: {}
+  data: { }
 
 networks:
   default:

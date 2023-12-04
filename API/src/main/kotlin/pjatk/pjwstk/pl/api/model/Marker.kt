@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import pjatk.pjwstk.pl.api.model.enums.CrayfishType
 import java.time.LocalDate
+import java.util.*
 
 @Document("marker")
 data class Marker(
@@ -22,5 +23,7 @@ data class Marker(
     @JsonFormat(pattern = "yyyy-MM-dd")
     val date: LocalDate,
     @JsonProperty("verified")
-    val verified: Boolean
+    val verified: Boolean,
+    @JsonProperty("image")
+    val image: Image? = null
 )

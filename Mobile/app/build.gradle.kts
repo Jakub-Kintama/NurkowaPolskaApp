@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("dagger.hilt.android.plugin")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -48,6 +50,17 @@ android {
     }
 }
 dependencies {
+    // Kotlin Symbol Processing
+    ksp("androidx.room:room-compiler:2.6.1")
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.2")
+    // Coil
+    implementation("io.coil-kt:coil-compose:1.4.0")
+    // Dagger Hilt
+    implementation("com.google.dagger:hilt-android:2.43.2")
+    ksp("com.google.dagger:hilt-android-compiler:2.43.2")
     // Secrets
     implementation("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1")
     // CredentialManager

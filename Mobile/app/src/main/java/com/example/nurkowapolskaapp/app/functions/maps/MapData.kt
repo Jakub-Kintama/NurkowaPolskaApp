@@ -6,23 +6,23 @@ import com.google.android.gms.maps.model.LatLng
 // Camera if permission not granted will start with Warsaw in center
 var currentUserLocation = LatLng(51.91890, 19.13437)
 
-var markers = mutableStateListOf<Marker>()
-var markerFilter: MarkersType = MarkersType.CRAYFISH
+var markerMockList = mutableStateListOf<MarkerMock>()
+var markerMockFilter: MarkerMockType = MarkerMockType.CRAYFISH
 
-enum class MarkersType {
+enum class MarkerMockType {
     CRAYFISH, DANGER, POLLUTION
 }
 
-enum class CrayfishesType {
+enum class CrayfishMockType {
     NOBLE, AMERICAN, SIGNAL, MUD, UNVERIFIED, NONE
 }
 
-data class Marker(
+data class MarkerMock(
     val lat: Double,
     val lng: Double,
     val title: String,
     val description: String,
     val date: String,
-    val markerType: MarkersType,
-    val crayfishType: CrayfishesType,
+    val markerType: MarkerMockType,
+    val crayfishType: CrayfishMockType,
 )

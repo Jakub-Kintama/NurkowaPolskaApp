@@ -74,7 +74,7 @@ fun AddMarker(navController: NavController) {
         Arrangement.SpaceEvenly
     ) {
 
-        val markerTypes = arrayOf(MarkersType.CRAYFISH, MarkersType.DANGER, MarkersType.POLLUTION)
+        val markerTypes = arrayOf(MarkerMockType.CRAYFISH, MarkerMockType.DANGER, MarkerMockType.POLLUTION)
         var expanded by remember { mutableStateOf(false) }
         var selectedMarker by remember { mutableStateOf(markerTypes[0]) }
         val markerTexts = arrayOf("Rak", "Niebezpieczeństwo", "Zanieczyszczenie")
@@ -145,7 +145,7 @@ fun AddMarker(navController: NavController) {
                             val latitude = location.latitude
                             val longitude = location.longitude
                             val currentDate = getCurrentDate()
-                            markers.add(Marker(latitude, longitude, title, snippet, currentDate ,selectedMarker, CrayfishesType.NONE ))
+                            markerMockList.add(MarkerMock(latitude, longitude, title, snippet, currentDate ,selectedMarker, CrayfishMockType.NONE ))
                         }
                     }
                 } else -> {

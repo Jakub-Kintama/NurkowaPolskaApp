@@ -10,6 +10,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,25 +19,29 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -51,7 +56,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -86,7 +90,9 @@ fun Map() {
     }
     val context = LocalContext.current
 
-    val showMarker = remember { mutableStateOf(MarkersType.CRAYFISH) }
+    val filterList = listOf("Crayfish", "DangPoll", "Both")
+    val checkedFilter = remember { mutableStateOf(filterList[0]) }
+    val showMarker = remember { mutableStateOf(MarkerMockType.CRAYFISH) }
     val showFormWindow = remember { mutableStateOf(false) }
 
     val cameraPositionState = rememberCameraPositionState {
@@ -103,42 +109,51 @@ fun Map() {
                     mapToolbarEnabled = false
                 )
             ) {
-                for(mapMarker in markers) {
+                for(mapMarker in markerMockList) {
                     val position = LatLng(mapMarker.lat, mapMarker.lng)
                     mapMarker.date
                     mapMarker.title
-                    if(showMarker.value == mapMarker.markerType) {
-                        val openExtendedDialog = remember { mutableStateOf(false) }
-                        MarkerInfoWindow(
-                            state = MarkerState(position = position),
-                            icon =
-                            when(mapMarker.markerType.toString()) {
-                                "CRAYFISH" -> BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)
-                                "DANGER" -> BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
-                                "POLLUTION" -> BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)
-                                else -> { BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA) }
-                            },
-                            onInfoWindowClick = { openExtendedDialog.value = true }
-                        ) {
-                            CustomMarkerInfoWindow(mapMarker)
-                            ExtendedInfoWindow(openExtendedDialog, mapMarker)
+                    if(checkedFilter.value == "Crayfish" || checkedFilter.value == "Both") {
+                        if(mapMarker.markerType == MarkerMockType.CRAYFISH) {
+                            val openExtendedDialog = remember { mutableStateOf(false) }
+                            MarkerInfoWindow(
+                                state = MarkerState(position = position),
+                                icon = (BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)),
+                                onInfoWindowClick = { openExtendedDialog.value = true }
+                            ) {
+                                CustomMarkerInfoWindow(mapMarker)
+                                ExtendedInfoWindow(openExtendedDialog, mapMarker)
+                            }
+                        }
+                    }
+                    if(checkedFilter.value == "DangPoll" || checkedFilter.value == "Both") {
+                        if(mapMarker.markerType == MarkerMockType.DANGER || mapMarker.markerType == MarkerMockType.POLLUTION) {
+                            val openExtendedDialog = remember { mutableStateOf(false) }
+                            MarkerInfoWindow(
+                                state = MarkerState(position = position),
+                                icon = (BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)),
+                                onInfoWindowClick = { openExtendedDialog.value = true }
+                            ) {
+                                CustomMarkerInfoWindow(mapMarker)
+                                ExtendedInfoWindow(openExtendedDialog, mapMarker)
+                            }
                         }
                     }
                 }
             }
         }
-        Box(modifier = Modifier.align(Alignment.BottomStart)) {
-            FilterButton(showMarker)
-        }
         Box(modifier = Modifier.align(Alignment.BottomEnd)) {
-            AddMarker(showFormWindow, permissionCheck, context)
+            Column {
+                FilterButton(showMarker, filterList, checkedFilter)
+                AddMarker(showFormWindow, permissionCheck, context)
+            }
         }
     }
 
 }
 
 @Composable
-fun CustomMarkerInfoWindow(marker: Marker) {
+fun CustomMarkerInfoWindow(markerMock: MarkerMock) {
     Box(
         modifier = Modifier
             .background(
@@ -155,20 +170,20 @@ fun CustomMarkerInfoWindow(marker: Marker) {
             val imageModifier = Modifier
                 .height(40.dp)
                 .fillMaxWidth()
-            when(marker.markerType) {
-                MarkersType.CRAYFISH -> Image(
+            when(markerMock.markerType) {
+                MarkerMockType.CRAYFISH -> Image(
                     painter = painterResource(id = R.drawable.placeholder_crayfish),
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
                     modifier = imageModifier
                 )
-                MarkersType.DANGER -> Image(
+                MarkerMockType.DANGER -> Image(
                     painter = painterResource(id = R.drawable.placeholder_danger),
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
                     modifier = imageModifier
                 )
-                MarkersType.POLLUTION -> Image(
+                MarkerMockType.POLLUTION -> Image(
                     painter = painterResource(id = R.drawable.placeholder_pollution),
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
@@ -177,7 +192,7 @@ fun CustomMarkerInfoWindow(marker: Marker) {
             }
             Spacer(modifier = Modifier.height(10.dp))
             Text(
-                text = "${marker.title} (${marker.date})",
+                text = "${markerMock.title} (${markerMock.date})",
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .padding(top = 10.dp)
@@ -189,18 +204,10 @@ fun CustomMarkerInfoWindow(marker: Marker) {
     }
 }
 
-//@Preview
-//@Composable
-//fun PreviewCustomMarkerInfoWindow() {
-//    val previewMarker = Marker(50.00, 20.00, "Rak", "Super opis Raka", "10-11-2023", MarkersType.POLLUTION, CrayfishesType.UNVERIFIED)
-//    val openPreviewDialog = remember { mutableStateOf(false) }
-//    CustomMarkerInfoWindow(previewMarker, openPreviewDialog)
-//}
-
 @Composable
 fun ExtendedInfoWindow(
     openAlertDialog: MutableState<Boolean>,
-    marker: Marker
+    markerMock: MarkerMock
 ) {
     when {
         openAlertDialog.value -> {
@@ -230,13 +237,13 @@ fun ExtendedInfoWindow(
                                     textAlign = TextAlign.Left,
                                 )
                                 Text(
-                                    text = "${marker.markerType}",
+                                    text = "${markerMock.markerType}",
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Normal,
                                     textAlign = TextAlign.Left
                                 )
                             }
-                            if(marker.markerType == MarkersType.CRAYFISH) {
+                            if(markerMock.markerType == MarkerMockType.CRAYFISH) {
                                 Spacer(modifier = Modifier.height(5.dp))
                                 Row {
                                     Text(
@@ -246,7 +253,7 @@ fun ExtendedInfoWindow(
                                         textAlign = TextAlign.Left,
                                     )
                                     Text(
-                                        text = "${marker.crayfishType}",
+                                        text = "${markerMock.crayfishType}",
                                         fontSize = 18.sp,
                                         fontWeight = FontWeight.Normal,
                                         textAlign = TextAlign.Left
@@ -262,7 +269,7 @@ fun ExtendedInfoWindow(
                                 fontSize = 18.sp
                             )
                             Spacer(modifier = Modifier.height(5.dp))
-                            Text(text = marker.description,
+                            Text(text = markerMock.description,
                                 modifier = Modifier.fillMaxWidth(),
                                 fontSize = 15.sp)
                         }
@@ -273,43 +280,74 @@ fun ExtendedInfoWindow(
     }
 }
 
-@Preview
-@Composable
-fun PreviewExtendedInfoWindow() {
-    val previewMarker = Marker(50.00, 20.00, "Rak", "Super opis Raka", "10-11-2023", MarkersType.CRAYFISH, CrayfishesType.MUD)
-    val openPreviewDialog = remember { mutableStateOf(true) }
-    ExtendedInfoWindow(openPreviewDialog, previewMarker)
-}
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterButton(
-    showMarker: MutableState<MarkersType>,
+    showMarker: MutableState<MarkerMockType>,
+    filterType: List<String>,
+    checkedFilter: MutableState<String>,
+    ) {
+    val openFilterBottomSheet = remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState()
 
-) {
-    val filterNames = arrayOf("Raki", "Zagrożenia", "Zanieczyszczenia")
-    Box {
-        Column(modifier = Modifier.padding(15.dp)) {
-            ExtendedFloatingActionButton(
-                modifier = Modifier.height(40.dp),
-                onClick = { showMarker.value = MarkersType.CRAYFISH },
-                icon = { Icon(Icons.Filled.Settings, "Filtr znaczników: raki") },
-                text = { Text(text = filterNames[0]) },
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            ExtendedFloatingActionButton(
-                modifier = Modifier.height(40.dp),
-                onClick = { showMarker.value = MarkersType.DANGER },
-                icon = { Icon(Icons.Filled.Settings, "Filtr znaczników: zagrożenia") },
-                text = { Text(text = filterNames[1]) },
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            ExtendedFloatingActionButton(
-                modifier = Modifier.height(40.dp),
-                onClick = { showMarker.value = MarkersType.POLLUTION },
-                icon = { Icon(Icons.Filled.Settings, "Filtr znaczników: zanieczyszczenia") },
-                text = { Text(text = filterNames[2]) },
-            )
-            Spacer(modifier = Modifier.height(20.dp))
+    FloatingActionButton(
+        onClick = { openFilterBottomSheet.value = true },
+        modifier = Modifier.padding(start = 0.dp, top = 0.dp, bottom = 15.dp, end = 15.dp),
+    ) {
+        Icon(Icons.Filled.Search, "Filtr znaczników: raki")
+    }
+    when {
+        openFilterBottomSheet.value -> {
+            ModalBottomSheet(
+                onDismissRequest = { openFilterBottomSheet.value = false },
+                sheetState = sheetState
+            ) {
+                var selectedCrayfish by remember { mutableStateOf(true) }
+                var selectedDangPoll by remember { mutableStateOf(false) }
+                Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+                    FilterChip(
+                        modifier = Modifier.padding(15.dp),
+                        selected = selectedCrayfish,
+                        onClick = { selectedCrayfish = !selectedCrayfish },
+                        label = { Text("Raki") },
+                        leadingIcon = if (selectedCrayfish) {
+                            {
+                                checkedFilter.value = filterType[0]
+                                showMarker.value = MarkerMockType.CRAYFISH
+                                Icon(
+                                    Icons.Filled.Done,
+                                    null,
+                                    modifier = Modifier.size(FilterChipDefaults.IconSize)
+                                )
+                            }
+                        } else {
+                            null
+                        }
+                    )
+                    FilterChip(
+                        modifier = Modifier.padding(15.dp),
+                        selected = selectedDangPoll,
+                        onClick = { selectedDangPoll = !selectedDangPoll },
+                        label = { Text("Zagrożenia/Zanieczyszczenia") },
+                        leadingIcon = if (selectedDangPoll) {
+                            {
+                                checkedFilter.value = filterType[1]
+                                showMarker.value = MarkerMockType.POLLUTION
+                                Icon(
+                                    Icons.Filled.Done,
+                                    null,
+                                    modifier = Modifier.size(FilterChipDefaults.IconSize)
+                                )
+                            }
+                        } else {
+                            null
+                        }
+                    )
+                    if (selectedCrayfish && selectedDangPoll) {
+                        checkedFilter.value = filterType[2]
+                    }
+                }
+            }
         }
     }
 }
@@ -322,7 +360,7 @@ fun AddMarker(
     context: Context
 ) {
     FloatingActionButton(
-        modifier = Modifier.padding(15.dp),
+        modifier = Modifier.padding(start = 0.dp, top = 0.dp, bottom = 15.dp, end = 15.dp),
         onClick = {
             when (PackageManager.PERMISSION_GRANTED) {
                 ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) -> {
@@ -336,192 +374,184 @@ fun AddMarker(
         Icon(Icons.Filled.Add, contentDescription = null)
     }
 
+    val sheetState = rememberModalBottomSheetState()
     when {
         openFormWindow.value -> {
 
-            Dialog(onDismissRequest = { openFormWindow.value = false }) {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(15.dp),
+            ModalBottomSheet(
+                onDismissRequest = { openFormWindow.value = false },
+                sheetState = sheetState
+            ) {
+                Box(
+                    modifier = Modifier.padding(20.dp),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Box(
-                        modifier = Modifier.padding(20.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        var expandedMarkerType by remember { mutableStateOf(false) }
-                        val markerTypes = arrayOf(MarkersType.CRAYFISH, MarkersType.DANGER, MarkersType.POLLUTION)
-                        var selectedMarkerType by remember { mutableStateOf(markerTypes[0]) }
-                        val markerTypesString = arrayOf("Rak", "Zagrożenie", "Zanieczyszczenie")
-                        var selectedMarkerTypeString by remember { mutableStateOf(markerTypesString[0]) }
+                    var expandedMarkerType by remember { mutableStateOf(false) }
+                    val markerTypes = arrayOf(MarkerMockType.CRAYFISH, MarkerMockType.DANGER, MarkerMockType.POLLUTION)
+                    var selectedMarkerType by remember { mutableStateOf(markerTypes[0]) }
+                    val markerTypesString = arrayOf("Rak", "Zagrożenie", "Zanieczyszczenie")
+                    var selectedMarkerTypeString by remember { mutableStateOf(markerTypesString[0]) }
 
-                        Column {
-                            Text("Typ znacznika:")
-                            ExposedDropdownMenuBox(
+                    Column {
+                        Text("Typ znacznika:")
+                        ExposedDropdownMenuBox(
+                            expanded = expandedMarkerType,
+                            onExpandedChange = { expandedMarkerType = !expandedMarkerType }
+                        ) {
+                            TextField(
+                                value = selectedMarkerTypeString,
+                                onValueChange = {},
+                                readOnly = true,
+                                trailingIcon = {
+                                    ExposedDropdownMenuDefaults.TrailingIcon(
+                                        expanded = expandedMarkerType
+                                    )
+                                },
+                                colors = ExposedDropdownMenuDefaults.textFieldColors(),
+                                modifier = Modifier.menuAnchor(),
+                            )
+
+                            ExposedDropdownMenu(
                                 expanded = expandedMarkerType,
-                                onExpandedChange = { expandedMarkerType = !expandedMarkerType }
-                            ) {
-                                TextField(
-                                    value = selectedMarkerTypeString,
-                                    onValueChange = {},
-                                    readOnly = true,
-                                    trailingIcon = {
-                                        ExposedDropdownMenuDefaults.TrailingIcon(
-                                            expanded = expandedMarkerType
-                                        )
-                                    },
-                                    colors = ExposedDropdownMenuDefaults.textFieldColors(),
-                                    modifier = Modifier.menuAnchor(),
+                                onDismissRequest = { expandedMarkerType = false }) {
+                                DropdownMenuItem(
+                                    text = { Text(text = "Rak") },
+                                    onClick = {
+                                        selectedMarkerType = markerTypes[0]
+                                        selectedMarkerTypeString = markerTypesString[0]
+                                        expandedMarkerType = false
+                                    }
                                 )
-
-                                ExposedDropdownMenu(
-                                    expanded = expandedMarkerType,
-                                    onDismissRequest = { expandedMarkerType = false }) {
-                                    DropdownMenuItem(
-                                        text = { Text(text = "Rak") },
-                                        onClick = {
-                                            selectedMarkerType = markerTypes[0]
-                                            selectedMarkerTypeString = markerTypesString[0]
-                                            expandedMarkerType = false
-                                        }
-                                    )
-                                    DropdownMenuItem(
-                                        text = { Text(text = "Niebezpieczeństwo") },
-                                        onClick = {
-                                            selectedMarkerType = markerTypes[1]
-                                            selectedMarkerTypeString = markerTypesString[1]
-                                            expandedMarkerType = false
-                                        }
-                                    )
-                                    DropdownMenuItem(
-                                        text = { Text(text = "Zanieczyszczenie") },
-                                        onClick = {
-                                            selectedMarkerType = markerTypes[2]
-                                            selectedMarkerTypeString = markerTypesString[2]
-                                            expandedMarkerType = false
-                                        }
-                                    )
-                                }
-                            }
-
-                            var expandedCrayfishType by remember { mutableStateOf(false) }
-                            val crayfishTypes = arrayOf(CrayfishesType.NOBLE, CrayfishesType.AMERICAN, CrayfishesType.SIGNAL, CrayfishesType.MUD, CrayfishesType.UNVERIFIED, CrayfishesType.NONE)
-                            var selectedCrayfishType by remember { mutableStateOf(crayfishTypes[5]) }
-                            val crayfishTypesString = arrayOf("Szlachetny", "Amerykański", "Sygnałowy", "Błotny", "Niezweryfikowany")
-                            var selectedCrayfishTypeString by remember { mutableStateOf(crayfishTypesString[0]) }
-
-                            if (selectedMarkerType == MarkersType.CRAYFISH) {
-                                Spacer(modifier = Modifier.height(25.dp))
-                                Column {
-
-
-                                    Text("Typ raka:")
-                                    ExposedDropdownMenuBox(
-                                        expanded = expandedCrayfishType,
-                                        onExpandedChange = { expandedCrayfishType = !expandedCrayfishType }
-                                    ) {
-                                        TextField(
-                                            value = selectedCrayfishTypeString,
-                                            onValueChange = {},
-                                            readOnly = true,
-                                            trailingIcon = {
-                                                ExposedDropdownMenuDefaults.TrailingIcon(
-                                                    expanded = expandedCrayfishType
-                                                )
-                                            },
-                                            colors = ExposedDropdownMenuDefaults.textFieldColors(),
-                                            modifier = Modifier.menuAnchor(),
-                                        )
-
-                                        ExposedDropdownMenu(
-                                            expanded = expandedCrayfishType,
-                                            onDismissRequest = { expandedCrayfishType = false }) {
-                                            DropdownMenuItem(
-                                                text = { Text(text = "Szlachetny") },
-                                                onClick = {
-                                                    selectedCrayfishType = crayfishTypes[0]
-                                                    selectedCrayfishTypeString = crayfishTypesString[0]
-                                                    expandedCrayfishType = false
-                                                }
-                                            )
-                                            DropdownMenuItem(
-                                                text = { Text(text = "Amerykański") },
-                                                onClick = {
-                                                    selectedCrayfishType = crayfishTypes[1]
-                                                    selectedCrayfishTypeString = crayfishTypesString[1]
-                                                    expandedCrayfishType = false
-                                                }
-                                            )
-                                            DropdownMenuItem(
-                                                text = { Text(text = "Sygnałowy") },
-                                                onClick = {
-                                                    selectedCrayfishType = crayfishTypes[2]
-                                                    selectedCrayfishTypeString = crayfishTypesString[2]
-                                                    expandedCrayfishType = false
-                                                }
-                                            )
-                                            DropdownMenuItem(
-                                                text = { Text(text = "Błotny") },
-                                                onClick = {
-                                                    selectedCrayfishType = crayfishTypes[3]
-                                                    selectedCrayfishTypeString = crayfishTypesString[3]
-                                                    expandedCrayfishType = false
-                                                }
-                                            )
-                                            DropdownMenuItem(
-                                                text = { Text(text = "Niezweryfikowany") },
-                                                onClick = {
-                                                    selectedCrayfishType = crayfishTypes[4]
-                                                    selectedCrayfishTypeString = crayfishTypesString[4]
-                                                    expandedCrayfishType = false
-                                                }
-                                            )
-
-                                        }
+                                DropdownMenuItem(
+                                    text = { Text(text = "Niebezpieczeństwo") },
+                                    onClick = {
+                                        selectedMarkerType = markerTypes[1]
+                                        selectedMarkerTypeString = markerTypesString[1]
+                                        expandedMarkerType = false
                                     }
-                                }
-                            }
-                            Spacer(modifier = Modifier.height(12.dp))
-                            var title by remember { mutableStateOf("") }
-                            OutlinedTextField(value = title, onValueChange = { title = it}, label = { Text("Nazwa lokacji znacznika") })
-                            Spacer(modifier = Modifier.height(12.dp))
-                            var description by remember { mutableStateOf("") }
-                            OutlinedTextField(value = description, onValueChange = { description = it}, label = { Text("Opis znacznika") })
-
-                            Spacer(modifier = Modifier.height(12.dp))
-                            Button(onClick = {
-                                when(PackageManager.PERMISSION_GRANTED) {
-                                    ContextCompat.checkSelfPermission(
-                                        context,
-                                        Manifest.permission.ACCESS_FINE_LOCATION
-                                    ) -> {
-                                        val userLocation = LocationServices.getFusedLocationProviderClient(context)
-                                        userLocation.lastLocation.addOnSuccessListener {
-                                            location: Location? ->
-                                            if(location != null) {
-                                                val lat = location.latitude
-                                                val lng = location.longitude
-                                                val currentDate = getCurrentDate()
-                                                markers.add(Marker(lat, lng, title, description, currentDate, selectedMarkerType, selectedCrayfishType))
-                                                openFormWindow.value = false
-                                            }
-                                        }
+                                )
+                                DropdownMenuItem(
+                                    text = { Text(text = "Zanieczyszczenie") },
+                                    onClick = {
+                                        selectedMarkerType = markerTypes[2]
+                                        selectedMarkerTypeString = markerTypesString[2]
+                                        expandedMarkerType = false
                                     }
-                                }
-                            }) {
-                                Text(text = "Dodaj znacznik")
+                                )
                             }
                         }
+
+                        var expandedCrayfishType by remember { mutableStateOf(false) }
+                        val crayfishTypes = arrayOf(CrayfishMockType.NOBLE, CrayfishMockType.AMERICAN, CrayfishMockType.SIGNAL, CrayfishMockType.MUD, CrayfishMockType.UNVERIFIED, CrayfishMockType.NONE)
+                        var selectedCrayfishType by remember { mutableStateOf(crayfishTypes[5]) }
+                        val crayfishTypesString = arrayOf("Szlachetny", "Amerykański", "Sygnałowy", "Błotny", "Niezweryfikowany")
+                        var selectedCrayfishTypeString by remember { mutableStateOf(crayfishTypesString[0]) }
+
+                        if (selectedMarkerType == MarkerMockType.CRAYFISH) {
+                            Spacer(modifier = Modifier.height(25.dp))
+                            Column {
+
+
+                                Text("Typ raka:")
+                                ExposedDropdownMenuBox(
+                                    expanded = expandedCrayfishType,
+                                    onExpandedChange = { expandedCrayfishType = !expandedCrayfishType }
+                                ) {
+                                    TextField(
+                                        value = selectedCrayfishTypeString,
+                                        onValueChange = {},
+                                        readOnly = true,
+                                        trailingIcon = {
+                                            ExposedDropdownMenuDefaults.TrailingIcon(
+                                                expanded = expandedCrayfishType
+                                            )
+                                        },
+                                        colors = ExposedDropdownMenuDefaults.textFieldColors(),
+                                        modifier = Modifier.menuAnchor(),
+                                    )
+
+                                    ExposedDropdownMenu(
+                                        expanded = expandedCrayfishType,
+                                        onDismissRequest = { expandedCrayfishType = false }) {
+                                        DropdownMenuItem(
+                                            text = { Text(text = "Szlachetny") },
+                                            onClick = {
+                                                selectedCrayfishType = crayfishTypes[0]
+                                                selectedCrayfishTypeString = crayfishTypesString[0]
+                                                expandedCrayfishType = false
+                                            }
+                                        )
+                                        DropdownMenuItem(
+                                            text = { Text(text = "Amerykański") },
+                                            onClick = {
+                                                selectedCrayfishType = crayfishTypes[1]
+                                                selectedCrayfishTypeString = crayfishTypesString[1]
+                                                expandedCrayfishType = false
+                                            }
+                                        )
+                                        DropdownMenuItem(
+                                            text = { Text(text = "Sygnałowy") },
+                                            onClick = {
+                                                selectedCrayfishType = crayfishTypes[2]
+                                                selectedCrayfishTypeString = crayfishTypesString[2]
+                                                expandedCrayfishType = false
+                                            }
+                                        )
+                                        DropdownMenuItem(
+                                            text = { Text(text = "Błotny") },
+                                            onClick = {
+                                                selectedCrayfishType = crayfishTypes[3]
+                                                selectedCrayfishTypeString = crayfishTypesString[3]
+                                                expandedCrayfishType = false
+                                            }
+                                        )
+                                        DropdownMenuItem(
+                                            text = { Text(text = "Niezweryfikowany") },
+                                            onClick = {
+                                                selectedCrayfishType = crayfishTypes[4]
+                                                selectedCrayfishTypeString = crayfishTypesString[4]
+                                                expandedCrayfishType = false
+                                            }
+                                        )
+
+                                    }
+                                }
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(12.dp))
+                        var title by remember { mutableStateOf("") }
+                        OutlinedTextField(value = title, onValueChange = { title = it}, label = { Text("Nazwa lokacji znacznika") })
+                        Spacer(modifier = Modifier.height(12.dp))
+                        var description by remember { mutableStateOf("") }
+                        OutlinedTextField(value = description, onValueChange = { description = it}, label = { Text("Opis znacznika") })
+
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Button(onClick = {
+                            when(PackageManager.PERMISSION_GRANTED) {
+                                ContextCompat.checkSelfPermission(
+                                    context,
+                                    Manifest.permission.ACCESS_FINE_LOCATION
+                                ) -> {
+                                    val userLocation = LocationServices.getFusedLocationProviderClient(context)
+                                    userLocation.lastLocation.addOnSuccessListener {
+                                            location: Location? ->
+                                        if(location != null) {
+                                            val lat = location.latitude
+                                            val lng = location.longitude
+                                            val currentDate = getCurrentDate()
+                                            markerMockList.add(MarkerMock(lat, lng, title, description, currentDate, selectedMarkerType, selectedCrayfishType))
+                                            openFormWindow.value = false
+                                        }
+                                    }
+                                }
+                            }
+                        }) {
+                            Text(text = "Dodaj znacznik")
+                        }
+                        Spacer(modifier = Modifier.height(12.dp))
                     }
                 }
             }
         }
     }
 }
-
-//@Preview
-//@Composable
-//fun TestAddMarker() {
-//    val openFormWindow = remember { mutableStateOf(true) }
-//    AddMarker(openFormWindow)
-//}

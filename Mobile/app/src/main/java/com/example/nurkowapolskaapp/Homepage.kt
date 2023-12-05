@@ -17,45 +17,45 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.nurkowapolskaapp.app.functions.maps.CrayfishesType
-import com.example.nurkowapolskaapp.app.functions.maps.Marker
-import com.example.nurkowapolskaapp.app.functions.maps.MarkersType
-import com.example.nurkowapolskaapp.app.functions.maps.markers
+import com.example.nurkowapolskaapp.app.functions.maps.CrayfishMockType
+import com.example.nurkowapolskaapp.app.functions.maps.MarkerMock
+import com.example.nurkowapolskaapp.app.functions.maps.MarkerMockType
+import com.example.nurkowapolskaapp.app.functions.maps.markerMockList
 
 @Composable
 fun Homepage(navController: NavController) {
     // Mock data
-    markers.add(
-        Marker(
+    markerMockList.add(
+        MarkerMock(
             52.22977,
             21.01178,
             "Rak",
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
             "14/10/2023",
-            MarkersType.CRAYFISH,
-            CrayfishesType.MUD
+            MarkerMockType.CRAYFISH,
+            CrayfishMockType.MUD
         )
     )
-    markers.add(
-        Marker(
+    markerMockList.add(
+        MarkerMock(
             54.35205,
             18.64637,
             "Zagrożenie",
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
             "14/10/2023",
-            MarkersType.DANGER,
-            CrayfishesType.NONE
+            MarkerMockType.DANGER,
+            CrayfishMockType.NONE
         )
     )
-    markers.add(
-        Marker(
+    markerMockList.add(
+        MarkerMock(
             53.9293,
             18.8613,
             "Zanieczyszczenie",
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
             "14/10/2023",
-            MarkersType.POLLUTION,
-            CrayfishesType.NONE
+            MarkerMockType.POLLUTION,
+            CrayfishMockType.NONE
         )
     )
     Column(
@@ -63,15 +63,15 @@ fun Homepage(navController: NavController) {
         verticalArrangement = Arrangement.Center
     ) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-//            Button(
-//                modifier = Modifier
-//                    .width(180.dp)
-//                    .height(60.dp),
-//                onClick = {
-//                    navController.navigate("mapOfMarkers")
-//                }) {
-//                Text(text = "Test Mapa")
-//            }
+            Button(
+                modifier = Modifier
+                    .width(180.dp)
+                    .height(60.dp),
+                onClick = {
+
+                }) {
+                Text(text = "Test Mapa")
+            }
             Button(
                 modifier = Modifier
                     .width(180.dp)

@@ -32,8 +32,8 @@ import com.google.maps.android.compose.rememberCameraPositionState
 @Composable
 fun TestMap(navController: NavController) {
     // Mock data
-    markers.plus(Marker(52.22977, 21.01178, "Warszawa", "Miasto Warszawa", "14-10-2023", MarkersType.CRAYFISH, CrayfishesType.MUD))
-    markers.plus(Marker(54.35205, 18.64637, "Gdańsk", "Miasto Gdańsk", "14-10-2023", MarkersType.DANGER, CrayfishesType.NONE))
+    markerMockList.plus(MarkerMock(52.22977, 21.01178, "Warszawa", "Miasto Warszawa", "14-10-2023", MarkerMockType.CRAYFISH, CrayfishMockType.MUD))
+    markerMockList.plus(MarkerMock(54.35205, 18.64637, "Gdańsk", "Miasto Gdańsk", "14-10-2023", MarkerMockType.DANGER, CrayfishMockType.NONE))
 
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(currentUserLocation, 5.5f)
@@ -47,11 +47,11 @@ fun TestMap(navController: NavController) {
                 uiSettings = MapUiSettings(zoomControlsEnabled = true),
                 googleMapOptionsFactory = { GoogleMapOptions().mapId((R.string.map_id).toString()) }
             ) {
-                for (marker in markers) {
+                for (marker in markerMockList) {
                     val mPosition = LatLng(marker.lat, marker.lng)
                     val mType = marker.title
                     val mSnippet = marker.markerType.toString() +" "+ marker.description
-                    if(markerFilter == marker.markerType) {
+                    if(markerMockFilter == marker.markerType) {
                         AdvancedMarker(
                             state = MarkerState(position = mPosition),
                             title = mType,
@@ -86,7 +86,7 @@ fun FilterMarkers(
 ) {
     Column(modifier = Modifier.height(IntrinsicSize.Max)) {
         SmallFloatingActionButton(onClick = {
-            markerFilter = MarkersType.CRAYFISH
+            markerMockFilter = MarkerMockType.CRAYFISH
             navController.popBackStack()
             navController.navigate("mapOfMarkers")
         }) {
@@ -96,7 +96,7 @@ fun FilterMarkers(
             }
         }
         SmallFloatingActionButton(onClick = {
-            markerFilter = MarkersType.DANGER
+            markerMockFilter = MarkerMockType.DANGER
             navController.popBackStack()
             navController.navigate("mapOfMarkers")
         }) {
@@ -106,7 +106,7 @@ fun FilterMarkers(
             }
         }
         SmallFloatingActionButton(onClick = {
-            markerFilter = MarkersType.POLLUTION
+            markerMockFilter = MarkerMockType.POLLUTION
             navController.popBackStack()
             navController.navigate("mapOfMarkers")
         }) {

@@ -24,7 +24,7 @@ export default function AdminView({markers}) {
                 <AdminMarkerTable markers={markers}/>
             )}
             {usersVisible && (
-                <AdminTable markers={markers}/>
+                <AdminTable/>
             )}
         </div>
         

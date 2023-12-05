@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function AddAdminPopup(props) {
+export default function AddMarkerPopup(props) {
     return (props.trigger) ? (
         <div className="Popup">
             <div className="PopupInner">

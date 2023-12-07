@@ -26,8 +26,14 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb:3.1.5")
     implementation("org.mongodb:bson-kotlinx:4.11.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.1")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("io.jsonwebtoken:jjwt-jackson:0.12.3")
+    implementation("io.jsonwebtoken:jjwt-impl:0.12.3")
+    implementation("io.jsonwebtoken:jjwt-api:0.12.3")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.mockk:mockk:1.13.8")
+    testImplementation("org.springframework.security:spring-security-test")
 }
 
 tasks.withType<KotlinCompile> {

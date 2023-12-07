@@ -1,0 +1,22 @@
+# Documentation / Swagger
+springdoc:
+    swagger-ui:
+        disable-swagger-default-url: true
+        path: /api
+
+# Database / MongoDB
+spring:
+    data:
+        mongodb:
+            authentication-database: admin
+            username: rootuser
+            password: rootpass
+            database: npamarkers
+            port: 27017
+            host: localhost
+
+# Security / JWT
+jwt:
+    key: ${JWT_KEY}
+    access-token-expiration: 3600000
+    refresh-token-expiration: 86400000

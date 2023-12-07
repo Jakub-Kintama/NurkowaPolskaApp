@@ -5,9 +5,7 @@ import pjatk.pjwstk.pl.api.datasource.MarkerDataSource
 import pjatk.pjwstk.pl.api.model.LatLng
 import pjatk.pjwstk.pl.api.model.MapMarker
 import pjatk.pjwstk.pl.api.model.Marker
-import pjatk.pjwstk.pl.api.model.User
 import pjatk.pjwstk.pl.api.model.enums.CrayfishType
-import pjatk.pjwstk.pl.api.model.enums.Role
 import java.time.LocalDate
 
 @Repository("mock")
@@ -42,19 +40,6 @@ class MockMarkerDataSource : MarkerDataSource {
             CrayfishType.GALICIAN,
             LocalDate.of(2023, 10, 17),
             true
-        )
-    )
-
-    val users = mutableListOf(
-        User(
-            "lol111@gmail.com"
-        ), User(
-            "xd222@wp.pl",
-            "xd222"
-        ), User(
-            "wow333@pjwstk.edu.pl",
-            "wow333",
-            Role.ADMIN
         )
     )
 

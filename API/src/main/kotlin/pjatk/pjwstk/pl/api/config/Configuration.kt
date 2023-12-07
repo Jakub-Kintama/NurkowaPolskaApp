@@ -1,4 +1,4 @@
-package pjatk.pjwstk.pl.api.config;
+package pjatk.pjwstk.pl.api.config
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -22,10 +22,10 @@ class Configuration {
         CustomUserDetailsService(userDataSource)
 
     @Bean
-    fun encoder(): PasswordEncoder = BCryptPasswordEncoder()    // TODO("delete?")
+    fun encoder(): PasswordEncoder = BCryptPasswordEncoder()
 
     @Bean
-    fun authenticationProvider(userDataSource: UserDataSource): AuthenticationProvider =    // TODO("delete?")
+    fun authenticationProvider(userDataSource: UserDataSource): AuthenticationProvider =
         DaoAuthenticationProvider()
             .also {
                 it.setUserDetailsService(userDetailsService(userDataSource))

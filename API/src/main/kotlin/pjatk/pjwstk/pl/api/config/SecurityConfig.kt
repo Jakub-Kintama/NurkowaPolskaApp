@@ -2,7 +2,6 @@ package pjatk.pjwstk.pl.api.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
@@ -26,12 +25,12 @@ class SecurityConfig(
             .csrf { it.disable() }
             .authorizeHttpRequests {
                 it
-                    .requestMatchers(HttpMethod.GET, "/api/markers")
-                    .permitAll()
-                    .requestMatchers(HttpMethod.POST, "/api/markers")
-                    .fullyAuthenticated()
-                    .requestMatchers("/api/markers**", "/api/users", "/api/users/**")
-                    .hasRole("ADMIN")
+//                    .requestMatchers(HttpMethod.GET, "/api/markers")
+//                    .permitAll()
+//                    .requestMatchers(HttpMethod.POST, "/api/markers")
+//                    .fullyAuthenticated()
+//                    .requestMatchers("/api/markers**", "/api/users", "/api/users/**")
+//                    .hasRole("ADMIN")
                     .anyRequest()
                     .permitAll()
             }

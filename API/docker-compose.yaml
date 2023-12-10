@@ -6,7 +6,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - data:/data
+      - ../MongoDB_data:/data/db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=rootuser
       - MONGO_INITDB_ROOT_PASSWORD=rootpass
@@ -24,7 +24,7 @@ services:
       - mongodb:mongodb
 
 volumes:
-  data: { }
+  mongodb_data: { }
 
 networks:
   default:

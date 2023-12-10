@@ -1,6 +1,5 @@
 package pjatk.pjwstk.pl.api.datasource
 
-import pjatk.pjwstk.pl.api.model.Admin
 import pjatk.pjwstk.pl.api.model.Marker
 import java.time.LocalDate
 
@@ -14,8 +13,4 @@ interface MarkerDataSource {
     fun createMarker(marker: Marker): Marker
     fun updateMarker(marker: Marker): Marker
     fun deleteMarker(markerId: String)
-    fun retrieveAdmins(): Collection<Admin>
-    fun retrieveAdminById(adminId: String): Admin
-    fun createAdmin(admin: Admin): Admin
-    fun deleteAdmin(adminId: String)
 }

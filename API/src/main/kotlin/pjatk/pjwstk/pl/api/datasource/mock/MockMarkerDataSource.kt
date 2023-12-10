@@ -2,7 +2,6 @@ package pjatk.pjwstk.pl.api.datasource.mock
 
 import org.springframework.stereotype.Repository
 import pjatk.pjwstk.pl.api.datasource.MarkerDataSource
-import pjatk.pjwstk.pl.api.model.Admin
 import pjatk.pjwstk.pl.api.model.LatLng
 import pjatk.pjwstk.pl.api.model.MapMarker
 import pjatk.pjwstk.pl.api.model.Marker
@@ -44,16 +43,6 @@ class MockMarkerDataSource : MarkerDataSource {
         )
     )
 
-    val admins = mutableListOf(
-        Admin(
-            "lol111@gmail.com"
-        ), Admin(
-            "xd222@wp.pl"
-        ), Admin(
-            "wow333@pjwstk.edu.pl"
-        )
-    )
-
     override fun retrieveMarkers(): Collection<Marker> = markers
     override fun retrieveMarkerById(markerId: String): Marker = markers.firstOrNull { it.id == markerId }
         ?: throw NoSuchElementException("Could not find a marker with id ${markerId}.")
@@ -89,25 +78,5 @@ class MockMarkerDataSource : MarkerDataSource {
             ?: throw NoSuchElementException("Could not find a marker with id ${markerId}.")
 
         markers.remove(currentMarker)
-    }
-
-    override fun retrieveAdmins(): Collection<Admin> = admins
-
-    override fun retrieveAdminById(adminId: String): Admin = admins.firstOrNull { it.id === adminId }
-        ?: throw NoSuchElementException("Could not find a marker with id ${adminId}.")
-
-    override fun createAdmin(admin: Admin): Admin {
-        if (admins.any { it.id == admin.id }) {
-            throw IllegalArgumentException("Marker with id ${admin.id} already exists.")
-        }
-        admins.add(admin)
-        return admin
-    }
-
-    override fun deleteAdmin(adminId: String) {
-        val currentAdmin = admins.firstOrNull { it.id == adminId }
-            ?: throw NoSuchElementException("Could not find a admin with id ${adminId}.")
-
-        admins.remove(currentAdmin)
     }
 }

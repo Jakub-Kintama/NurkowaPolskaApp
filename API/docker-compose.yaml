@@ -9,8 +9,6 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=rootuser
       - MONGO_INITDB_ROOT_PASSWORD=rootpass
-    volumes:
-      - ../../MongoDB:/data/db
 
   mongo-express:
     image: mongo-express

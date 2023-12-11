@@ -26,12 +26,12 @@ class SecurityConfig(
             .csrf { it.disable() }
             .authorizeHttpRequests {
                 it
-//                    .requestMatchers(HttpMethod.GET, "/api/markers")
-//                    .permitAll()
-//                    .requestMatchers(HttpMethod.POST, "/api/markers")
-//                    .fullyAuthenticated()
-//                    .requestMatchers("/api/markers**", "/api/users", "/api/users/**")
-//                    .hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET, "/api/markers")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/markers")
+                    .fullyAuthenticated()
+                    .requestMatchers("/api/markers**", "/api/users", "/api/users/**")
+                    .hasRole("ADMIN")
                     .anyRequest()
                     .permitAll()
             }

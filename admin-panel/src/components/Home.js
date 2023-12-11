@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import MarkerTable from "./MarkerTable";
-import AdminView from "./AdminView";
+import MarkerTable from "./tables/MarkerTable";
+import AdminView from "./views/AdminView"
 import axios from 'axios';
 import { saveAs } from 'file-saver';
 
@@ -21,7 +21,7 @@ export default function Home() {
           }
         };
         fetchData();
-    }, []);
+    }, [markers]);
 
     const exportMarkers = () => {
         const markersJson = JSON.stringify(markers, null, 2);

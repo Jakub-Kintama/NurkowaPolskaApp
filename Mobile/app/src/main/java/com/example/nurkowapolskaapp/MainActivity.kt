@@ -3,6 +3,7 @@ package com.example.nurkowapolskaapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -18,19 +19,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.nurkowapolskaapp.app.functions.FirstAid
 import com.example.nurkowapolskaapp.app.functions.Insurance
-import com.example.nurkowapolskaapp.app.functions.maps.AddMarker
-import com.example.nurkowapolskaapp.app.functions.maps.CrayfishesType
-import com.example.nurkowapolskaapp.app.functions.maps.Marker
-import com.example.nurkowapolskaapp.app.functions.maps.MarkersMap
-import com.example.nurkowapolskaapp.app.functions.maps.MarkersType
-import com.example.nurkowapolskaapp.app.functions.maps.TestMap
-import com.example.nurkowapolskaapp.app.functions.maps.markers
+import com.example.nurkowapolskaapp.app.functions.map.MarkersMap
 import com.example.nurkowapolskaapp.ui.theme.NurkowaPolskaAppTheme
 
 
@@ -86,21 +80,10 @@ fun AppScaffold() {
         {
             NavHost(navController, startDestination = "homepage") {
                 composable("homepage") { Homepage(navController) }
-                composable("mapOfMarkers") { TestMap(navController) }
                 composable("insurance") { Insurance(navController) }
-                composable("firstAid") { FirstAid(navController) }
-                composable("addMarker") { AddMarker(navController) }
+                composable("firstAid") { FirstAid() }
                 composable("markersMap") { MarkersMap() }
             }
         }
     }
 }
-
-
-
-@Preview(showSystemUi = false, showBackground = false)
-@Composable
-fun AppScaffoldPreview() {
-    AppScaffold()
-}
-

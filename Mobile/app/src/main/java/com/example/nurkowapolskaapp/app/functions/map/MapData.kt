@@ -1,4 +1,4 @@
-package com.example.nurkowapolskaapp.app.functions.maps
+package com.example.nurkowapolskaapp.app.functions.map
 
 import androidx.compose.runtime.mutableStateListOf
 import com.google.android.gms.maps.model.LatLng
@@ -7,7 +7,6 @@ import com.google.android.gms.maps.model.LatLng
 var currentUserLocation = LatLng(51.91890, 19.13437)
 
 var markerMockList = mutableStateListOf<MarkerMock>()
-var markerMockFilter: MarkerMockType = MarkerMockType.CRAYFISH
 
 enum class MarkerMockType {
     CRAYFISH, DANGER, POLLUTION

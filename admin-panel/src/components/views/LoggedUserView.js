@@ -1,5 +1,5 @@
 import React from "react";
-import MarkerTable from "./MarkerTable";
+import MarkerTable from "../tables/MarkerTable";
 
 const [AddMarkerPopupButton, setAddMarkerPopupButton] = useState(false);
 

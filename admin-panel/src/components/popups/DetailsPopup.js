@@ -1,5 +1,5 @@
 import React from "react";
-import { crayfishTypeSwitch } from "./functions";
+import { crayfishTypeSwitch } from "../functions";
 
 export default function DetailsPopup(props) {
     return (props.trigger) ? (

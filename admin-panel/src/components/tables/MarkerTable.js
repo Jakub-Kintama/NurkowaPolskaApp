@@ -1,6 +1,6 @@
 import React, {useState} from "react";
-import DetailsPopup from "./DetailsPopup";
-import { crayfishTypeSwitch, sortData } from "./functions";
+import DetailsPopup from "../popups/DetailsPopup";
+import { crayfishTypeSwitch, sortMarkers, generateTableHeaders, handleHeaderClick } from "../functions";
 
 export default function MarkerTable({markers}) {
 
@@ -23,8 +23,8 @@ export default function MarkerTable({markers}) {
             marker.userEmail]);
     };
 
-    const handleHeaderClick = (header, sort) => {
-        header === currentHeader ? (sort === "asc" ? setSortAs("desc") : setSortAs("asc")) : setCurrentHeader(header)
+    const handleHeaderClickWrapper = (header) => {
+        handleHeaderClick(header, currentHeader, sortAs, setCurrentHeader, setSortAs);
     };
 
     return(
@@ -33,21 +33,11 @@ export default function MarkerTable({markers}) {
         <table className="MarkerTable">
             <thead>
                 <tr>
-                    {headers.map( (header, index) => (
-                        <th key={index} onClick={() => handleHeaderClick(header, sortAs)}>
-                            {header}
-                            {currentHeader === header && (
-                                <span>
-                                    {sortAs === "asc" ? " ▲" : " ▼"}
-                                </span>
-                            )}
-                        </th>
-                    ))
-                    }
+                    {generateTableHeaders(headers, currentHeader, sortAs, handleHeaderClickWrapper)}
                 </tr>
             </thead>
             <tbody>
-                {sortData(markers, currentHeader, sortAs).map( (marker, index) => (
+                {sortMarkers(markers, currentHeader, sortAs).map( (marker, index) => (
                     <tr key={index}>
                         <td>{marker.date}</td>
                         <td>{marker.mapMarker.position.lat}, {marker.mapMarker.position.lng}</td>

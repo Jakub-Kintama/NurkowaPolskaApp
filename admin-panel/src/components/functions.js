@@ -13,7 +13,28 @@ export function crayfishTypeSwitch(param) {
     }
 }
 
-export const sortData = (data, header, sortAs) => {
+export const generateTableHeaders = (headers, currentHeader, sortAs, handleHeaderClick) => {
+    return headers.map((header, index) => (
+        <th key={index} onClick={() => handleHeaderClick(header)}>
+            {header}
+            {currentHeader === header && (
+                <span>
+                    {sortAs === "asc" ? " ▲" : " ▼"}
+                </span>
+            )}
+        </th>
+    ));
+};
+
+export const handleHeaderClick = (header, currentHeader, sortAs, setCurrentHeader, setSortAs) => {
+    if (header === currentHeader) {
+        sortAs === "asc" ? setSortAs("desc") : setSortAs("asc");
+    } else {
+        setCurrentHeader(header);
+    }
+};
+
+export const sortMarkers = (data, header, sortAs) => {
     switch(header){
         case "Status":
             if(sortAs === "asc"){
@@ -41,6 +62,25 @@ export const sortData = (data, header, sortAs) => {
 
         default:
             return data.sort( (a,b) => a.verified - b.verified);
+    }
+    
+};
+export const sortUsers = (data, header, sortAs) => {
+    switch(header){
+        case "E-Mail":
+            if(sortAs === "asc"){
+                return data.sort( (a,b) => a.email.localeCompare(b.email));
+            }
+            return data.sort( (a,b) => b.email.localeCompare(a.email));
+
+        case "Rola":
+            if(sortAs === "asc"){
+                return data.sort( (a,b) => a.role.localeCompare(b.role));
+            }
+            return data.sort( (a,b) => b.role.localeCompare(a.role));
+
+        default:
+            return data.sort( (a,b) => a.role.localeCompare(b.role));
     }
     
 };

@@ -1,6 +1,6 @@
 import React, {useState} from "react";
-import AdminMarkerTable from "./AdminMarkerTable"
-import AdminTable from "./AdminTable";
+import AdminMarkerTable from "../tables/AdminMarkerTable"
+import AdminTable from "../tables/AdminTable";
 
 export default function AdminView({markers}) {
 

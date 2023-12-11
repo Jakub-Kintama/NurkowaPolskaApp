@@ -30,7 +30,7 @@ class SecurityConfig(
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/markers")
                     .fullyAuthenticated()
-                    .requestMatchers("/api/markers**", "/api/users", "/api/users/**")
+                    .requestMatchers("/api/markers", "/api/markers/**", "/api/users", "/api/users/**")
                     .hasRole("ADMIN")
                     .anyRequest()
                     .permitAll()

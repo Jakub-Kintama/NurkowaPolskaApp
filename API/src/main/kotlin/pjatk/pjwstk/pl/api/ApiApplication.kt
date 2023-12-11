@@ -26,7 +26,7 @@ class ApiApplication
             print("Inject test data?: (y/n) ")
             val userInput = scanner.nextLine()
             scanner.close()
-            if(userInput === "y"){
+            if(userInput == "y"){
                 println("injecting test data...")
 
                 userService.addUser(User("user@gmail.com", "user", Role.USER))

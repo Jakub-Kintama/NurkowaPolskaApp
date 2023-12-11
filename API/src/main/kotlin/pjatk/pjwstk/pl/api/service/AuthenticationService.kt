@@ -33,7 +33,7 @@ class AuthenticationService(
         dataSource.save(refreshToken, user)
 
         return AuthenticationResponse(
-            accessToken = accessToken, refreshToken = refreshToken
+            role = user.authorities, accessToken = accessToken, refreshToken = refreshToken
         )
     }
 

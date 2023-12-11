@@ -5,7 +5,7 @@ import { crayfishTypeSwitch, sortMarkers, generateTableHeaders, handleHeaderClic
 export default function MarkerTable({markers}) {
 
     const [DetailsPopupButton, setDetailsPopupButton] = useState(false);
-    const [markerDetails, setMarkerDetails] = useState([]);
+    const [markerDetails, setMarkerDetails] = useState({id: "", lat: "", lng: "", crayfishType: "", date: "", title: "", description: "", userEmail: ""});
     const [currentHeader, setCurrentHeader] = useState("Status");
     const [sortAs, setSortAs] = useState("asc");
 
@@ -13,14 +13,15 @@ export default function MarkerTable({markers}) {
 
     const handleDetailsClick = (marker) => {
         setDetailsPopupButton(true);
-        setMarkerDetails([
-            marker._id,
-            marker.mapMarker.position.lat,
-            marker.mapMarker.position.lng,
-            marker.date, marker.CrayfishType,
-            marker.mapMarker.title,
-            marker.mapMarker.description,
-            marker.userEmail]);
+        setMarkerDetails({
+            id: marker._id,
+            lat: marker.mapMarker.position.lat,
+            lng: marker.mapMarker.position.lng,
+            crayfishType: marker.CrayfishType, 
+            date: marker.date,
+            title: marker.mapMarker.title,
+            description: marker.mapMarker.description,
+            userEmail: marker.userEmail});
     };
 
     const handleHeaderClickWrapper = (header) => {

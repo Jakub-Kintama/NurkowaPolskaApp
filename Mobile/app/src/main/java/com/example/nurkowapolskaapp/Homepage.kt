@@ -17,10 +17,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.nurkowapolskaapp.app.functions.maps.CrayfishMockType
-import com.example.nurkowapolskaapp.app.functions.maps.MarkerMock
-import com.example.nurkowapolskaapp.app.functions.maps.MarkerMockType
-import com.example.nurkowapolskaapp.app.functions.maps.markerMockList
+import com.example.nurkowapolskaapp.app.functions.map.CrayfishMockType
+import com.example.nurkowapolskaapp.app.functions.map.MarkerMock
+import com.example.nurkowapolskaapp.app.functions.map.MarkerMockType
+import com.example.nurkowapolskaapp.app.functions.map.markerMockList
 
 @Composable
 fun Homepage(navController: NavController) {
@@ -68,18 +68,9 @@ fun Homepage(navController: NavController) {
                     .width(180.dp)
                     .height(60.dp),
                 onClick = {
-
-                }) {
-                Text(text = "Test Mapa")
-            }
-            Button(
-                modifier = Modifier
-                    .width(180.dp)
-                    .height(60.dp),
-                onClick = {
                     navController.navigate("markersMap")
                 }) {
-                Text(text = "Finalna Mapa")
+                Text(text = "Mapa Znaczników")
             }
         }
         Spacer(modifier = Modifier.size(100.dp))

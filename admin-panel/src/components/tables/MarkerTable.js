@@ -34,7 +34,9 @@ export default function MarkerTable({markers}) {
                         <td>{marker.date}</td>
                         <td>{marker.mapMarker.position.lat}, {marker.mapMarker.position.lng}</td>
                         <td>{crayfishTypeSwitch(marker.CrayfishType)}</td>
-                        <td>{marker.verified ? "Zweryfikowany" : "Niezweryfikowany" }</td>
+                        <td className={marker.verified ? "" : "UnverifiedText"}>
+                            {marker.verified ? "Zweryfikowany" : "Niezweryfikowany"}
+                        </td>
                         <td><button className="TableButton" onClick={ () => handleDetailsClickWrapper(marker)}>Szczegóły</button></td>
                     </tr>
                 ))}

@@ -63,7 +63,7 @@ export default function AdminTable( {token} ) {
                     ))}
                 </tbody>
             </table>
-            <AddAdminPopup trigger={AddAdminPopupButton} setTrigger={setAddAdminPopupButton} refreshTable={setRefreshTable}></AddAdminPopup>
+            <AddAdminPopup trigger={AddAdminPopupButton} setTrigger={setAddAdminPopupButton} refreshTable={setRefreshTable} token={token}></AddAdminPopup>
             <EditAdminPopup trigger={EditAdminPopupButton} setTrigger={setEditAdminPopupButton} email={selectedAdmin}></EditAdminPopup>
         </div>
     )

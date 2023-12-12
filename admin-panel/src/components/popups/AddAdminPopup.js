@@ -21,7 +21,13 @@ export default function AddAdminPopup(props) {
         role: selectedRole
       };
 
-      await axios.post("http://localhost:8080/api/users", data);
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${props.token}`,
+        },
+      };
+
+      await axios.post("http://localhost:8080/api/users", data, config);
       props.setTrigger(false);
       props.refreshTable(true);
 

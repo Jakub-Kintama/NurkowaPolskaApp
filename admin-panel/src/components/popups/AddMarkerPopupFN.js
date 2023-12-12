@@ -71,7 +71,7 @@ export default function AddMarkerPopupFN(props) {
       <div className="PopupInner">
         <button onClick={() => props.setTrigger(false)} className="CloseButton">Zamknij</button>
         <br/>
-        <h2>Dodaj</h2>
+        <h2>Dodaj Znacznik</h2>
         <input
           type="text"
           placeholder="Latitude"

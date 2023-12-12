@@ -23,6 +23,7 @@ export default function AddAdminPopup(props) {
 
       await axios.post("http://localhost:8080/api/users", data);
       props.setTrigger(false);
+      props.refreshTable(true);
 
     } catch (error) {
       console.error("Błąd podczas przesyłania danych:", error);

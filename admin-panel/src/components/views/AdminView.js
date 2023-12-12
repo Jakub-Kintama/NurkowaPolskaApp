@@ -2,10 +2,10 @@ import React, {useState} from "react";
 import AdminMarkerTable from "../tables/AdminMarkerTable"
 import AdminTable from "../tables/AdminTable";
 
-export default function AdminView({markers}) {
+export default function AdminView({markers, token}) {
 
-    const [markersVisible, setMarkersVisible] = useState(true)
-    const [usersVisible, setUsersVisible] = useState(false)
+    const [markersVisible, setMarkersVisible] = useState(true);
+    const [usersVisible, setUsersVisible] = useState(false);
 
     const markersHandler = () => {
         setMarkersVisible(true);
@@ -24,7 +24,7 @@ export default function AdminView({markers}) {
                 <AdminMarkerTable markers={markers}/>
             )}
             {usersVisible && (
-                <AdminTable/>
+                <AdminTable token={token}/>
             )}
         </div>
         

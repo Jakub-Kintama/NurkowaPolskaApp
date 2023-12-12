@@ -34,6 +34,19 @@ export const handleHeaderClick = (header, currentHeader, sortAs, setCurrentHeade
     }
 };
 
+export const handleDetailsClick = (marker, setDetailsPopupButton, setMarkerDetails) => {
+    setDetailsPopupButton(true);
+    setMarkerDetails({
+        id: marker._id,
+        lat: marker.mapMarker.position.lat,
+        lng: marker.mapMarker.position.lng,
+        crayfishType: marker.CrayfishType, 
+        date: marker.date,
+        title: marker.mapMarker.title,
+        description: marker.mapMarker.description,
+        userEmail: marker.userEmail});
+};
+
 export const sortMarkers = (data, header, sortAs) => {
     switch(header){
         case "Status":

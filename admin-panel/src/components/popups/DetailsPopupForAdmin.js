@@ -1,7 +1,18 @@
 import React from "react";
 import { crayfishTypeSwitch } from "../functions";
+import axios from "axios";
 
-export default function DetailsPopup(props) {
+export default function DetailsPopupForAdmin(props) {
+
+    const handleDelete = async () => {
+        try {
+            await axios.delete(`http://localhost:8080/api/markers/${props.marker.id}`);
+            props.setTrigger(false);
+        } catch (error) {
+            console.error("Błąd podczas usuwania rekordu", error);
+        }
+    };
+
     return (props.trigger) ? (
         <div className="DetailsPopup">
             <div className="DetailsPopupInner">
@@ -17,6 +28,9 @@ export default function DetailsPopup(props) {
                         <p><strong>Dodane przez: </strong>{props.marker.userEmail}</p>
                     </div>
                 </div>
+                <button onClick={handleDelete} className="DeleteButton">
+                    <span role="img" aria-label="Delete">🗑️</span> Usuń
+                </button>
             </div>
         </div>
     ) : "";

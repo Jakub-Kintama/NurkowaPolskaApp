@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import DetailsPopup from "../popups/DetailsPopup";
-import { crayfishTypeSwitch, sortMarkers, generateTableHeaders, handleHeaderClick } from "../functions";
+import { crayfishTypeSwitch, sortMarkers, generateTableHeaders, handleHeaderClick, handleDetailsClick } from "../functions";
 
 export default function MarkerTable({markers}) {
 
@@ -11,21 +11,12 @@ export default function MarkerTable({markers}) {
 
     const headers = ["Data","Koordynaty", "Typ", "Status"];
 
-    const handleDetailsClick = (marker) => {
-        setDetailsPopupButton(true);
-        setMarkerDetails({
-            id: marker._id,
-            lat: marker.mapMarker.position.lat,
-            lng: marker.mapMarker.position.lng,
-            crayfishType: marker.CrayfishType, 
-            date: marker.date,
-            title: marker.mapMarker.title,
-            description: marker.mapMarker.description,
-            userEmail: marker.userEmail});
-    };
-
     const handleHeaderClickWrapper = (header) => {
         handleHeaderClick(header, currentHeader, sortAs, setCurrentHeader, setSortAs);
+    };
+
+    const handleDetailsClickWrapper = (marker) => {
+        handleDetailsClick(marker, setDetailsPopupButton, setMarkerDetails);
     };
 
     return(
@@ -44,7 +35,7 @@ export default function MarkerTable({markers}) {
                         <td>{marker.mapMarker.position.lat}, {marker.mapMarker.position.lng}</td>
                         <td>{crayfishTypeSwitch(marker.CrayfishType)}</td>
                         <td>{marker.verified ? "Zweryfikowany" : "Niezweryfikowany" }</td>
-                        <td><button className="TableButton" onClick={ () => handleDetailsClick(marker)}>Szczegóły</button></td>
+                        <td><button className="TableButton" onClick={ () => handleDetailsClickWrapper(marker)}>Szczegóły</button></td>
                     </tr>
                 ))}
             </tbody>

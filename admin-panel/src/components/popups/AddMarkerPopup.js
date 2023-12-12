@@ -47,7 +47,7 @@ export default function AddMarkerPopup(props) {
         <h2>Dodaj</h2>
         <input type="text" placeholder="Latitude" value={coordinates.latitude} onChange={(e) => setCoordinates({ ...coordinates, latitude: e.target.value })} />
         <input type="text" placeholder="Longitude" value={coordinates.longitude} onChange={(e) => setCoordinates({ ...coordinates, longitude: e.target.value })} />
-        <button>Submit</button>
+        <button className="SubmitButton">Submit</button>
       </div>
     </div>
   ) : "";

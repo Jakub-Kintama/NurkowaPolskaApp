@@ -1,25 +1,35 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useCallback} from "react";
 import AddAdminPopup from "../popups/AddAdminPopup";
 import EditAdminPopup from "../popups/EditAdminPopup";
 import axios from 'axios';
 import { sortUsers, generateTableHeaders, handleHeaderClick } from "../functions";
 
-export default function AdminTable() {
+export default function AdminTable( {token} ) {
 
     const [admins, setAdmins] = useState([]);
+    const [refreshTable, setRefreshTable] = useState(false);
+
     const apiAdmins = 'http://localhost:8080/api/users'
 
+    const fetchData = useCallback(async () => {
+        try {
+          const config = {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
+          };
+      
+          const response = await axios.get(apiAdmins, config);
+          setAdmins(response.data);
+        } catch (error) {
+          console.error('Error while fetching data:', error);
+        }
+      }, [token]);
+
     useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const response = await axios.get(apiAdmins);
-            setAdmins(response.data);
-          } catch (error) {
-            console.error('Error while fetching data:', error);
-          }
-        };
         fetchData();
-    }, [admins]);
+        setRefreshTable(false);
+    }, [refreshTable, token, fetchData]);
 
     const [AddAdminPopupButton, setAddAdminPopupButton] = useState(false);
     const [EditAdminPopupButton, setEditAdminPopupButton] = useState(false);
@@ -53,7 +63,7 @@ export default function AdminTable() {
                     ))}
                 </tbody>
             </table>
-            <AddAdminPopup trigger={AddAdminPopupButton} setTrigger={setAddAdminPopupButton}></AddAdminPopup>
+            <AddAdminPopup trigger={AddAdminPopupButton} setTrigger={setAddAdminPopupButton} refreshTable={setRefreshTable}></AddAdminPopup>
             <EditAdminPopup trigger={EditAdminPopupButton} setTrigger={setEditAdminPopupButton} email={selectedAdmin}></EditAdminPopup>
         </div>
     )

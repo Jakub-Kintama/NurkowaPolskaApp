@@ -1,13 +1,13 @@
 import React, {useState} from "react";
-import DetailsPopup from "../popups/DetailsPopup";
 import AddMarkerPopupFN from "../popups/AddMarkerPopupFN";
-import { crayfishTypeSwitch, sortMarkers, generateTableHeaders, handleHeaderClick } from "../functions";
+import { crayfishTypeSwitch, sortMarkers, generateTableHeaders, handleHeaderClick, handleDetailsClick } from "../functions";
+import DetailsPopupForAdmin from "../popups/DetailsPopupForAdmin";
 
 export default function AdminMarkerTable({markers}) {
 
     const [DetailsPopupButton, setDetailsPopupButton] = useState(false);
     const [AddMarkerPopupButton, setAddMarkerPopupButton] = useState(false);
-    const [markerDetails, setMarkerDetails] = useState([]);
+    const [markerDetails, setMarkerDetails] = useState({id: "", lat: "", lng: "", crayfishType: "", date: "", title: "", description: "", userEmail: ""});
     const [currentHeader, setCurrentHeader] = useState("Status");
     const [sortAs, setSortAs] = useState("asc");
 
@@ -15,6 +15,10 @@ export default function AdminMarkerTable({markers}) {
 
     const handleHeaderClickWrapper = (header) => {
         handleHeaderClick(header, currentHeader, sortAs, setCurrentHeader, setSortAs);
+    };
+
+    const handleDetailsClickWrapper = (marker) => {
+        handleDetailsClick(marker, setDetailsPopupButton, setMarkerDetails);
     };
 
     return(
@@ -33,12 +37,12 @@ export default function AdminMarkerTable({markers}) {
                         <td>{marker.date}</td>
                         <td>{crayfishTypeSwitch(marker.CrayfishType)}</td>
                         <td>{marker.verified ? "Zweryfikowany" : "Niezweryfikowany" }</td>
-                        <td><button className="TableButton" onClick={ () => {setDetailsPopupButton(true); setMarkerDetails([marker._id, marker.mapMarker.position.lat,marker.mapMarker.position.lng, marker.date, marker.CrayfishType, marker.mapMarker.title, marker.mapMarker.description, marker.userEmail])}}>Szczegóły</button></td>
+                        <td><button className="TableButton" onClick={ () => handleDetailsClickWrapper(marker) }>Szczegóły</button></td>
                     </tr>
                 ))}
             </tbody>  
         </table>   
-        <DetailsPopup trigger={DetailsPopupButton} setTrigger={setDetailsPopupButton} marker={markerDetails}/>  
+        <DetailsPopupForAdmin trigger={DetailsPopupButton} setTrigger={setDetailsPopupButton} marker={markerDetails}/>  
         <AddMarkerPopupFN trigger={AddMarkerPopupButton} setTrigger={setAddMarkerPopupButton}></AddMarkerPopupFN>
     </div>
     )

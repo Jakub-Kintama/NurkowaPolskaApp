@@ -54,10 +54,9 @@ fun MarkersMap() {
     val showMarker = remember { mutableStateOf(MarkerMockType.CRAYFISH) }
     val showFormWindow = remember { mutableStateOf(false) }
 
-    val showAdditionalInfo = remember { mutableStateOf(false) }
 
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(currentUserLocation, 1f)
+        position = CameraPosition.fromLatLngZoom(currentUserLocation, 15f)
     }
     Box(modifier = Modifier.fillMaxSize()) {
         Box {
@@ -79,7 +78,7 @@ fun MarkersMap() {
                             MarkerInfoWindow(
                                 state = MarkerState(position = position),
                                 icon = (BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)),
-                                onInfoWindowClick = { showAdditionalInfo.value = true }
+                                onInfoWindowClick = {  }
                             ) {
                                 Box(Modifier.padding(10.dp)) {
                                     CustomMarkerInfoWindow(markerMock = mapMarker)
@@ -92,7 +91,7 @@ fun MarkersMap() {
                             MarkerInfoWindow(
                                 state = MarkerState(position = position),
                                 icon = (BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)),
-                                onInfoWindowClick = { showAdditionalInfo.value = true }
+                                onInfoWindowClick = {  }
                             ) {
                                 Box(Modifier.padding(10.dp)) {
                                     CustomMarkerInfoWindow(markerMock = mapMarker)

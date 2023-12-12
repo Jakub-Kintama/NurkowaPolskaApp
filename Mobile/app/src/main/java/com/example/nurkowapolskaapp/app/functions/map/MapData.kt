@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateListOf
 import com.google.android.gms.maps.model.LatLng
 
 // Camera if permission not granted will start with Warsaw in center
-var currentUserLocation = LatLng(51.91890, 19.13437)
+var currentUserLocation = LatLng(52.22977, 21.01178)
 
 var markerMockList = mutableStateListOf<MarkerMock>()
 

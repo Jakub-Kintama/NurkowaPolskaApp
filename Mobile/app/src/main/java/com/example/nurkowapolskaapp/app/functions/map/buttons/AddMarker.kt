@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
+import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,6 +38,7 @@ import androidx.core.content.ContextCompat
 import com.example.nurkowapolskaapp.app.functions.map.CrayfishMockType
 import com.example.nurkowapolskaapp.app.functions.map.MarkerMock
 import com.example.nurkowapolskaapp.app.functions.map.MarkerMockType
+import com.example.nurkowapolskaapp.app.functions.map.functions.getAddress
 import com.example.nurkowapolskaapp.app.functions.map.functions.getCurrentDate
 import com.example.nurkowapolskaapp.app.functions.map.markerMockList
 import com.google.android.gms.location.LocationServices
@@ -226,9 +228,22 @@ fun AddMarker(
                                             val lat = location.latitude
                                             val lng = location.longitude
                                             /*  TODO: Get Location Name */
-                                            val title = "Nazwa Lokacji"
+                                            var address = "default"
+                                            val addresses = getAddress(lat, lng, context) { result ->
+                                                Log.d("addressTitleResult", result)
+                                            }
+                                            Log.d("addressTitle", addresses.toString())
                                             val currentDate = getCurrentDate()
-                                            markerMockList.add(MarkerMock(lat, lng, title, description, currentDate, selectedMarkerType, selectedCrayfishType))
+                                            markerMockList.add(
+                                                MarkerMock(
+                                                    lat,
+                                                    lng,
+                                                    address,
+                                                    description,
+                                                    currentDate,
+                                                    selectedMarkerType,
+                                                    selectedCrayfishType
+                                                ))
                                             openFormWindow.value = false
                                         }
                                     }

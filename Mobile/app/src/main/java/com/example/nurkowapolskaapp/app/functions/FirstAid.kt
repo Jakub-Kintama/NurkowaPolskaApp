@@ -19,12 +19,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.nurkowapolskaapp.R
 
 @Composable
-fun FirstAid(navController: NavController) {
-    Box(modifier = Modifier.fillMaxSize().padding(20.dp)) {
+fun FirstAid() {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .padding(20.dp)) {
         FirstAidInfo()
     }
 }

@@ -52,8 +52,7 @@ fun FilterButton(
                     FilterChip(
                         modifier = Modifier.padding(15.dp),
                         selected = selectedCrayfish.value,
-                        onClick = {
-                            selectedCrayfish.value = !selectedCrayfish.value },
+                        onClick = { selectedCrayfish.value = !selectedCrayfish.value },
                         label = { Text("Raki") },
                         leadingIcon = if (selectedCrayfish.value) {
                             {
@@ -88,7 +87,7 @@ fun FilterButton(
                             null
                         }
                     )
-                    if (selectedCrayfish.value && selectedDangPoll.value) {
+                    if (selectedCrayfish.value && selectedDangPoll.value || !selectedCrayfish.value && !selectedDangPoll.value) {
                         checkedFilter.value = filterType[2]
                     }
                 }

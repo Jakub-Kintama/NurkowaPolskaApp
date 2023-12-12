@@ -6,7 +6,12 @@ export default function DetailsPopupForAdmin(props) {
 
     const handleDelete = async () => {
         try {
-            await axios.delete(`http://localhost:8080/api/markers/${props.marker.id}`);
+            const config = {
+                headers: {
+                  'Authorization': `Bearer ${props.token}`,
+                },
+            };
+            await axios.delete(`http://localhost:8080/api/markers/${props.marker.id}`, config);
             props.setTrigger(false);
         } catch (error) {
             console.error("Błąd podczas usuwania rekordu", error);

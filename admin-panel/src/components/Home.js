@@ -10,7 +10,8 @@ export default function Home() {
     const [isLogged, setIsLogged] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     const [markers, setMarkers] = useState([]);
-    const [token, setToken] = useState("")
+    const [token, setToken] = useState("");
+    const [email, setEmail] = useState("");
     const [loginPopupButton, setLoginPopupButton] = useState(false);
 
     const apiMarkers = 'http://localhost:8080/api/markers'
@@ -33,9 +34,10 @@ export default function Home() {
         saveAs(blob, 'markers.json');
     };
 
-    const handleLoginSuccess = (token, refreshToken, role) => {
+    const handleLoginSuccess = (token, refreshToken, email, role) => {
         setIsLogged(true);
         setToken(token);
+        setEmail(email);
         setIsAdmin(role === 'ADMIN');
     };
 
@@ -54,7 +56,7 @@ export default function Home() {
                 {isAdmin && isLogged && (
                     <div className="ListContainer">
                         <button onClick={ () => setIsAdmin(false) } className="LogoutButton">Wyloguj</button><br/>
-                        <AdminView markers={markers} token={token}/>
+                        <AdminView markers={markers} token={token} email={email}/>
                     </div>
                 )}
                 {!isAdmin && (

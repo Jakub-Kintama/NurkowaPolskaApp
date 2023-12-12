@@ -46,13 +46,18 @@ export default function AddMarkerPopupFN(props) {
             title: title,
             description: description            
         },
-        userEmail: "ten co wysyła",
+        userEmail: props.email,
         CrayfishType: crayfishType,
         date: date.toISOString().split('T')[0],
         verified: false
       };
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${props.token}`,
+        },
+      };
 
-      await axios.post("http://localhost:8080/api/markers", data);
+      await axios.post("http://localhost:8080/api/markers", data, config);
       props.setTrigger(false);
       setLat("");
       setLng("");

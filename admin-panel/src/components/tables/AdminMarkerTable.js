@@ -3,7 +3,7 @@ import AddMarkerPopupFN from "../popups/AddMarkerPopupFN";
 import { crayfishTypeSwitch, sortMarkers, generateTableHeaders, handleHeaderClick, handleDetailsClick } from "../functions";
 import DetailsPopupForAdmin from "../popups/DetailsPopupForAdmin";
 
-export default function AdminMarkerTable({markers}) {
+export default function AdminMarkerTable({markers, token, email}) {
 
     const [DetailsPopupButton, setDetailsPopupButton] = useState(false);
     const [AddMarkerPopupButton, setAddMarkerPopupButton] = useState(false);
@@ -36,14 +36,16 @@ export default function AdminMarkerTable({markers}) {
                     <tr key={index}>
                         <td>{marker.date}</td>
                         <td>{crayfishTypeSwitch(marker.CrayfishType)}</td>
-                        <td>{marker.verified ? "Zweryfikowany" : "Niezweryfikowany" }</td>
+                        <td className={marker.verified ? "" : "UnverifiedText"}>
+                            {marker.verified ? "Zweryfikowany" : "Niezweryfikowany"}
+                        </td>
                         <td><button className="TableButton" onClick={ () => handleDetailsClickWrapper(marker) }>Szczegóły</button></td>
                     </tr>
                 ))}
             </tbody>  
         </table>   
-        <DetailsPopupForAdmin trigger={DetailsPopupButton} setTrigger={setDetailsPopupButton} marker={markerDetails}/>  
-        <AddMarkerPopupFN trigger={AddMarkerPopupButton} setTrigger={setAddMarkerPopupButton}></AddMarkerPopupFN>
+        <DetailsPopupForAdmin trigger={DetailsPopupButton} setTrigger={setDetailsPopupButton} marker={markerDetails} token={token}/>
+        <AddMarkerPopupFN trigger={AddMarkerPopupButton} setTrigger={setAddMarkerPopupButton} token={token} email={email}></AddMarkerPopupFN>
     </div>
     )
 }

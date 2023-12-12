@@ -23,9 +23,9 @@ export default function LoginForm( props ) {
             }
             const response = await axios.post(`http://localhost:8080/api/auth`, data);
             if (response.data.role[0].authority === "ROLE_ADMIN") {
-                props.onLoginSuccess(response.data.accessToken, response.data.refreshToken, "ADMIN");
+                props.onLoginSuccess(response.data.accessToken, response.data.refreshToken, response.data.email, "ADMIN");
             } else {
-                props.onLoginSuccess(response.data.accessToken, response.data.refreshToken, "USER");
+                props.onLoginSuccess(response.data.accessToken, response.data.refreshToken, response.data.email, "USER");
             }
             props.setTrigger(false);
             

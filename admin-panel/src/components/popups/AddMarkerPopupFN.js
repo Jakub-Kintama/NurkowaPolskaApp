@@ -57,8 +57,9 @@ export default function AddMarkerPopupFN(props) {
         },
       };
 
-      await axios.post("http://localhost:8080/api/markers", data, config);
+      await axios.post("http://172.19.100.10:8080/api/markers", data, config);
       props.setTrigger(false);
+      props.refreshTable(true);
       setLat("");
       setLng("");
       setTitle("");

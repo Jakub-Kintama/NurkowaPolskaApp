@@ -12,7 +12,7 @@ const handleSubmit = async () => {
         password: password
       };
 
-      const response = await axios.post("http://localhost:8080/api/auth", data);
+      const response = await axios.post("http://172.19.100.10:8080/api/auth", data);
       props.setTrigger(false);
 
     } catch (error) {

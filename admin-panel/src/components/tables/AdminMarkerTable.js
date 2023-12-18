@@ -3,11 +3,11 @@ import AddMarkerPopupFN from "../popups/AddMarkerPopupFN";
 import { crayfishTypeSwitch, sortMarkers, generateTableHeaders, handleHeaderClick, handleDetailsClick } from "../functions";
 import DetailsPopupForAdmin from "../popups/DetailsPopupForAdmin";
 
-export default function AdminMarkerTable({markers, token, email}) {
+export default function AdminMarkerTable({markers, token, email, refreshTable}) {
 
     const [DetailsPopupButton, setDetailsPopupButton] = useState(false);
     const [AddMarkerPopupButton, setAddMarkerPopupButton] = useState(false);
-    const [markerDetails, setMarkerDetails] = useState({id: "", lat: "", lng: "", crayfishType: "", date: "", title: "", description: "", userEmail: ""});
+    const [markerDetails, setMarkerDetails] = useState({id: "", lat: "", lng: "", crayfishType: "", date: "", title: "", description: "", verified: null, userEmail: ""});
     const [currentHeader, setCurrentHeader] = useState("Status");
     const [sortAs, setSortAs] = useState("asc");
 
@@ -44,8 +44,8 @@ export default function AdminMarkerTable({markers, token, email}) {
                 ))}
             </tbody>  
         </table>   
-        <DetailsPopupForAdmin trigger={DetailsPopupButton} setTrigger={setDetailsPopupButton} marker={markerDetails} token={token}/>
-        <AddMarkerPopupFN trigger={AddMarkerPopupButton} setTrigger={setAddMarkerPopupButton} token={token} email={email}></AddMarkerPopupFN>
+        <DetailsPopupForAdmin trigger={DetailsPopupButton} setTrigger={setDetailsPopupButton} marker={markerDetails} token={token} refreshTable={refreshTable}/>
+        <AddMarkerPopupFN trigger={AddMarkerPopupButton} setTrigger={setAddMarkerPopupButton} token={token} email={email} refreshTable={refreshTable}></AddMarkerPopupFN>
     </div>
     )
 }

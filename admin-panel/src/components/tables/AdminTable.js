@@ -8,8 +8,15 @@ export default function AdminTable( {token} ) {
 
     const [admins, setAdmins] = useState([]);
     const [refreshTable, setRefreshTable] = useState(false);
+    const [AddAdminPopupButton, setAddAdminPopupButton] = useState(false);
+    const [EditAdminPopupButton, setEditAdminPopupButton] = useState(false);
+    const [selectedAdmin, setSelectedAdmin] = useState("");
 
-    const apiAdmins = 'http://localhost:8080/api/users'
+    const headers = ["E-Mail", "Rola"];
+    const [currentHeader, setCurrentHeader] = useState("Rola");
+    const [sortAs, setSortAs] = useState("asc");
+
+    const apiAdmins = 'http://172.19.100.10:8080/api/users'
 
     const fetchData = useCallback(async () => {
         try {
@@ -31,13 +38,6 @@ export default function AdminTable( {token} ) {
         setRefreshTable(false);
     }, [refreshTable, token, fetchData]);
 
-    const [AddAdminPopupButton, setAddAdminPopupButton] = useState(false);
-    const [EditAdminPopupButton, setEditAdminPopupButton] = useState(false);
-    const [selectedAdmin, setSelectedAdmin] = useState();
-
-    const headers = ["E-Mail", "Rola"];
-    const [currentHeader, setCurrentHeader] = useState("Rola");
-    const [sortAs, setSortAs] = useState("asc");
 
     const handleHeaderClickWrapper = (header) => {
         handleHeaderClick(header, currentHeader, sortAs, setCurrentHeader, setSortAs);
@@ -58,13 +58,13 @@ export default function AdminTable( {token} ) {
                         <tr key={index} className="adminRow">
                             <td>{admin.email}</td>
                             <td>{admin.role}</td>
-                            <td><button onClick={() => {setEditAdminPopupButton(true); setSelectedAdmin(admin.id)}} className="TableButton">Edytuj</button></td>
+                            <td><button onClick={() => {setEditAdminPopupButton(true); setSelectedAdmin(admin.email)}} className="TableButton">Edytuj</button></td>
                         </tr>
                     ))}
                 </tbody>
             </table>
             <AddAdminPopup trigger={AddAdminPopupButton} setTrigger={setAddAdminPopupButton} refreshTable={setRefreshTable} token={token}></AddAdminPopup>
-            <EditAdminPopup trigger={EditAdminPopupButton} setTrigger={setEditAdminPopupButton} email={selectedAdmin}></EditAdminPopup>
+            <EditAdminPopup trigger={EditAdminPopupButton} setTrigger={setEditAdminPopupButton} email={selectedAdmin} refreshTable={setRefreshTable} token={token}></EditAdminPopup>
         </div>
     )
 }

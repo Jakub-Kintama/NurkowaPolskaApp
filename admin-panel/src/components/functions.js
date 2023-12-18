@@ -44,10 +44,12 @@ export const handleDetailsClick = (marker, setDetailsPopupButton, setMarkerDetai
         date: marker.date,
         title: marker.mapMarker.title,
         description: marker.mapMarker.description,
+        verified: marker.verified,
         userEmail: marker.userEmail});
 };
 
 export const sortMarkers = (data, header, sortAs) => {
+    data.sort( (a,b) => b.date.localeCompare(a.date))
     switch(header){
         case "Status":
             if(sortAs === "asc"){

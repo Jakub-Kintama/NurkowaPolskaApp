@@ -1,7 +1,10 @@
 package com.example.nurkowapolskaapp.app.functions.map.buttons
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -21,6 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.nurkowapolskaapp.app.functions.map.MarkerMockType
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,48 +52,75 @@ fun FilterButton(
                 onDismissRequest = { openFilterBottomSheet.value = false },
                 sheetState = sheetState
             ) {
-                Row(horizontalArrangement = Arrangement.SpaceEvenly) {
-                    FilterChip(
-                        modifier = Modifier.padding(15.dp),
-                        selected = selectedCrayfish.value,
-                        onClick = { selectedCrayfish.value = !selectedCrayfish.value },
-                        label = { Text("Raki") },
-                        leadingIcon = if (selectedCrayfish.value) {
-                            {
-                                checkedFilter.value = filterType[0]
-                                showMarker.value = MarkerMockType.CRAYFISH
-                                Icon(
-                                    Icons.Filled.Done,
-                                    null,
-                                    modifier = Modifier.size(FilterChipDefaults.IconSize)
-                                )
-                            }
-                        } else {
-                            null
+                Box(
+                    modifier = Modifier
+                        .padding(10.dp, 0.dp, 10.dp, 34.dp),
+                ) {
+                    Column {
+                        Row(modifier = Modifier.padding(36.dp, 0.dp)) {
+                            Text(text = "Filtr typy znaczników:", fontSize = 14.sp)
                         }
-                    )
-                    FilterChip(
-                        modifier = Modifier.padding(15.dp),
-                        selected = selectedDangPoll.value,
-                        onClick = { selectedDangPoll.value = !selectedDangPoll.value },
-                        label = { Text("Zagrożenia/Zanieczyszczenia") },
-                        leadingIcon = if (selectedDangPoll.value) {
-                            {
-                                checkedFilter.value = filterType[1]
-                                showMarker.value = MarkerMockType.POLLUTION
-                                Icon(
-                                    Icons.Filled.Done,
-                                    null,
-                                    modifier = Modifier.size(FilterChipDefaults.IconSize)
-                                )
+                        Row(modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center) {
+                            FilterChip(
+                                modifier = Modifier.padding(15.dp),
+                                selected = selectedCrayfish.value,
+                                onClick = { selectedCrayfish.value = !selectedCrayfish.value },
+                                label = { Text("Raki") },
+                                leadingIcon = if (selectedCrayfish.value) {
+                                    {
+                                        checkedFilter.value = filterType[0]
+                                        showMarker.value = MarkerMockType.CRAYFISH
+                                        Icon(
+                                            Icons.Filled.Done,
+                                            null,
+                                            modifier = Modifier.size(FilterChipDefaults.IconSize)
+                                        )
+                                    }
+                                } else {
+                                    null
+                                }
+                            )
+
+                            FilterChip(
+                                modifier = Modifier.padding(15.dp),
+                                selected = selectedDangPoll.value,
+                                onClick = { selectedDangPoll.value = !selectedDangPoll.value },
+                                label = {
+                                    Text(
+                                        "Zagrożenia i \nZanieczyszczenia",
+                                        modifier = Modifier.padding(3.dp)
+                                    )
+                                },
+                                leadingIcon = if (selectedDangPoll.value) {
+                                    {
+                                        checkedFilter.value = filterType[1]
+                                        showMarker.value = MarkerMockType.POLLUTION
+                                        Icon(
+                                            Icons.Filled.Done,
+                                            null,
+                                            modifier = Modifier.size(FilterChipDefaults.IconSize)
+                                        )
+                                    }
+                                } else {
+                                    null
+                                }
+                            )
+                            if (selectedCrayfish.value && selectedDangPoll.value || !selectedCrayfish.value && !selectedDangPoll.value) {
+                                checkedFilter.value = filterType[2]
                             }
-                        } else {
-                            null
                         }
-                    )
-                    if (selectedCrayfish.value && selectedDangPoll.value || !selectedCrayfish.value && !selectedDangPoll.value) {
-                        checkedFilter.value = filterType[2]
                     }
+//                    Column {
+//                        Row(
+//                            modifier = Modifier.fillMaxWidth().padding(0.dp),
+//                            horizontalArrangement = Arrangement.SpaceEvenly
+//                        ) {
+//                            Column {
+//
+//                            }
+//                        }
+//                    }
                 }
             }
         }

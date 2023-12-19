@@ -38,10 +38,10 @@ class MongodbUserDataSource(
         return mongoTemplate.save(updatedUser)
     }
 
-    override fun deleteUser(userId: String) {
-        val query = Query.query(Criteria.where("id").`is`(userId))
+    override fun deleteUser(userEmail: String) {
+        val query = Query.query(Criteria.where("_id").`is`(userEmail))
         val existingUser = mongoTemplate.findOne(query, User::class.java)
-            ?: throw NoSuchElementException("Could not find a user with id $userId.")
+            ?: throw NoSuchElementException("Could not find a user with email $userEmail.")
 
         mongoTemplate.remove(existingUser)
     }

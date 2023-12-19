@@ -6,5 +6,5 @@ interface UserDataSource {
     fun retrieveUsers(): Collection<User>
     fun retrieveUserByEmail(userId: String): User
     fun createUser(user: User): User
-    fun deleteUser(userId: String)
+    fun deleteUser(userEmail: String)
 }

@@ -1,5 +1,4 @@
 <resources>
-    <string name="your_web_client_id"></string>
     <string name="map_id">"54a125cc0263c7a7"</string>
     <string name="app_name">NurkowaPolskaApp</string>
     <string name="testImage">testImage</string>

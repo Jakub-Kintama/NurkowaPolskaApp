@@ -18,6 +18,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.example.nurkowapolskaapp.app.functions.map.buttons.AddMarker
+import com.example.nurkowapolskaapp.app.functions.map.buttons.AddMarkerNew
 import com.example.nurkowapolskaapp.app.functions.map.buttons.FilterButton
 import com.example.nurkowapolskaapp.app.functions.map.marker.CustomMarkerInfoWindow
 import com.example.nurkowapolskaapp.app.functions.signin.GoogleAuthUiClient
@@ -114,6 +115,7 @@ fun MarkersMap(
             Column {
                 if(googleAuthUiClient.getSignedInUser()?.userId != null) {
                     AddMarker(showFormWindow, permissionCheck, context)
+                    AddMarkerNew(showFormWindow, permissionCheck, context)
                 }
                 FilterButton(showMarker, filterListMarkerType, checkedFilterMarkerType, selectedCrayfish, selectedDangPoll)
             }

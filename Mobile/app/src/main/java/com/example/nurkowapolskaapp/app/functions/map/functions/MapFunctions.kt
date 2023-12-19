@@ -3,7 +3,6 @@ package com.example.nurkowapolskaapp.app.functions.map.functions
 import android.content.Context
 import android.location.Geocoder
 import android.os.Build
-import android.util.Log
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -22,19 +21,18 @@ fun getCurrentDate(): String {
     }
 }
 
-fun getAddress(lat: Double, lng: Double, context: Context, callback: (String) -> Unit) {
+fun getAddress(lat: Double, lng: Double, context: Context): String {
     val geocoder = Geocoder(context, Locale.getDefault())
-    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        geocoder.getFromLocation(lat, lng, 1) { addresses ->
-            if (addresses.isNotEmpty()) {
-                val address = addresses[0]
-                val subLocality = address.countryName.toString()
-                Log.d("address33locality", subLocality)
-
-                callback(subLocality)
-            } else {
-                callback("default")
-            }
+    return try {
+        val addresses = geocoder.getFromLocation(lat, lng, 1)
+        if (addresses!!.isNotEmpty()) {
+            val address = addresses[0]
+            val locationName = address.locality ?: address.subAdminArea ?: address.adminArea ?: ""
+            locationName
+        } else {
+            "Location name not found"
         }
+    } catch (e: Exception) {
+        "Error retrieving location name"
     }
 }

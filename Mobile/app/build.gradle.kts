@@ -11,9 +11,8 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        manifestPlaceholders += mapOf("API_KEY" to "AIzaSyAb-XcIxU1oBD2wop0-Px1H0QCvTe-_1yg")
         applicationId = "com.example.nurkowapolskaapp"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -77,14 +76,11 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
-//    implementation("com.google.firebase.firebase-auth-ktx:22.3.0")
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
     implementation("com.google.firebase:firebase-auth")
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.11")
     // Coil
     implementation("io.coil-kt:coil-compose:2.5.0")
     // Secrets

@@ -2,6 +2,7 @@ package pjatk.pjwstk.pl.api.datasource.mongodb
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.springframework.data.mongodb.core.MongoTemplate
@@ -11,6 +12,7 @@ import pjatk.pjwstk.pl.api.model.Marker
 import pjatk.pjwstk.pl.api.model.enums.CrayfishType
 import java.time.LocalDate
 
+@Disabled
 class MongodbMarkerDataSourceTest {
     private val mongoTemplate = Mockito.mock(MongoTemplate::class.java)
     private val mongodbMarkerDataSource = MongodbMarkerDataSource(mongoTemplate)

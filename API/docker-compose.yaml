@@ -9,6 +9,10 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=rootuser
       - MONGO_INITDB_ROOT_PASSWORD=rootpass
+    volumes:
+      - ./db:/data/db
+    networks:
+      - mongodb_network
 
   mongo-express:
     image: mongo-express
@@ -22,7 +26,11 @@ services:
       - ME_CONFIG_MONGODB_SERVER=mongodb
     links:
       - mongodb:mongodb
+    networks:
+      - mongodb_network
 
 networks:
-  default:
-    name: mongodb_network
+  mongodb_network:
+    ipam:
+      config:
+        - subnet: 192.168.92.0/24

@@ -14,19 +14,15 @@ import pjatk.pjwstk.pl.api.model.enums.Role
 import pjatk.pjwstk.pl.api.service.AdminMarkerService
 import pjatk.pjwstk.pl.api.service.UserService
 import java.time.LocalDate
-import java.util.*
 
 @SpringBootApplication
 class ApiApplication
 {
     @Bean   //REMOVE
     fun init(userService: UserService, markerService: AdminMarkerService): ApplicationRunner {
-        return ApplicationRunner { args: ApplicationArguments ->
-            val scanner = Scanner(System.`in`)
-            print("Inject test data?: (y/n) ")
-            val userInput = scanner.nextLine()
-            scanner.close()
-            if(userInput == "y"){
+        return ApplicationRunner { _: ApplicationArguments ->
+            val userInput = false
+            if(userInput){
                 println("injecting test data...")
 
                 userService.addUser(User("user@gmail.com", "user", Role.USER))
@@ -70,7 +66,7 @@ class ApiApplication
                 markerService.addMarker(Marker(null, MapMarker(LatLng(53.79744401846501, 20.420528859946444), "Title", "Desc"), "email@gmail.com", CrayfishType.SIGNAL, LocalDate.parse("2023-09-09"), true))
 
                 println("Initialized with test data injection")
-            }else println("Initialized without test data injection")
+            }
         }
     }
 }

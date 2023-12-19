@@ -13,10 +13,9 @@ spring:
             password: rootpass
             database: npamarkers
             port: 27017
-            host: localhost
+            host: 172.19.100.10
 
 # Security / JWT
 jwt:
-    key: ${JWT_KEY}
     access-token-expiration: 86400000
     refresh-token-expiration: 86400000

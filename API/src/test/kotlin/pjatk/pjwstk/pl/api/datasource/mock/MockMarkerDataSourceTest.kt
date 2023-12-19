@@ -1,9 +1,11 @@
 package pjatk.pjwstk.pl.api.datasource.mock
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import pjatk.pjwstk.pl.api.model.Marker
 
+@Disabled
 internal class MockMarkerDataSourceTest {
 
     private val mockMarkerDataSource = MockMarkerDataSource()

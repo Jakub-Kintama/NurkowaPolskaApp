@@ -12,9 +12,7 @@ import java.util.*
 class TokenService(
     jwtProperties: JwtProperties
 ) {
-    private val secretKey = Keys.hmacShaKeyFor(
-        jwtProperties.key.toByteArray()
-    )
+    private val secretKey = Keys.hmacShaKeyFor(jwtProperties.key?.toByteArray() ?: "OK".toByteArray())
 
     fun generate(
         userDetails: UserDetails,

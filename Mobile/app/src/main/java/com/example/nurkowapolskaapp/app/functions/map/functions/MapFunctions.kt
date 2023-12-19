@@ -25,17 +25,16 @@ fun getCurrentDate(): String {
 fun getAddress(lat: Double, lng: Double, context: Context, callback: (String) -> Unit) {
     val geocoder = Geocoder(context, Locale.getDefault())
     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        geocoder.getFromLocation(lat, lng, 1, Geocoder.GeocodeListener { addresses ->
-            if(addresses.isNotEmpty()) {
+        geocoder.getFromLocation(lat, lng, 1) { addresses ->
+            if (addresses.isNotEmpty()) {
                 val address = addresses[0]
                 val subLocality = address.countryName.toString()
                 Log.d("address33locality", subLocality)
 
                 callback(subLocality)
-            }
-            else {
+            } else {
                 callback("default")
             }
-        })
+        }
     }
 }

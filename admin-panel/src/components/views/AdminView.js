@@ -1,11 +1,11 @@
 import React, {useState} from "react";
-import AdminMarkerTable from "./AdminMarkerTable"
-import AdminTable from "./AdminTable";
+import AdminMarkerTable from "../tables/AdminMarkerTable"
+import AdminTable from "../tables/AdminTable";
 
-export default function AdminView({markers}) {
+export default function AdminView({markers, token, email, refreshTable}) {
 
-    const [markersVisible, setMarkersVisible] = useState(true)
-    const [usersVisible, setUsersVisible] = useState(false)
+    const [markersVisible, setMarkersVisible] = useState(true);
+    const [usersVisible, setUsersVisible] = useState(false);
 
     const markersHandler = () => {
         setMarkersVisible(true);
@@ -21,10 +21,10 @@ export default function AdminView({markers}) {
             <button className="markersButton" onClick={() => markersHandler()}>Znaczniki</button>
             <button className="adminsButton" onClick={() => usersHandler()}>Administratorzy</button>
             {markersVisible && (
-                <AdminMarkerTable markers={markers}/>
+                <AdminMarkerTable markers={markers} token={token} email={email} refreshTable={refreshTable}/>
             )}
             {usersVisible && (
-                <AdminTable markers={markers}/>
+                <AdminTable token={token}/>
             )}
         </div>
         

@@ -9,7 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.*
-import pjatk.pjwstk.pl.api.model.Admin
+import pjatk.pjwstk.pl.api.model.User
 import pjatk.pjwstk.pl.api.model.LatLng
 import pjatk.pjwstk.pl.api.model.MapMarker
 import pjatk.pjwstk.pl.api.model.Marker
@@ -18,7 +18,7 @@ import java.time.LocalDate
 
 @SpringBootTest
 @AutoConfigureMockMvc
-internal class AdminMarkersControllerTest @Autowired constructor(
+internal class UserMarkersControllerTest @Autowired constructor(
     val mockMvc: MockMvc,
     val objectMapper: ObjectMapper
 ) {
@@ -205,16 +205,16 @@ internal class AdminMarkersControllerTest @Autowired constructor(
     @Nested
     @DisplayName("POST /api/admin")
     @TestInstance(Lifecycle.PER_CLASS)
-    inner class AddAdmin {
+    inner class AddUser {
         @Test
         fun `should add new admin`() {
             // given
-            val newAdmin = Admin("damn123@gmail.com")
+            val newUser = User("damn123@gmail.com")
 
             // when
             val performPost = mockMvc.post("/api/admin") {
                 contentType = MediaType.APPLICATION_JSON
-                content = objectMapper.writeValueAsString(newAdmin)
+                content = objectMapper.writeValueAsString(newUser)
             }
 
             // then
@@ -224,23 +224,23 @@ internal class AdminMarkersControllerTest @Autowired constructor(
                     status { isCreated() }
                     content {
                         contentType(MediaType.APPLICATION_JSON)
-                        json(objectMapper.writeValueAsString(newAdmin))
+                        json(objectMapper.writeValueAsString(newUser))
                     }
                 }
 
-            mockMvc.get("/api/admin/${newAdmin.id}")
-                .andExpect { content { newAdmin } }
+            mockMvc.get("/api/admin/${newUser.id}")
+                .andExpect { content { newUser } }
         }
 
         @Test
         fun `should return BAD REQUEST if admin with given id already exist`() {
             // given
-            val invalidAdmin = Admin("xd222@wp.pl")
+            val invalidUser = User("xd222@wp.pl")
 
             // when
             val performPost = mockMvc.post(baseUrl) {
                 contentType = MediaType.APPLICATION_JSON
-                content = objectMapper.writeValueAsString(invalidAdmin)
+                content = objectMapper.writeValueAsString(invalidUser)
             }
 
             // then
@@ -253,7 +253,7 @@ internal class AdminMarkersControllerTest @Autowired constructor(
     @Nested
     @DisplayName("DELETE /api/admin/{adminId}")
     @TestInstance(Lifecycle.PER_CLASS)
-    inner class DeleteExistingAdmin {
+    inner class DeleteExistingUser {
         @Test
         fun `should delete admin with given id`() {
             // given

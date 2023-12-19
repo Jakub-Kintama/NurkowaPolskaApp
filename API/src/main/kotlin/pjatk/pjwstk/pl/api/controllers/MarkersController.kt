@@ -8,7 +8,7 @@ import pjatk.pjwstk.pl.api.service.MarkerService
 import java.time.LocalDate
 
 @RestController
-@RequestMapping("api/markers")
+@RequestMapping("/api/markers")
 class MarkersController(private val service: MarkerService) {
 
     @ExceptionHandler(NoSuchElementException::class)

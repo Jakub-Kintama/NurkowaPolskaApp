@@ -22,10 +22,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.nurkowapolskaapp.R
-import com.example.nurkowapolskaapp.app.functions.map.CrayfishMockType
 import com.example.nurkowapolskaapp.app.functions.map.MarkerMock
 import com.example.nurkowapolskaapp.app.functions.map.MarkerMockType
 
@@ -108,13 +106,4 @@ fun CustomMarkerInfoWindow(
             }
         }
     }
-}
-
-
-val test = MarkerMock(52.22977, 21.01178, "Rak", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.", "14/10/2023", MarkerMockType.CRAYFISH, CrayfishMockType.MUD)
-
-@Preview
-@Composable
-fun CustomMarkerInfoWindowPreview() {
-    CustomMarkerInfoWindow(test)
 }

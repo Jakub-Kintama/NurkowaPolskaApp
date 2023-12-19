@@ -2,6 +2,7 @@ package com.example.nurkowapolskaapp
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -34,11 +35,19 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.nurkowapolskaapp.app.functions.FirstAid
 import com.example.nurkowapolskaapp.app.functions.Insurance
+import com.example.nurkowapolskaapp.app.functions.map.Marker
 import com.example.nurkowapolskaapp.app.functions.map.MarkersMap
+import com.example.nurkowapolskaapp.app.functions.map.markerList
 import com.example.nurkowapolskaapp.app.functions.signin.GoogleAuthUiClient
 import com.example.nurkowapolskaapp.app.functions.signin.SignInOrOut
+import com.example.nurkowapolskaapp.domain.MarkersApi
 import com.example.nurkowapolskaapp.ui.theme.NurkowaPolskaAppTheme
 import com.google.android.gms.auth.api.identity.Identity
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : ComponentActivity() {
 
@@ -49,8 +58,14 @@ class MainActivity : ComponentActivity() {
         )
     }
 
+
+    private val BASE_URL ="http://localhost:8080/"
+    private val TAG ="CHECK_RESPONSE"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        getAllMarkers()
 
         setContent {
             val userIsLogged = remember { mutableStateOf(
@@ -60,6 +75,42 @@ class MainActivity : ComponentActivity() {
                 AppScaffold(googleAuthUiClient, applicationContext, userIsLogged)
             }
         }
+    }
+
+    private fun getAllMarkers() {
+        val apiMarkers = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(MarkersApi::class.java)
+
+        apiMarkers.getMarkers().enqueue(object : Callback<List<Marker>>{
+            override fun onResponse(call: Call<List<Marker>>, response: Response<List<Marker>>) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        for(marker in it) {
+                            markerList.add(
+                                Marker(
+                                    _id = marker._id,
+                                    mapMarker = marker.mapMarker,
+                                    userEmail = marker.userEmail,
+                                    crayfishType = marker.crayfishType,
+                                    date = marker.date,
+                                    verified = marker.verified,
+                                    image = marker.image
+                                )
+                            )
+                        }
+                        Log.i(TAG, "onResponse: success")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<List<Marker>>, t: Throwable) {
+                Log.i(TAG, "onFailure: ${t.message}")
+            }
+
+        })
     }
 }
 

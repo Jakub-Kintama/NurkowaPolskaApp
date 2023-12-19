@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useCallback} from "react";
 import MarkerTable from "./tables/MarkerTable";
 import AdminView from "./views/AdminView"
 import axios from 'axios';
@@ -13,20 +13,23 @@ export default function Home() {
     const [token, setToken] = useState("");
     const [email, setEmail] = useState("");
     const [loginPopupButton, setLoginPopupButton] = useState(false);
+    const [refreshTable, setRefreshTable] = useState(false);
 
-    const apiMarkers = 'http://localhost:8080/api/markers'
+    const apiMarkers = 'http://172.19.100.10:8080/api/markers'
 
-    useEffect(() => {
-        const fetchData = async () => {
-          try {
+    const fetchData = useCallback(async () => {
+        try {
             const response = await axios.get(apiMarkers);
             setMarkers(response.data);
-          } catch (error) {
+        } catch (error) {
             console.error('Error while fetching data:', error);
-          }
-        };
-        fetchData();
+        }
     }, []);
+
+    useEffect(() => {
+        fetchData();
+        setRefreshTable(false);
+    }, [refreshTable, fetchData]);
 
     const exportMarkers = () => {
         const markersJson = JSON.stringify(markers, null, 2);
@@ -56,8 +59,14 @@ export default function Home() {
                 {isAdmin && isLogged && (
                     <div className="ListContainer">
                         <button onClick={ () => setIsAdmin(false) } className="LogoutButton">Wyloguj</button><br/>
-                        <AdminView markers={markers} token={token} email={email}/>
+                        <AdminView markers={markers} token={token} email={email} refreshTable={setRefreshTable}/>
                     </div>
+                )}
+                {isLogged && !isAdmin && (
+                    <>
+                    <button onClick={ () => setIsAdmin(false) } className="LogoutButton">Wyloguj</button><br/>
+                    <MarkerTable markers={markers}/>
+                    </>
                 )}
                 {!isAdmin && (
                     <>

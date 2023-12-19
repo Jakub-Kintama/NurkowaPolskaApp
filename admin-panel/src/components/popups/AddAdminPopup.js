@@ -27,7 +27,7 @@ export default function AddAdminPopup(props) {
         },
       };
 
-      await axios.post("http://localhost:8080/api/users", data, config);
+      await axios.post("http://172.19.100.10:8080/api/users", data, config);
       setEmail("");
       setSelectedRole("");
       props.setTrigger(false);

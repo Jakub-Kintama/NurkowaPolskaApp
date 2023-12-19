@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat
 import com.example.nurkowapolskaapp.app.functions.map.buttons.AddMarker
 import com.example.nurkowapolskaapp.app.functions.map.buttons.FilterButton
 import com.example.nurkowapolskaapp.app.functions.map.marker.CustomMarkerInfoWindow
+import com.example.nurkowapolskaapp.app.functions.signin.GoogleAuthUiClient
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -29,9 +30,12 @@ import com.google.maps.android.compose.MarkerInfoWindow
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 
+
 @Composable
-fun MarkersMap() {
-    val permissionCheck = rememberLauncherForActivityResult(
+fun MarkersMap(
+    googleAuthUiClient: GoogleAuthUiClient
+) {
+    val permissionCheck  = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
         if(isGranted) {
@@ -40,7 +44,6 @@ fun MarkersMap() {
             Log.d("LocationFine","PERMISSION DENIED")
         }
     }
-
     val context = LocalContext.current
 
     when (PackageManager.PERMISSION_GRANTED) {
@@ -49,8 +52,8 @@ fun MarkersMap() {
         }
     }
 
-    val filterList = listOf("Crayfish", "DangPoll", "Both")
-    val checkedFilter = remember { mutableStateOf(filterList[0]) }
+    val filterListMarkerType = listOf("Crayfish", "DangPoll", "Both")
+    val checkedFilterMarkerType = remember { mutableStateOf(filterListMarkerType[0]) }
     val showMarker = remember { mutableStateOf(MarkerMockType.CRAYFISH) }
     val showFormWindow = remember { mutableStateOf(false) }
 
@@ -73,7 +76,7 @@ fun MarkersMap() {
                     val position = LatLng(mapMarker.lat, mapMarker.lng)
                     mapMarker.date
                     mapMarker.title
-                    if(checkedFilter.value == "Crayfish" || checkedFilter.value == "Both") {
+                    if(checkedFilterMarkerType.value == "Crayfish" || checkedFilterMarkerType.value == "Both") {
                         if(mapMarker.markerType == MarkerMockType.CRAYFISH) {
                             MarkerInfoWindow(
                                 state = MarkerState(position = position),
@@ -86,7 +89,7 @@ fun MarkersMap() {
                             }
                         }
                     }
-                    if(checkedFilter.value == "DangPoll" || checkedFilter.value == "Both") {
+                    if(checkedFilterMarkerType.value == "DangPoll" || checkedFilterMarkerType.value == "Both") {
                         if(mapMarker.markerType == MarkerMockType.DANGER || mapMarker.markerType == MarkerMockType.POLLUTION) {
                             MarkerInfoWindow(
                                 state = MarkerState(position = position),
@@ -106,10 +109,13 @@ fun MarkersMap() {
         val selectedCrayfish = remember { mutableStateOf(true) }
         val selectedDangPoll = remember { mutableStateOf(false) }
 
+
         Box(modifier = Modifier.align(Alignment.BottomEnd)) {
             Column {
-                FilterButton(showMarker, filterList, checkedFilter, selectedCrayfish, selectedDangPoll)
-                AddMarker(showFormWindow, permissionCheck, context)
+                if(googleAuthUiClient.getSignedInUser()?.userId != null) {
+                    AddMarker(showFormWindow, permissionCheck, context)
+                }
+                FilterButton(showMarker, filterListMarkerType, checkedFilterMarkerType, selectedCrayfish, selectedDangPoll)
             }
         }
     }

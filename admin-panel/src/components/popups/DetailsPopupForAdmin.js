@@ -43,6 +43,7 @@ export default function DetailsPopupForAdmin(props) {
             console.error("Błąd podczas usuwania rekordu", error);
         }
     };
+    
     const handleSubmit = async () => {
         try {
             const data = {

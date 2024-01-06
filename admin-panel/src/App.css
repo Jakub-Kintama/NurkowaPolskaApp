@@ -134,7 +134,8 @@ td {
   border-radius: 4px;
   font-size: 14px;
 }
-.DeleteButton:hover {
+.DeleteButton:hover,
+.DeleteUserButton:hover {
   background-color: #d9534f;
   /* Kolor czerwony (ciemniejszy) po najechaniu myszką */
 }

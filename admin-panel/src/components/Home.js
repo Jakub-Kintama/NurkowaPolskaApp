@@ -75,12 +75,15 @@ export default function Home() {
                     </>
                 )}
             </div>
-            <LoginForm 
-                trigger={loginPopupButton} 
-                setTrigger={setLoginPopupButton} 
-                onLoginSuccess={handleLoginSuccess}
-                onLoginError={handleLoginError}
-            />
+            {loginPopupButton && (
+                <LoginForm 
+                    trigger={loginPopupButton} 
+                    setTrigger={setLoginPopupButton} 
+                    onLoginSuccess={handleLoginSuccess}
+                    onLoginError={handleLoginError}
+                />
+            )}
+            
         </div>
         </>
     );

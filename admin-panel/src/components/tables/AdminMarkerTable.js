@@ -43,9 +43,13 @@ export default function AdminMarkerTable({markers, token, email, refreshTable}) 
                     </tr>
                 ))}
             </tbody>  
-        </table>   
-        <DetailsPopupForAdmin trigger={DetailsPopupButton} setTrigger={setDetailsPopupButton} marker={markerDetails} token={token} refreshTable={refreshTable}/>
-        <AddMarkerPopupFN trigger={AddMarkerPopupButton} setTrigger={setAddMarkerPopupButton} token={token} email={email} refreshTable={refreshTable}></AddMarkerPopupFN>
+        </table>
+        {DetailsPopupButton && (
+            <DetailsPopupForAdmin trigger={DetailsPopupButton} setTrigger={setDetailsPopupButton} marker={markerDetails} token={token} refreshTable={refreshTable}/>
+        )}
+        {AddMarkerPopupButton && (
+            <AddMarkerPopupFN trigger={AddMarkerPopupButton} setTrigger={setAddMarkerPopupButton} token={token} email={email} refreshTable={refreshTable}></AddMarkerPopupFN>
+        )}
     </div>
     )
 }

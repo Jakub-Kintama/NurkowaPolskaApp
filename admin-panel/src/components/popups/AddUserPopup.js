@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-export default function AddAdminPopup(props) {
+export default function AddUserPopup(props) {
   const [email, setEmail] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
 

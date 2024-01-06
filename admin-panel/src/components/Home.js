@@ -4,6 +4,7 @@ import AdminView from "./views/AdminView"
 import axios from 'axios';
 import { saveAs } from 'file-saver';
 import LoginForm from "./LoginForm";
+import LoggedUserView from "./views/LoggedUserView";
 
 export default function Home() {
 
@@ -58,29 +59,32 @@ export default function Home() {
             <div className="PanelPart">
                 {isAdmin && isLogged && (
                     <div className="ListContainer">
-                        <button onClick={ () => setIsAdmin(false) } className="LogoutButton">Wyloguj</button><br/>
+                        <button onClick={ () => {setIsAdmin(false); setIsLogged(false)} } className="LogoutButton">Wyloguj</button><br/>
                         <AdminView markers={markers} token={token} email={email} refreshTable={setRefreshTable}/>
                     </div>
                 )}
                 {isLogged && !isAdmin && (
                     <>
-                    <button onClick={ () => setIsAdmin(false) } className="LogoutButton">Wyloguj</button><br/>
-                    <MarkerTable markers={markers}/>
+                    <button onClick={ () => setIsLogged(false) } className="LogoutButton">Wyloguj</button><br/>
+                    <LoggedUserView markers={markers} token={token} email={email} refreshTable={setRefreshTable}/>
                     </>
                 )}
-                {!isAdmin && (
+                {!isLogged && !isAdmin && (
                     <>
                     <button onClick={ () => setLoginPopupButton(true) } className="LogoutButton">Zaloguj</button><br/>
                     <MarkerTable markers={markers}/>
                     </>
                 )}
             </div>
-            <LoginForm 
-                trigger={loginPopupButton} 
-                setTrigger={setLoginPopupButton} 
-                onLoginSuccess={handleLoginSuccess}
-                onLoginError={handleLoginError}
-            />
+            {loginPopupButton && (
+                <LoginForm 
+                    trigger={loginPopupButton} 
+                    setTrigger={setLoginPopupButton} 
+                    onLoginSuccess={handleLoginSuccess}
+                    onLoginError={handleLoginError}
+                />
+            )}
+            
         </div>
         </>
     );

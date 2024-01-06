@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import { crayfishTypeSwitch } from "../functions";
 import axios from "axios";
 
 export default function DetailsPopupForAdmin(props) {
 
-    const [date, setDate] = useState(new Date());
-    const [crayfishType, setCrayfishType] = useState("");
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [status, setStatus] = useState("");
-    const [userEmail, setUserEmail] = useState("");
+    const [date, setDate] = useState(props.marker.date);
+    const [crayfishType, setCrayfishType] = useState(props.marker.crayfishType);
+    const [title, setTitle] = useState(props.marker.title);
+    const [description, setDescription] = useState(props.marker.description);
+    const [verified, setVerified] = useState(props.marker.verified);
+
+    const handleClose = () => {
+        props.setTrigger(false);
+    }
 
     const handleDateChange = (date) => {
         setDate(date);
@@ -27,10 +29,6 @@ export default function DetailsPopupForAdmin(props) {
         setDescription(e.target.value);
     };
 
-    const handleUserEmailChange = (e) => {
-        setUserEmail(e.target.value);
-    }
-
     const handleDelete = async () => {
         try {
             const config = {
@@ -45,6 +43,7 @@ export default function DetailsPopupForAdmin(props) {
             console.error("Błąd podczas usuwania rekordu", error);
         }
     };
+    
     const handleSubmit = async () => {
         try {
             const data = {
@@ -54,12 +53,12 @@ export default function DetailsPopupForAdmin(props) {
                         lat: props.marker.lat,
                         lng: props.marker.lng
                     },
-                    title: props.marker.title,
-                    description: props.marker.description            
+                    title: title,
+                    description: description            
                 },
                 userEmail: props.marker.userEmail,
-                CrayfishType: props.marker.crayfishType,
-                date: props.marker.date
+                CrayfishType: crayfishType,
+                date: date
             };
             const config = {
                 headers: {
@@ -96,7 +95,8 @@ export default function DetailsPopupForAdmin(props) {
                 },
             };
             await axios.patch(`http://172.19.100.10:8080/api/markers`, data, config);
-            props.setTrigger(false);
+            // props.setTrigger(false);
+            setVerified(!verified);
             props.refreshTable(true);
         } catch (error) {
             console.error("Błąd podczas patchowania", error);
@@ -106,24 +106,25 @@ export default function DetailsPopupForAdmin(props) {
     return (props.trigger) ? (
         <div className="DetailsPopup">
             <div className="DetailsPopupInner">
-                <button onClick={ () => props.setTrigger(false) } className="CloseButton">Zamknij</button>
+                <button onClick={ () => handleClose() } className="CloseButton">Zamknij</button>
                 <h2>Znacznik</h2>
                 <div className="DetailsPopupContent">
                     <iframe className="DetailsIframe" title={title} src={`https://maps.google.com/maps?q=${props.marker.lat},${props.marker.lng}&z=14&output=embed`} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
                     <div className="Details">
-                        <p><strong>Data dodania: </strong><input type="text" defaultValue={props.marker.date}/></p>
+                        <p><strong>Data dodania: </strong><input type="text" value={date} onChange={handleDateChange}/></p>
                         <p><strong>Typ: </strong>
-                            <select value={props.marker.crayfishType} onChange={handleCrayfishTypeChange}>
+                            <select value={crayfishType} onChange={handleCrayfishTypeChange}>
                               <option value="SIGNAL">Sygnałowy</option>
                               <option value="AMERICAN">Amerykański</option>
                               <option value="NOBLE">Szlachetny</option>
                               <option value="GALICIAN">Galicyjski</option>
                             </select>
                         </p>
-                        <p><strong>Tytuł: </strong><input type="text" defaultValue={props.marker.title}/></p>
-                        <p><strong>Opis: </strong><textarea value={props.marker.description} onChange={handleDescriptionChange}/></p>
-                        <p><strong>Status: </strong><button onClick={handleStatusChange}>{props.marker.verified === true ? "Zweryfikowany" : "Niezweryfikowany" }</button></p>
-                        <p><strong>Dodane przez: </strong><input type="text" defaultValue={props.marker.userEmail}/></p>
+                        <p><strong>Tytuł: </strong><input type="text" value={title} onChange={handleTitleChange}/></p>
+                        <p><strong>Opis: </strong><textarea value={description} onChange={handleDescriptionChange}/></p>
+                        <p><strong>Status: </strong><button onClick={handleStatusChange}>{verified === true ? "Zweryfikowany" : "Niezweryfikowany" }</button></p>
+                        <p><strong>Dodane przez: </strong>{props.marker.userEmail}</p>
+                        <button onClick={handleSubmit}>Submit</button>
                     </div>
                 </div>
                 <button onClick={handleDelete} className="DeleteButton">

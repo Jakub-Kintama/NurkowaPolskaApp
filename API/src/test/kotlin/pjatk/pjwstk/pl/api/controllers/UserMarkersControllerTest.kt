@@ -13,7 +13,7 @@ import pjatk.pjwstk.pl.api.model.LatLng
 import pjatk.pjwstk.pl.api.model.MapMarker
 import pjatk.pjwstk.pl.api.model.Marker
 import pjatk.pjwstk.pl.api.model.User
-import pjatk.pjwstk.pl.api.model.enums.CrayfishType
+import pjatk.pjwstk.pl.api.model.enums.MarkerType
 import java.time.LocalDate
 
 @Disabled
@@ -39,7 +39,7 @@ internal class UserMarkersControllerTest @Autowired constructor(
                 "000000000000000000000999",
                 MapMarker(LatLng(999.999, 999.999), "title 999", "description 999"),
                 "999",
-                CrayfishType.SIGNAL,
+                MarkerType.SIGNAL,
                 LocalDate.now(),
                 false
             )
@@ -72,7 +72,7 @@ internal class UserMarkersControllerTest @Autowired constructor(
                 "000000000000000000000001",
                 MapMarker(LatLng(1.1, 1.1), "title 1", "description 1"),
                 "1",
-                CrayfishType.SIGNAL,
+                MarkerType.SIGNAL,
                 LocalDate.now(),
                 true
             )
@@ -101,7 +101,7 @@ internal class UserMarkersControllerTest @Autowired constructor(
                 "000000000000000000000002",
                 MapMarker(LatLng(2.2, 2.2), "title 2", "description 2"),
                 "2",
-                CrayfishType.AMERICAN,
+                MarkerType.AMERICAN,
                 LocalDate.parse("2023-10-13"),
                 true
             )
@@ -134,7 +134,7 @@ internal class UserMarkersControllerTest @Autowired constructor(
                 "000000000000000000000000",
                 MapMarker(LatLng(2.2, 2.2), "title 2", "description 2"),
                 "2",
-                CrayfishType.AMERICAN,
+                MarkerType.AMERICAN,
                 LocalDate.parse("2023-10-13"),
                 true
             )

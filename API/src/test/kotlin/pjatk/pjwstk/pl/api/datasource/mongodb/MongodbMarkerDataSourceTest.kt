@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.MongoTemplate
 import pjatk.pjwstk.pl.api.model.LatLng
 import pjatk.pjwstk.pl.api.model.MapMarker
 import pjatk.pjwstk.pl.api.model.Marker
-import pjatk.pjwstk.pl.api.model.enums.CrayfishType
+import pjatk.pjwstk.pl.api.model.enums.MarkerType
 import java.time.LocalDate
 
 @Disabled
@@ -18,9 +18,9 @@ class MongodbMarkerDataSourceTest {
     private val mongodbMarkerDataSource = MongodbMarkerDataSource(mongoTemplate)
 
     private val expectedMarkers = listOf(
-        Marker("1", MapMarker(LatLng(1.1, 1.1), "title 1", "description 1"), "user1", CrayfishType.NOBLE, LocalDate.of(2023, 10, 10), true),
-        Marker("2", MapMarker(LatLng(2.2, 2.2), "title 2", "description 2"), "user2", CrayfishType.AMERICAN, LocalDate.of(2023, 10, 13), false),
-        Marker("3", MapMarker(LatLng(3.3, 3.3), "title 3", "description 3"), "user3", CrayfishType.SIGNAL, LocalDate.of(2023, 10, 16), true)
+        Marker("1", MapMarker(LatLng(1.1, 1.1), "title 1", "description 1"), "user1", MarkerType.NOBLE, LocalDate.of(2023, 10, 10), true),
+        Marker("2", MapMarker(LatLng(2.2, 2.2), "title 2", "description 2"), "user2", MarkerType.AMERICAN, LocalDate.of(2023, 10, 13), false),
+        Marker("3", MapMarker(LatLng(3.3, 3.3), "title 3", "description 3"), "user3", MarkerType.SIGNAL, LocalDate.of(2023, 10, 16), true)
     )
 
     @BeforeEach

@@ -30,7 +30,7 @@ class SecurityConfig(
             .cors { corsFilter() }
             .authorizeHttpRequests {
                 it
-                    .requestMatchers(HttpMethod.GET, "/api/markers")
+                    .requestMatchers(HttpMethod.GET, "/api/markers", "/api/markers/**")
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/markers")
                     .fullyAuthenticated()

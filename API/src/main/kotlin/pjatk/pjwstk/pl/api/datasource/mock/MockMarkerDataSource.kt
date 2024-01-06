@@ -5,7 +5,7 @@ import pjatk.pjwstk.pl.api.datasource.MarkerDataSource
 import pjatk.pjwstk.pl.api.model.LatLng
 import pjatk.pjwstk.pl.api.model.MapMarker
 import pjatk.pjwstk.pl.api.model.Marker
-import pjatk.pjwstk.pl.api.model.enums.CrayfishType
+import pjatk.pjwstk.pl.api.model.enums.MarkerType
 import java.time.LocalDate
 
 @Repository("mock")
@@ -16,28 +16,28 @@ class MockMarkerDataSource : MarkerDataSource {
             "000000000000000000000001",
             MapMarker(LatLng(1.1, 1.1), "title 1", "description 1"),
             "1",
-            CrayfishType.NOBLE,
+            MarkerType.NOBLE,
             LocalDate.of(2023, 10, 10),
             true
         ), Marker(
             "000000000000000000000002",
             MapMarker(LatLng(2.2, 2.2), "title 2", "description 2"),
             "2",
-            CrayfishType.AMERICAN,
+            MarkerType.AMERICAN,
             LocalDate.of(2023, 10, 13),
             false
         ), Marker(
             "000000000000000000000003",
             MapMarker(LatLng(3.3, 3.3), "title 3", "description 3"),
             "3",
-            CrayfishType.SIGNAL,
+            MarkerType.SIGNAL,
             LocalDate.of(2023, 10, 16),
             true
         ), Marker(
             "000000000000000000000004",
             MapMarker(LatLng(4.4, 4.4), "title 4", "description 4"),
             "3",
-            CrayfishType.GALICIAN,
+            MarkerType.GALICIAN,
             LocalDate.of(2023, 10, 17),
             true
         )

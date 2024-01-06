@@ -1,8 +1,8 @@
-package pjatk.pjwstk.pl.api.controllers.user
+package pjatk.pjwstk.pl.api.model
 
 import pjatk.pjwstk.pl.api.model.enums.Role
 
-data class UserResponse(
+data class UserEmailRole(
     val email: String,
     val role: Role
 )

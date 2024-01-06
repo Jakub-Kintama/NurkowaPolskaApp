@@ -15,5 +15,5 @@ data class User(
     @JsonProperty("password")
     val password: String? = null,
     @JsonProperty("role")
-    val role: Role = Role.USER
+    var role: Role = Role.USER
 )

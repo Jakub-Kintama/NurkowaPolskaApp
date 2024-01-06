@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import AdminMarkerTable from "../tables/AdminMarkerTable"
-import AdminTable from "../tables/AdminTable";
+import UserTable from "../tables/UserTable";
 
 export default function AdminView({markers, token, email, refreshTable}) {
 
@@ -24,7 +24,7 @@ export default function AdminView({markers, token, email, refreshTable}) {
                 <AdminMarkerTable markers={markers} token={token} email={email} refreshTable={refreshTable}/>
             )}
             {usersVisible && (
-                <AdminTable token={token}/>
+                <UserTable token={token}/>
             )}
         </div>
         

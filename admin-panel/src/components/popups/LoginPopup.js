@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { baseURL } from "../functions";
 
 const [email, setEmail] = useState("");
 const [password, setPassword] = useState("");
@@ -12,13 +13,13 @@ const handleSubmit = async () => {
         password: password
       };
 
-      const response = await axios.post("http://172.19.100.10:8080/api/auth", data);
+      const response = await axios.post(`${baseURL}/api/auth`, data);
       props.setTrigger(false);
 
     } catch (error) {
       console.error("Błąd podczas przesyłania danych:", error);
     }
-  };
+};
 
 export default function LoginPopup(props) {
     return (props.trigger) ? (

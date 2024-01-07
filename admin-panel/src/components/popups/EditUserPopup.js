@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { baseURL } from "../functions";
 
 export default function EditUserPopup(props) {
   const [email, setEmail] = useState(props.user.email);
@@ -24,7 +25,7 @@ export default function EditUserPopup(props) {
               'Authorization': `Bearer ${props.token}`,
             },
         };
-        await axios.patch(`http://172.19.100.10:8080/api/markers`, data, config);
+        await axios.patch(`${baseURL}/api/users`, data, config);
         props.setTrigger(false);
         props.refreshTable(true);
     } catch (error) {
@@ -33,7 +34,6 @@ export default function EditUserPopup(props) {
 };
 
   const handleDelete = async () => {
-    
     try {
       const config = {
         headers: {
@@ -41,7 +41,7 @@ export default function EditUserPopup(props) {
         },
       };
 
-      await axios.delete(`http://172.19.100.10:8080/api/users/${email}`, config);
+      await axios.delete(`${baseURL}/api/users/${email}`, config);
       props.setTrigger(false);
       props.refreshTable(true);
 

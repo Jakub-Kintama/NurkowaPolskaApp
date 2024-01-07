@@ -1,6 +1,6 @@
 import React, {useState} from "react";
-import AdminMarkerTable from "../tables/AdminMarkerTable"
 import UserTable from "../tables/UserTable";
+import MarkerTableForLoggedUsers from "../tables/MarkerTableForLoggedUsers";
 
 export default function AdminView({markers, token, email, refreshTable}) {
 
@@ -21,10 +21,10 @@ export default function AdminView({markers, token, email, refreshTable}) {
             <button className="MarkersButton" onClick={() => markersHandler()}>Znaczniki</button>
             <button className="UsersButton" onClick={() => usersHandler()}>Użytkownicy</button>
             {markersVisible && (
-                <AdminMarkerTable markers={markers} token={token} email={email} refreshTable={refreshTable}/>
+                <MarkerTableForLoggedUsers markers={markers} token={token} email={email} role={"ADMIN"} refreshTable={refreshTable}/>
             )}
             {usersVisible && (
-                <UserTable token={token}/>
+                <UserTable token={token} email={email}/>
             )}
         </div>
         

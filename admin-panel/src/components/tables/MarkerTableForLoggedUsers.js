@@ -1,9 +1,9 @@
 import React, {useState} from "react";
 import AddMarkerPopupFN from "../popups/AddMarkerPopupFN";
 import { crayfishTypeSwitch, sortMarkers, generateTableHeaders, handleHeaderClick, handleDetailsClick } from "../functions";
-import DetailsPopupForAdmin from "../popups/DetailsPopupForAdmin";
+import DetailsPopupWithEditing from "../popups/DetailsPopupWithEditing";
 
-export default function AdminMarkerTable({markers, token, email, refreshTable}) {
+export default function MarkerTableForLoggedUsers({markers, token, email, role, refreshTable}) {
 
     const [DetailsPopupButton, setDetailsPopupButton] = useState(false);
     const [AddMarkerPopupButton, setAddMarkerPopupButton] = useState(false);
@@ -21,6 +21,8 @@ export default function AdminMarkerTable({markers, token, email, refreshTable}) 
         handleDetailsClick(marker, setDetailsPopupButton, setMarkerDetails);
     };
 
+    const filteredMarkers = markers.filter(marker => marker.userEmail === email);
+
     return(
     <div className="AdminMarkerList">
         <h2>Lista znaczników:</h2>
@@ -32,7 +34,16 @@ export default function AdminMarkerTable({markers, token, email, refreshTable}) 
             </tr>
             </thead>
             <tbody>
-                {sortMarkers(markers, currentHeader, sortAs).map( (marker, index) => (
+                {role === "ADMIN" ? sortMarkers(markers, currentHeader, sortAs).map( (marker, index) => (
+                    <tr key={index}>
+                        <td>{marker.date}</td>
+                        <td>{crayfishTypeSwitch(marker.CrayfishType)}</td>
+                        <td className={marker.verified ? "" : "UnverifiedText"}>
+                            {marker.verified ? "Zweryfikowany" : "Niezweryfikowany"}
+                        </td>
+                        <td><button className="TableButton" onClick={ () => handleDetailsClickWrapper(marker) }>Szczegóły</button></td>
+                    </tr>
+                )) : sortMarkers(filteredMarkers, currentHeader, sortAs).map( (marker, index) => (
                     <tr key={index}>
                         <td>{marker.date}</td>
                         <td>{crayfishTypeSwitch(marker.CrayfishType)}</td>
@@ -45,10 +56,10 @@ export default function AdminMarkerTable({markers, token, email, refreshTable}) 
             </tbody>  
         </table>
         {DetailsPopupButton && (
-            <DetailsPopupForAdmin trigger={DetailsPopupButton} setTrigger={setDetailsPopupButton} marker={markerDetails} token={token} refreshTable={refreshTable}/>
+            <DetailsPopupWithEditing role={role} trigger={DetailsPopupButton} setTrigger={setDetailsPopupButton} marker={markerDetails} token={token} refreshTable={refreshTable}/>
         )}
         {AddMarkerPopupButton && (
-            <AddMarkerPopupFN trigger={AddMarkerPopupButton} setTrigger={setAddMarkerPopupButton} token={token} email={email} refreshTable={refreshTable}></AddMarkerPopupFN>
+            <AddMarkerPopupFN trigger={AddMarkerPopupButton} setTrigger={setAddMarkerPopupButton} token={token} email={email} role={role} refreshTable={refreshTable}></AddMarkerPopupFN>
         )}
     </div>
     )

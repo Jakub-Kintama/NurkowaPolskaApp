@@ -2,9 +2,9 @@ import React, {useState, useEffect, useCallback} from "react";
 import AddUserPopup from "../popups/AddUserPopup";
 import EditUserPopup from "../popups/EditUserPopup";
 import axios from 'axios';
-import { sortUsers, generateTableHeaders, handleHeaderClick } from "../functions";
+import { sortUsers, generateTableHeaders, handleHeaderClick, baseURL } from "../functions";
 
-export default function UserTable( {token} ) {
+export default function UserTable( {token, email} ) {
 
     const [users, setUsers] = useState([]);
     const [refreshTable, setRefreshTable] = useState(false);
@@ -16,8 +16,6 @@ export default function UserTable( {token} ) {
     const [currentHeader, setCurrentHeader] = useState("Rola");
     const [sortAs, setSortAs] = useState("asc");
 
-    const apiUsers = 'http://172.19.100.10:8080/api/users'
-
     const fetchData = useCallback(async () => {
         try {
           const config = {
@@ -26,7 +24,7 @@ export default function UserTable( {token} ) {
             },
           };
       
-          const response = await axios.get(apiUsers, config);
+          const response = await axios.get(`${baseURL}/api/users`, config);
           setUsers(response.data);
         } catch (error) {
           console.error('Error while fetching data:', error);
@@ -44,13 +42,17 @@ export default function UserTable( {token} ) {
     };
 
     const handleEditButton = (user) => {
-        setSelectedUser({email: user.email, role: user.role});
-        setEditUserPopupButton(true);
+        if (user.email !== email) {
+            setSelectedUser({email: user.email, role: user.role});
+            setEditUserPopupButton(true);
+        } else {
+            alert("Nie edytujemy swoich uprawnień!");
+        }
     }
     
     return(
         <div>
-            <h2>Lista osób uprawnionych:</h2>
+            <h2>Lista użytkowników:</h2>
             <table className="UserTable">
                 <thead>
                     <tr>
@@ -62,7 +64,7 @@ export default function UserTable( {token} ) {
                     {sortUsers(users, currentHeader, sortAs).map( (user, index) => (
                         <tr key={index} className="UserRow">
                             <td>{user.email}</td>
-                            <td>{user.role}</td>
+                            <td>{user.role === "ADMIN" ? "Administrator" : "Użytkownik"}</td>
                             <td><button onClick={() => handleEditButton(user)} className="TableButton">Edytuj</button></td>
                         </tr>
                     ))}
@@ -72,7 +74,7 @@ export default function UserTable( {token} ) {
                 <AddUserPopup trigger={AddUserPopupButton} setTrigger={setAddUserPopupButton} refreshTable={setRefreshTable} token={token}></AddUserPopup>
             )}
             {EditUserPopupButton && (
-                <EditUserPopup trigger={EditUserPopupButton} setTrigger={setEditUserPopupButton} user={selectedUser} refreshTable={setRefreshTable} token={token}></EditUserPopup>
+                <EditUserPopup email={email} trigger={EditUserPopupButton} setTrigger={setEditUserPopupButton} user={selectedUser} refreshTable={setRefreshTable} token={token}></EditUserPopup>
             )}
         </div>
     )

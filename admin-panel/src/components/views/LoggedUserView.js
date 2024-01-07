@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import MarkerTable from "../tables/MarkerTable";
-import UserMarkerTable from "../tables/UserMarkerTable";
+import MarkerTableForLoggedUsers from "../tables/MarkerTableForLoggedUsers";
 
 export default function LoggedUserView({markers, token, email, refreshTable}) {
 
@@ -21,7 +21,7 @@ export default function LoggedUserView({markers, token, email, refreshTable}) {
             <button className="UserMarkersButton" onClick={() => userMarkersHandler()}>Moje Znaczniki</button>
             <button className="AllMarkersButton" onClick={() => allMarkersHandler()}>Wszystkie Znaczniki</button>
             {userMarkersVisible && (
-                <UserMarkerTable markers={markers} token={token} email={email} refreshTable={refreshTable}/>
+                <MarkerTableForLoggedUsers markers={markers} token={token} email={email} role="USER" refreshTable={refreshTable}/>
             )}
             {allMarkersVisible && (
                 <MarkerTable markers={markers}/>

@@ -1,3 +1,5 @@
+export const baseURL = "http://172.19.100.10:8080";
+
 export function crayfishTypeSwitch(param) {
     switch(param) {
         case "GALICIAN":
@@ -8,6 +10,8 @@ export function crayfishTypeSwitch(param) {
             return "Amerykański";
         case "NOBLE":
             return "Szlachetny";
+        case "OTHER":
+            return "Inne";
         default:
             return "WHAT IS THAT MELODY";
     }
@@ -81,6 +85,7 @@ export const sortMarkers = (data, header, sortAs) => {
     
 };
 export const sortUsers = (data, header, sortAs) => {
+    data.sort( (a,b) => a.email.localeCompare(b.email));
     switch(header){
         case "E-Mail":
             if(sortAs === "asc"){

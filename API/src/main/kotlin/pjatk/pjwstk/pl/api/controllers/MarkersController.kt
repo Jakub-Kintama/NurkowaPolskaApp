@@ -38,32 +38,44 @@ class MarkersController(private val service: MarkerService) {
     @GetMapping("/year/{year}")
     fun getMarkersByYear(@PathVariable year: Int): Collection<Marker> = service.getMarkersByYear(year)
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @SecurityRequirement(name = "jwtAuth")
+    fun addMarker(@RequestBody marker: Marker): Marker = service.addMarker(Marker(
+        id = marker.id,
+        mapMarker = marker.mapMarker,
+        userEmail = marker.userEmail,
+        crayfishType = marker.crayfishType,
+        date = marker.date,
+        false,  //change to false
+        image = marker.image
+    ))
+
     @PatchMapping
     @SecurityRequirement(name = "jwtAuth")
     fun updateMarker(@RequestBody marker: Marker): Marker {
         val userEmail = SecurityContextHolder.getContext().authentication.name
         if (userEmail != marker.userEmail) throw AccessDeniedException("You can only update your own markers.")
 
-        val newMarker = Marker(
+        return service.updateMarker(Marker(
             id = marker.id,
             mapMarker = marker.mapMarker,
             userEmail = marker.userEmail,
             crayfishType = marker.crayfishType,
             date = marker.date,
-            false,  //change to false when editing data
+            false,  //change to false
             image = marker.image
-        )
-        return service.updateMarker(newMarker)
+        ))
     }
 
     @DeleteMapping("/{markerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @SecurityRequirement(name = "jwtAuth")
-    fun deleteMarker(@PathVariable markerId: String) {
+    fun deleteMarker(@PathVariable markerId: String): Unit {
         val userEmail = SecurityContextHolder.getContext().authentication.name
         val marker = service.getMarkerById(markerId)
         if (userEmail != marker.userEmail) throw AccessDeniedException("You can only delete your own markers.")
 
-        service.deleteMarker(markerId)
+        return service.deleteMarker(markerId)
     }
 }

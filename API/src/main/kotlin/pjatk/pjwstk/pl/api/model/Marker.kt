@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
-import pjatk.pjwstk.pl.api.model.enums.MarkerType
+import pjatk.pjwstk.pl.api.model.enums.CrayfishType
 import java.time.LocalDate
 import java.util.*
 
@@ -18,7 +18,7 @@ data class Marker(
     @JsonProperty("userEmail")
     val userEmail: String,
     @JsonProperty("CrayfishType")
-    val markerType: MarkerType,
+    val crayfishType: CrayfishType,
     @JsonProperty("date")
     @JsonFormat(pattern = "yyyy-MM-dd")
     val date: LocalDate,

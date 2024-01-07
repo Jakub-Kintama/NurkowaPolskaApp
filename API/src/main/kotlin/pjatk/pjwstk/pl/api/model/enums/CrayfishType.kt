@@ -1,5 +1,5 @@
 package pjatk.pjwstk.pl.api.model.enums
 
-enum class MarkerType {
+enum class CrayfishType {
     SIGNAL, AMERICAN, NOBLE, GALICIAN, OTHER
 }

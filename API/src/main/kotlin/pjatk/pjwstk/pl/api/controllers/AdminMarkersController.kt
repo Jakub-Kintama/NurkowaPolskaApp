@@ -5,12 +5,12 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import pjatk.pjwstk.pl.api.model.Marker
-import pjatk.pjwstk.pl.api.service.AdminMarkerService
+import pjatk.pjwstk.pl.api.service.MarkerService
 
 @RestController
-@RequestMapping("/api/markers")
+@RequestMapping("/api/admin/markers")
 @SecurityRequirement(name = "jwtAuth")
-class AdminMarkersController(private val service: AdminMarkerService) {
+class AdminMarkersController(private val service: MarkerService) {
 
     @ExceptionHandler(NoSuchElementException::class)
     fun handleNotFound(e: NoSuchElementException): ResponseEntity<String> =
@@ -30,6 +30,4 @@ class AdminMarkersController(private val service: AdminMarkerService) {
     @DeleteMapping("/{markerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteMarker(@PathVariable markerId: String): Unit = service.deleteMarker(markerId)
-
-
 }

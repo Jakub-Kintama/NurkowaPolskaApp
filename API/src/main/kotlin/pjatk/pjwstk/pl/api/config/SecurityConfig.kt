@@ -30,14 +30,10 @@ class SecurityConfig(
             .cors { corsFilter() }
             .authorizeHttpRequests {
                 it
-                    .requestMatchers(HttpMethod.GET, "/api/markers", "/api/markers/**")
-                    .permitAll()
-                    .requestMatchers(HttpMethod.POST, "/api/markers")
-                    .fullyAuthenticated()
-                    .requestMatchers("/api/markers", "/api/markers/**", "/api/users", "/api/users/**")
-                    .hasRole("ADMIN")
-                    .anyRequest()
-                    .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/markers", "/api/markers/**").permitAll()
+                    .requestMatchers( "/api/markers", "api/markers/**").fullyAuthenticated()
+                    .requestMatchers("/api/admin/markers", "/api/admin/markers/**", "/api/users", "/api/users/**").hasRole("ADMIN")
+                    .anyRequest().permitAll()
             }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

@@ -14,6 +14,8 @@ class MarkerService(@Qualifier("mongodbMarker") private val dataSource: MarkerDa
     fun getMarkersSinceDate(since: LocalDate): Collection<Marker> = dataSource.retrieveMarkersSinceDate(since)
     fun getMarkersSinceDateToDate(since: LocalDate, to: LocalDate): Collection<Marker> =
         dataSource.retrieveMarkersSinceDateToDate(since, to)
-
     fun getMarkersByYear(year: Int): Collection<Marker> = dataSource.retrieveMarkersByYear(year)
+    fun addMarker(marker: Marker): Marker = dataSource.createMarker(marker)
+    fun updateMarker(marker: Marker): Marker = dataSource.updateMarker(marker)
+    fun deleteMarker(markerId: String): Unit = dataSource.deleteMarker(markerId)
 }

@@ -1,7 +1,10 @@
 package pjatk.pjwstk.pl.api.controllers
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.AccessDeniedException
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 import pjatk.pjwstk.pl.api.model.Marker
 import pjatk.pjwstk.pl.api.service.MarkerService
@@ -34,4 +37,33 @@ class MarkersController(private val service: MarkerService) {
 
     @GetMapping("/year/{year}")
     fun getMarkersByYear(@PathVariable year: Int): Collection<Marker> = service.getMarkersByYear(year)
+
+    @PatchMapping
+    @SecurityRequirement(name = "jwtAuth")
+    fun updateMarker(@RequestBody marker: Marker): Marker {
+        val userEmail = SecurityContextHolder.getContext().authentication.name
+        if (userEmail != marker.userEmail) throw AccessDeniedException("You can only update your own markers.")
+
+        val newMarker = Marker(
+            id = marker.id,
+            mapMarker = marker.mapMarker,
+            userEmail = marker.userEmail,
+            crayfishType = marker.crayfishType,
+            date = marker.date,
+            false,  //change to false when editing data
+            image = marker.image
+        )
+        return service.updateMarker(newMarker)
+    }
+
+    @DeleteMapping("/{markerId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @SecurityRequirement(name = "jwtAuth")
+    fun deleteMarker(@PathVariable markerId: String) {
+        val userEmail = SecurityContextHolder.getContext().authentication.name
+        val marker = service.getMarkerById(markerId)
+        if (userEmail != marker.userEmail) throw AccessDeniedException("You can only delete your own markers.")
+
+        service.deleteMarker(markerId)
+    }
 }

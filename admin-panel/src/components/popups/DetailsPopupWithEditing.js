@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { baseURL } from "../functions";
 
-export default function DetailsPopupForAdmin(props) {
+export default function DetailsPopupWithEditing(props) {
+    const [role] = useState(props.role);
 
-    const [date, setDate] = useState(props.marker.date);
+    const [date, setDate] = useState(new Date(props.marker.date));
     const [crayfishType, setCrayfishType] = useState(props.marker.crayfishType);
     const [title, setTitle] = useState(props.marker.title);
     const [description, setDescription] = useState(props.marker.description);
@@ -30,47 +34,66 @@ export default function DetailsPopupForAdmin(props) {
     };
 
     const handleDelete = async () => {
-        try {
-            const config = {
-                headers: {
-                  'Authorization': `Bearer ${props.token}`,
-                },
-            };
-            await axios.delete(`http://172.19.100.10:8080/api/markers/${props.marker.id}`, config);
-            props.setTrigger(false);
-            props.refreshTable(true);
-        } catch (error) {
-            console.error("Błąd podczas usuwania rekordu", error);
+        const config = {
+            headers: {
+              'Authorization': `Bearer ${props.token}`,
+            },
+        };
+        if (role === "ADMIN") {
+            try {
+                await axios.delete(`${baseURL}/api/admin/markers/${props.marker.id}`, config);
+            } catch (error) {
+                console.error("Błąd podczas usuwania rekordu", error);
+            }
+        } else {
+            try {
+                await axios.delete(`${baseURL}/api/markers/${props.marker.id}`, config);
+            } catch (error) {
+                console.error("Błąd podczas usuwania rekordu", error);
+            }
         }
+        props.setTrigger(false);
+        props.refreshTable(true);
+       
     };
     
     const handleSubmit = async () => {
-        try {
-            const data = {
-                _id: props.marker.id,
-                mapMarker: {
-                    position: {
-                        lat: props.marker.lat,
-                        lng: props.marker.lng
-                    },
-                    title: title,
-                    description: description            
+        const data = {
+            _id: props.marker.id,
+            mapMarker: {
+                position: {
+                    lat: props.marker.lat,
+                    lng: props.marker.lng
                 },
-                userEmail: props.marker.userEmail,
-                CrayfishType: crayfishType,
-                date: date
-            };
-            const config = {
-                headers: {
-                  'Authorization': `Bearer ${props.token}`,
-                },
-            };
-            await axios.patch(`http://172.19.100.10:8080/api/markers`, data, config);
-            props.setTrigger(false);
-            props.refreshTable(true);
-        } catch (error) {
-            console.error("Błąd podczas patchowania", error);
+                title: title,
+                description: description            
+            },
+            userEmail: props.marker.userEmail,
+            CrayfishType: crayfishType,
+            date: date.toISOString().split('T')[0],
+            verified: verified
+        };
+        const config = {
+            headers: {
+              'Authorization': `Bearer ${props.token}`,
+            },
+        };
+        if (role === "ADMIN") {
+            try {
+                await axios.patch(`${baseURL}/api/admin/markers`, data, config);
+    
+            } catch (error) {
+                console.error("Błąd podczas patchowania", error);
+            }
+        } else {
+            try {
+                await axios.patch(`${baseURL}/api/markers`, data, config);
+            } catch (error) {
+                console.error("Błąd podczas patchowania", error);
+            }
         }
+        props.setTrigger(false);
+        props.refreshTable(true);
     };
     const handleStatusChange = async () => {
         try {
@@ -94,7 +117,7 @@ export default function DetailsPopupForAdmin(props) {
                   'Authorization': `Bearer ${props.token}`,
                 },
             };
-            await axios.patch(`http://172.19.100.10:8080/api/markers`, data, config);
+            await axios.patch(`${baseURL}/api/admin/markers`, data, config);
             // props.setTrigger(false);
             setVerified(!verified);
             props.refreshTable(true);
@@ -111,20 +134,31 @@ export default function DetailsPopupForAdmin(props) {
                 <div className="DetailsPopupContent">
                     <iframe className="DetailsIframe" title={title} src={`https://maps.google.com/maps?q=${props.marker.lat},${props.marker.lng}&z=14&output=embed`} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
                     <div className="Details">
-                        <p><strong>Data dodania: </strong><input type="text" value={date} onChange={handleDateChange}/></p>
+                        <label htmlFor="dpicker"><strong>Data dodania: </strong></label>
+                            <DatePicker
+                                id="dpicker"
+                                selected={date}
+                                onChange={handleDateChange}
+                                dateFormat="yyyy-MM-dd"
+                            />
+                        
                         <p><strong>Typ: </strong>
                             <select value={crayfishType} onChange={handleCrayfishTypeChange}>
                               <option value="SIGNAL">Sygnałowy</option>
                               <option value="AMERICAN">Amerykański</option>
                               <option value="NOBLE">Szlachetny</option>
                               <option value="GALICIAN">Galicyjski</option>
+                              <option value="OTHER">Pozostałe</option>
                             </select>
                         </p>
                         <p><strong>Tytuł: </strong><input type="text" value={title} onChange={handleTitleChange}/></p>
                         <p><strong>Opis: </strong><textarea value={description} onChange={handleDescriptionChange}/></p>
-                        <p><strong>Status: </strong><button onClick={handleStatusChange}>{verified === true ? "Zweryfikowany" : "Niezweryfikowany" }</button></p>
+                        {role === "ADMIN" ? 
+                            <p><strong>Status: </strong><button onClick={handleStatusChange}>{verified === true ? "Zweryfikowany" : "Niezweryfikowany" }</button></p>
+                            : <p><strong>Status: </strong>{verified === true ? "Zweryfikowany" : "Niezweryfikowany" }</p>
+                        }
                         <p><strong>Dodane przez: </strong>{props.marker.userEmail}</p>
-                        <button onClick={handleSubmit}>Submit</button>
+                        <button onClick={handleSubmit}>Prześlij zmiany</button>
                     </div>
                 </div>
                 <button onClick={handleDelete} className="DeleteButton">

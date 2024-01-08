@@ -16,6 +16,8 @@ export default function Home() {
     const [email, setEmail] = useState("");
     const [loginPopupButton, setLoginPopupButton] = useState(false);
     const [refreshTable, setRefreshTable] = useState(false);
+    const [downloadTrigger, setDownloadTrigger] = useState(false);
+    const [selectedMarkers, setSelectedMarkers] = useState([]);
 
     const fetchData = useCallback(async () => {
         try {
@@ -31,10 +33,31 @@ export default function Home() {
         setRefreshTable(false);
     }, [refreshTable, fetchData]);
 
-    const exportMarkers = () => {
+    const setTriggerAndClearArr = (trigger) => {
+        setDownloadTrigger(trigger);
+        setSelectedMarkers([]);
+    }
+    
+    const startExportingProcess = () => {
+        setDownloadTrigger(true);
+    }
+    
+    const cancelDownloading = () => {
+        setTriggerAndClearArr(false);
+    }
+
+    const handleDownload = () => {
+        const markersJson = JSON.stringify(selectedMarkers, null, 2);
+        const blob = new Blob([markersJson], { type: 'application/json' });
+        saveAs(blob, 'selectedMarkers.json');
+        setTriggerAndClearArr(false);
+    }
+
+    const exportAllMarkers = () => {
         const markersJson = JSON.stringify(markers, null, 2);
         const blob = new Blob([markersJson], { type: 'application/json' });
         saveAs(blob, 'markers.json');
+        setTriggerAndClearArr(false);
     };
 
     const handleLoginSuccess = (token, refreshToken, email, role) => {
@@ -53,7 +76,10 @@ export default function Home() {
         <div className="App">
             <div className="Topnav">
                 <button className='TopnavButton' id='homeButton'>Powrót</button>
-                <button className='TopnavButton' id='exportButton' onClick={exportMarkers}>Eksportuj znaczniki</button>
+                {downloadTrigger 
+                    ? <button className='TopnavButton' id='cancelButton' onClick={cancelDownloading}>Anuluj</button>
+                    : <button className='TopnavButton' id='exportButton' onClick={startExportingProcess}>Eksportuj znaczniki</button>}
+                {downloadTrigger ? <button className='TopnavButton' id='exportButton' onClick={exportAllMarkers}>Eksportuj wszystkie</button> : ""}
             </div>
             <div className="PanelPart">
                 {isAdmin && isLogged && (
@@ -71,7 +97,7 @@ export default function Home() {
                 {!isLogged && !isAdmin && (
                     <>
                     <button onClick={ () => setLoginPopupButton(true) } className="LogoutButton">Zaloguj</button><br/>
-                    <MarkerTable markers={markers}/>
+                    <MarkerTable markers={markers} downloadTrigger={downloadTrigger} setDownloadTrigger={setDownloadTrigger} selectedMarkers={selectedMarkers} setSelectedMarkers={setSelectedMarkers} handleDownload={handleDownload}/>
                     </>
                 )}
             </div>

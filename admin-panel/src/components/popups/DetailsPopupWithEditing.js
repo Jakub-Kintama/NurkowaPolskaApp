@@ -110,7 +110,7 @@ export default function DetailsPopupWithEditing(props) {
                 userEmail: props.marker.userEmail,
                 CrayfishType: props.marker.crayfishType,
                 date: props.marker.date,
-                verified: !props.marker.verified
+                verified: !verified
             };
             const config = {
                 headers: {

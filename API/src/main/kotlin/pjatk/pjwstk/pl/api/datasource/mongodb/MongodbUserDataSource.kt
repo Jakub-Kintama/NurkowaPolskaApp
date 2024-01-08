@@ -29,6 +29,8 @@ class MongodbUserDataSource(
             ?: throw NoSuchElementException("Could not find a user with id $userId.")
     }
 
+    override fun existsUser(userId: String): Boolean = mongoTemplate.findById(userId, User::class.java) != null
+
     override fun createUser(user: User): User {
         val userId = user.email
         if (mongoTemplate.exists(Query.query(Criteria.where("_id").`is`(userId)), Marker::class.java)) {

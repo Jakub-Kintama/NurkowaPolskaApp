@@ -4,16 +4,27 @@ springdoc:
         disable-swagger-default-url: true
         path: /api
 
-# Database / MongoDB
+# Spring config
 spring:
     data:
-        mongodb:
+        mongodb:    # Database / MongoDB
             authentication-database: admin
             username: rootuser
             password: rootpass
             database: npamarkers
             port: 27017
             host: 172.19.100.10
+    security:
+        oauth2:     # Security / OAuth2.0
+          client:
+              registration:
+                google:
+                    client-id: ${CLIENT_ID:178156330035-5g0rpffae5mdjf39h60ksjkob7k7ht32.apps.googleusercontent.com}
+                    client-secret: ${CLIENT_SECRET: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}
+                    redirect-uri: http://localhost:8080/me
+                    scope:
+                      - email
+                      - profile
 
 # Security / JWT
 jwt:

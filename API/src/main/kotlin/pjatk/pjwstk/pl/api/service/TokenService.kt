@@ -48,7 +48,7 @@ class TokenService(
         val parser = Jwts.parser()
             .verifyWith(secretKey)
             .build()
-
+        println(token)
         return parser
             .parseSignedClaims(token)
             .payload

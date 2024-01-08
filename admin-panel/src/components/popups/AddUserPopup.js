@@ -32,7 +32,6 @@ export default function AddUserPopup(props) {
       setEmail("");
       setSelectedRole("");
       props.setTrigger(false);
-      props.refreshTable(true);
 
     } catch (error) {
       console.error("Błąd podczas przesyłania danych:", error);

@@ -2,6 +2,7 @@ package pjatk.pjwstk.pl.api.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
@@ -13,7 +14,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
 @EnableWebSecurity
-class WebConfig{
+class SecurityConfig{
 
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
@@ -30,21 +31,18 @@ class WebConfig{
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
-            .authorizeHttpRequests { registry ->
-                registry
-                    .requestMatchers("/login", "/ping")
-                    .permitAll()
-                registry
-                    .anyRequest()
-                    .authenticated()
+            .authorizeHttpRequests {
+                it.requestMatchers(HttpMethod.GET, "/api/markers", "/api/markers/**").permitAll()
+                    .requestMatchers("/api/markers", "api/markers/**").fullyAuthenticated()
+                    .requestMatchers("/api/admin/markers", "/api/admin/markers/**", "/api/users", "/api/users/**")
+                    .hasRole("ADMIN").anyRequest().permitAll()
             }
             .csrf { it.disable() }
             .cors { c -> c.configurationSource(corsConfigurationSource()) }
             .sessionManagement{
                 it.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
             }
-            .oauth2Login { l -> l.defaultSuccessUrl("http://localhost:8080/me", true) }
-            .formLogin{}
+            .oauth2Login { l -> l.defaultSuccessUrl("http://localhost:8080/api") }
             .build()
     }
 }

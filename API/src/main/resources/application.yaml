@@ -21,12 +21,6 @@ spring:
                 google:
                     client-id: ${CLIENT_ID:178156330035-5g0rpffae5mdjf39h60ksjkob7k7ht32.apps.googleusercontent.com}
                     client-secret: ${CLIENT_SECRET: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}
-                    #redirect-uri: http://localhost:8080/me
                     scope:
                       - email
                       - profile
-
-# Security / JWT
-jwt:
-    access-token-expiration: 86400000
-    refresh-token-expiration: 86400000

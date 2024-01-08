@@ -1,7 +1,5 @@
 package pjatk.pjwstk.pl.api
 
-import io.swagger.v3.oas.annotations.security.SecurityRequirement
-import io.swagger.v3.oas.annotations.security.SecurityRequirements
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.security.core.context.SecurityContextHolder
@@ -25,9 +23,10 @@ class ApiController {
     }
 
     @GetMapping("/me")
-    @SecurityRequirements(
-        SecurityRequirement(name = "jwtAuth"),
-        SecurityRequirement(name = "oauth2")
-    )
     fun getMyInfo(): String = SecurityContextHolder.getContext().authentication.authorities.toString()
+
+    @GetMapping("/google")
+    fun logIn(): String {
+        return "http://localhost:8080/oauth2/authorization/google"
+    }
 }

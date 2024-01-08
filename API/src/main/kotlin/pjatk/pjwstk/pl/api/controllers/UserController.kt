@@ -1,7 +1,6 @@
 package pjatk.pjwstk.pl.api.controllers
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
-import io.swagger.v3.oas.annotations.security.SecurityRequirements
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -12,10 +11,7 @@ import java.util.*
 
 @RestController
 @RequestMapping("/api/users")
-@SecurityRequirements(
-    SecurityRequirement(name = "jwtAuth"),
-    SecurityRequirement(name = "oauth2")
-)
+@SecurityRequirement(name = "oauth2")
 class UserController(private val service: UserService) {
 
     @ExceptionHandler(NoSuchElementException::class)

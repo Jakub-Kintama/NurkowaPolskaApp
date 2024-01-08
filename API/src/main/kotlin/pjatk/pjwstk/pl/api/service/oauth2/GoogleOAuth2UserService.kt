@@ -16,8 +16,9 @@ class GoogleOAuth2UserService(
     @Throws(OAuth2AuthenticationException::class)
     override fun loadUser(userRequest: OAuth2UserRequest): GoogleOAuth2User {
         val oAuth2User = super.loadUser(userRequest)
-        val user = if(dataSource.existsUser(oAuth2User.name)) dataSource.retrieveUserByEmail(oAuth2User.name)
-        else dataSource.createUser(User(oAuth2User.name, null, Role.USER))
+        val userEmail = oAuth2User.attributes["email"].toString()
+        val user = if(dataSource.existsUser(userEmail)) dataSource.retrieveUserByEmail(userEmail)
+        else dataSource.createUser(User(userEmail, null, Role.USER))
 
         return GoogleOAuth2User(oAuth2User, user)
     }

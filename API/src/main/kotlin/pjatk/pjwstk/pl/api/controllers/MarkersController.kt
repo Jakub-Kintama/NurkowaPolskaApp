@@ -1,7 +1,6 @@
 package pjatk.pjwstk.pl.api.controllers
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
-import io.swagger.v3.oas.annotations.security.SecurityRequirements
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.AccessDeniedException
@@ -41,10 +40,7 @@ class MarkersController(private val service: MarkerService) {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @SecurityRequirements(
-        SecurityRequirement(name = "jwtAuth"),
-        SecurityRequirement(name = "oauth2")
-    )
+    @SecurityRequirement(name = "oauth2")
     fun addMarker(@RequestBody marker: Marker): Marker = service.addMarker(Marker(
         id = marker.id,
         mapMarker = marker.mapMarker,
@@ -56,10 +52,7 @@ class MarkersController(private val service: MarkerService) {
     ))
 
     @PatchMapping
-    @SecurityRequirements(
-        SecurityRequirement(name = "jwtAuth"),
-        SecurityRequirement(name = "oauth2")
-    )
+    @SecurityRequirement(name = "oauth2")
     fun updateMarker(@RequestBody marker: Marker): Marker {
         val userEmail = SecurityContextHolder.getContext().authentication.name
         if (userEmail != marker.userEmail) throw AccessDeniedException("You can only update your own markers.")
@@ -77,11 +70,8 @@ class MarkersController(private val service: MarkerService) {
 
     @DeleteMapping("/{markerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @SecurityRequirements(
-        SecurityRequirement(name = "jwtAuth"),
-        SecurityRequirement(name = "oauth2")
-    )
-    fun deleteMarker(@PathVariable markerId: String): Unit {
+    @SecurityRequirement(name = "oauth2")
+    fun deleteMarker(@PathVariable markerId: String) {
         val userEmail = SecurityContextHolder.getContext().authentication.name
         val marker = service.getMarkerById(markerId)
         if (userEmail != marker.userEmail) throw AccessDeniedException("You can only delete your own markers.")

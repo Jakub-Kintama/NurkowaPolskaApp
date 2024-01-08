@@ -47,10 +47,14 @@ export default function Home() {
     }
 
     const handleDownload = () => {
-        const markersJson = JSON.stringify(selectedMarkers, null, 2);
-        const blob = new Blob([markersJson], { type: 'application/json' });
-        saveAs(blob, 'selectedMarkers.json');
-        setTriggerAndClearArr(false);
+        if (selectedMarkers.length > 0) {
+            const markersJson = JSON.stringify(selectedMarkers, null, 2);
+            const blob = new Blob([markersJson], { type: 'application/json' });
+            saveAs(blob, 'selectedMarkers.json');
+            setTriggerAndClearArr(false);
+        } else {
+            alert("Najpierw proszę coś zaznaczyć!");
+        }
     }
 
     const exportAllMarkers = () => {

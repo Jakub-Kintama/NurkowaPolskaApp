@@ -5,6 +5,7 @@ import axios from 'axios';
 import { saveAs } from 'file-saver';
 import LoginForm from "./LoginForm";
 import LoggedUserView from "./views/LoggedUserView";
+import { baseURL } from "./functions";
 
 export default function Home() {
 
@@ -16,11 +17,9 @@ export default function Home() {
     const [loginPopupButton, setLoginPopupButton] = useState(false);
     const [refreshTable, setRefreshTable] = useState(false);
 
-    const apiMarkers = 'http://172.19.100.10:8080/api/markers'
-
     const fetchData = useCallback(async () => {
         try {
-            const response = await axios.get(apiMarkers);
+            const response = await axios.get(`${baseURL}/api/markers`);
             setMarkers(response.data);
         } catch (error) {
             console.error('Error while fetching data:', error);

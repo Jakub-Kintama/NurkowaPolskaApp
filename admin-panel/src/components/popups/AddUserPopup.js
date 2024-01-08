@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { baseURL } from "../functions";
 
 export default function AddUserPopup(props) {
   const [email, setEmail] = useState("");
@@ -27,7 +28,7 @@ export default function AddUserPopup(props) {
         },
       };
 
-      await axios.post("http://172.19.100.10:8080/api/users", data, config);
+      await axios.post(`${baseURL}/api/users`, data, config);
       setEmail("");
       setSelectedRole("");
       props.setTrigger(false);

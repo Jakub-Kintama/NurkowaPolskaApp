@@ -45,7 +45,7 @@ export default function MarkerTable({markers}) {
         </table>
         {DetailsPopupButton && (
             <DetailsPopup trigger={DetailsPopupButton} setTrigger={setDetailsPopupButton} marker={markerDetails}/>          
-        )};
+        )}
     </div>
     )
 }

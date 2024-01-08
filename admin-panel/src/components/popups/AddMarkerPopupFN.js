@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { baseURL } from '../functions';
 
 export default function AddMarkerPopupFN(props) {
+  const [role] = useState(props.role);
+
   const [lat, setLat] = useState("");
   const [lng, setLng] = useState("");
   const [title, setTitle] = useState("");
@@ -36,40 +39,47 @@ export default function AddMarkerPopupFN(props) {
   };
 
   const handleSubmit = async () => {
-    try {
-      const data = {
-        mapMarker: {
-            position: {
-                lat: lat,
-                lng: lng
-            },
-            title: title,
-            description: description            
-        },
-        userEmail: props.email,
-        CrayfishType: crayfishType,
-        date: date.toISOString().split('T')[0],
-        verified: false
-      };
-      const config = {
-        headers: {
-          'Authorization': `Bearer ${props.token}`,
-        },
-      };
-
-      await axios.post("http://172.19.100.10:8080/api/markers", data, config);
-      props.setTrigger(false);
-      props.refreshTable(true);
-      setLat("");
-      setLng("");
-      setTitle("");
-      setDescription("");
-      setDate(new Date());
-      setCrayfishType("");
-
-    } catch (error) {
-      console.error("Błąd podczas przesyłania danych:", error);
+    const data = {
+      mapMarker: {
+          position: {
+              lat: lat,
+              lng: lng
+          },
+          title: title,
+          description: description            
+      },
+      userEmail: props.email,
+      CrayfishType: crayfishType,
+      date: date.toISOString().split('T')[0],
+      verified: false
+    };
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${props.token}`,
+      },
+    };
+    if (role === "ADMIN") {
+      try {
+        data.verified = true;
+        await axios.post(`${baseURL}/api/admin/markers`, data, config);
+      } catch (error) {
+        console.error("Błąd podczas przesyłania danych:", error);
+      }
+    } else {
+      try {
+        await axios.post(`${baseURL}/api/markers`, data, config);
+      } catch (error) {
+        console.error("Błąd podczas przesyłania danych:", error);
+      }
     }
+    props.setTrigger(false);
+    props.refreshTable(true);
+    setLat("");
+    setLng("");
+    setTitle("");
+    setDescription("");
+    setDate(new Date());
+    setCrayfishType("");
   };
 
   return props.trigger ? (
@@ -112,6 +122,7 @@ export default function AddMarkerPopupFN(props) {
           <option value="AMERICAN">Amerykański</option>
           <option value="NOBLE">Szlachetny</option>
           <option value="GALICIAN">Galicyjski</option>
+          <option value="OTHER">Inne</option>
         </select>
         <button onClick={handleSubmit}>Submit</button>
       </div>

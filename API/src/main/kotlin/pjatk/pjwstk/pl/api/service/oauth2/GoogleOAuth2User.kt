@@ -16,4 +16,5 @@ class GoogleOAuth2User(
     }
     override fun getAttributes(): Map<String, Any> = oAuth2User.attributes
     override fun getName(): String = oAuth2User.name
+    fun getUser(): User = this.user
 }

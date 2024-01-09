@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Repository
 import pjatk.pjwstk.pl.api.datasource.UserDataSource
 import pjatk.pjwstk.pl.api.model.Marker
@@ -15,7 +14,7 @@ import java.io.IOException
 @Repository("mongodbUser")
 class MongodbUserDataSource(
     @Autowired private val mongoTemplate: MongoTemplate,
-    private val encoder: PasswordEncoder
+    //private val encoder: PasswordEncoder
 ) : UserDataSource {
     override fun retrieveUsers(): Collection<User> {
         val users = mongoTemplate.findAll(User::class.java)
@@ -37,8 +36,8 @@ class MongodbUserDataSource(
             throw IllegalArgumentException("User with id $userId already exists.")
         }
         
-        val updatedUser = user.copy(password = encoder.encode(user.password))
-        return mongoTemplate.save(updatedUser)
+        //val updatedUser = user.copy(password = encoder.encode(user.password))
+        return mongoTemplate.save(user)
     }
 
     override fun updateUser(userEmailRole: UserEmailRole): User {

@@ -1,12 +1,13 @@
-package pjatk.pjwstk.pl.api.service
+package pjatk.pjwstk.pl.api.service.jwt
+
 
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import pjatk.pjwstk.pl.api.config.jwt.JwtProperties
-import pjatk.pjwstk.pl.api.controllers.auth.AuthenticationRequest
-import pjatk.pjwstk.pl.api.controllers.auth.AuthenticationResponse
+import pjatk.pjwstk.pl.api.controllers.jwt.AuthenticationRequest
+import pjatk.pjwstk.pl.api.controllers.jwt.AuthenticationResponse
 import pjatk.pjwstk.pl.api.datasource.RefreshTokenDataSource
 import java.util.*
 

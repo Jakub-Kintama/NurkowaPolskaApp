@@ -81,7 +81,7 @@ class MarkersController(private val service: MarkerService) {
         SecurityRequirement(name = "jwtAuth"),
         SecurityRequirement(name = "oauth2")
     )
-    fun deleteMarker(@PathVariable markerId: String): Unit {
+    fun deleteMarker(@PathVariable markerId: String) {
         val userEmail = SecurityContextHolder.getContext().authentication.name
         val marker = service.getMarkerById(markerId)
         if (userEmail != marker.userEmail) throw AccessDeniedException("You can only delete your own markers.")

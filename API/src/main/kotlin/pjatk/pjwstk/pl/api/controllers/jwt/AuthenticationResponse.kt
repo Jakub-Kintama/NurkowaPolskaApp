@@ -1,4 +1,4 @@
-package pjatk.pjwstk.pl.api.controllers.auth
+package pjatk.pjwstk.pl.api.controllers.jwt
 
 import org.springframework.security.core.GrantedAuthority
 

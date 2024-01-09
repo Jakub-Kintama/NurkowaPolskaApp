@@ -1,4 +1,4 @@
-package pjatk.pjwstk.pl.api.service
+package pjatk.pjwstk.pl.api.service.jwt
 
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.security.core.userdetails.User

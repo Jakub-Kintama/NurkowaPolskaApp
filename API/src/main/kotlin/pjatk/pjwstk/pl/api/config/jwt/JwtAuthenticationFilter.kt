@@ -9,8 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
-import pjatk.pjwstk.pl.api.service.CustomUserDetailsService
-import pjatk.pjwstk.pl.api.service.TokenService
+import pjatk.pjwstk.pl.api.service.jwt.CustomUserDetailsService
+import pjatk.pjwstk.pl.api.service.jwt.TokenService
 
 @Component
 class JwtAuthenticationFilter(

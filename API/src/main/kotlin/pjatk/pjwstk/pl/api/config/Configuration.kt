@@ -12,7 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import pjatk.pjwstk.pl.api.config.jwt.JwtProperties
 import pjatk.pjwstk.pl.api.datasource.UserDataSource
-import pjatk.pjwstk.pl.api.service.CustomUserDetailsService
+import pjatk.pjwstk.pl.api.service.jwt.CustomUserDetailsService
 
 @Configuration
 @EnableConfigurationProperties(JwtProperties::class)

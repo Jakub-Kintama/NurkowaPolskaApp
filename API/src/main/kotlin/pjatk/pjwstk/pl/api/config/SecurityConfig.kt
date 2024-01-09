@@ -13,50 +13,44 @@ import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import org.springframework.web.filter.CorsFilter
 import pjatk.pjwstk.pl.api.config.jwt.JwtAuthenticationFilter
-import pjatk.pjwstk.pl.api.service.oauth2.GoogleOAuth2UserService
 
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
-    private val authenticationProvider: AuthenticationProvider,
-    private val googleOAuth2UserService: GoogleOAuth2UserService
+    private val authenticationProvider: AuthenticationProvider
 ) {
-
+    // JWT Configuration
     @Bean
     fun securityFilterChain(
-        http: HttpSecurity, jwtAuthenticationFilter: JwtAuthenticationFilter
-    ): DefaultSecurityFilterChain = http.csrf {
-        it.disable()
-    }
-        .cors {
-            corsFilter()
-        }
+        http: HttpSecurity,
+        jwtAuthenticationFilter: JwtAuthenticationFilter
+    ): DefaultSecurityFilterChain = http
+        .csrf { it.disable() }
+        .cors { corsFilter() }
         .authorizeHttpRequests {
             it.requestMatchers(HttpMethod.GET, "/api/markers", "/api/markers/**").permitAll()
                 .requestMatchers("/api/markers", "api/markers/**").fullyAuthenticated()
                 .requestMatchers("/api/admin/markers", "/api/admin/markers/**", "/api/users", "/api/users/**")
-                .hasRole("ADMIN").anyRequest().permitAll()
+                .hasRole("ADMIN")
+                .anyRequest().permitAll()
         }
         .sessionManagement {
-            it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            it.sessionCreationPolicy(SessionCreationPolicy.NEVER)
         }
         .authenticationProvider(authenticationProvider)
-        .oauth2Login { it ->
-            it.userInfoEndpoint{
-                it.userService(googleOAuth2UserService)
-            }
-        }
-        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java).build()
+        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
+        .oauth2Login { l -> l.defaultSuccessUrl("http://localhost:8080/api") }
+        .build()
 
     @Bean
     fun corsFilter(): CorsFilter {
         val source = UrlBasedCorsConfigurationSource()
         val config = CorsConfiguration()
-        config.allowCredentials = true
         config.allowedOrigins = listOf("http://localhost:3000/*", "http://localhost:8080/*")
         config.addAllowedHeader("*")
         config.addAllowedMethod("*")
+        config.allowCredentials = true
         source.registerCorsConfiguration("/**", config)
         return CorsFilter(source)
     }

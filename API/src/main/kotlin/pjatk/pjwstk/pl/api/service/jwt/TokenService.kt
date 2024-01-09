@@ -1,4 +1,4 @@
-package pjatk.pjwstk.pl.api.service
+package pjatk.pjwstk.pl.api.service.jwt
 
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
@@ -48,7 +48,7 @@ class TokenService(
         val parser = Jwts.parser()
             .verifyWith(secretKey)
             .build()
-        println(token)
+
         return parser
             .parseSignedClaims(token)
             .payload

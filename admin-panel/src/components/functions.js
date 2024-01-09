@@ -1,4 +1,4 @@
-export const baseURL = "http://172.19.100.10:8080";
+export const baseURL = "http://172.19.100.10.nip.io:8080";
 
 export function crayfishTypeSwitch(param) {
     switch(param) {

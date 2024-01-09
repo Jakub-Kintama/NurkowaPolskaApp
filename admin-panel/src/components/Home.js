@@ -33,6 +33,19 @@ export default function Home() {
         setRefreshTable(false);
     }, [refreshTable, fetchData]);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`${baseURL}/me`);
+                console.log(response);
+            } catch (error) {
+                console.error('Error while fetching data:', error);
+            }
+        };
+    
+        fetchData();
+    }, []);
+
     const setTriggerAndClearArr = (trigger) => {
         setDownloadTrigger(trigger);
         setSelectedMarkers([]);

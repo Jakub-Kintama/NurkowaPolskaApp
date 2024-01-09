@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { baseURL } from './functions';
 
 export default function LoginForm( props ) {
     
@@ -21,7 +22,7 @@ export default function LoginForm( props ) {
                 email: email,
                 password: password
             }
-            const response = await axios.post(`http://172.19.100.10:8080/api/auth`, data);
+            const response = await axios.post(`${baseURL}/api/auth`, data);
             if (response.data.role[0].authority === "ROLE_ADMIN") {
                 props.onLoginSuccess(response.data.accessToken, response.data.refreshToken, response.data.email, "ADMIN");
             } else {
@@ -40,9 +41,12 @@ export default function LoginForm( props ) {
             <div className='PopupInner'>
                 <button onClick={ () => props.setTrigger(false) } className="CloseButton">Zamknij</button>
                 <h2>Proszę się zalogować</h2>
+                <a href={`${baseURL}/login`}><img src='/web_light_sq_SI@1x.png' alt='Zaloguj poprzez Google'/></a>
+                <div>
                 <input type='text' id='email' autoComplete="on" onChange={handleEmailChange} placeholder='E-Mail'></input>
                 <input type='password' id='pass' autoComplete="on" onChange={handlePasswordChange} placeholder='Hasło'></input>
                 <button onClick={handleSubmit} disabled={!email || !password}>Submit</button>
+                </div>
             </div>
         </div>
     ) : "";

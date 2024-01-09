@@ -40,14 +40,14 @@ class SecurityConfig(
         }
         .authenticationProvider(authenticationProvider)
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
-        .oauth2Login { l -> l.defaultSuccessUrl("http://localhost:8080/api") }
+        .oauth2Login { l -> l.defaultSuccessUrl("http://172.19.100.10.nip.io:8080/api") }
         .build()
 
     @Bean
     fun corsFilter(): CorsFilter {
         val source = UrlBasedCorsConfigurationSource()
         val config = CorsConfiguration()
-        config.allowedOrigins = listOf("http://localhost:3000/*", "http://localhost:8080/*")
+        config.allowedOrigins = listOf("http://localhost:3000/", "172.19.100.10.nip.io:8080/", "172.19.100.10:8080/")
         config.addAllowedHeader("*")
         config.addAllowedMethod("*")
         config.allowCredentials = true

@@ -4,10 +4,15 @@ import { baseURL } from "../functions";
 
 export default function AddUserPopup(props) {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
 
   const handleInputChange = (e) => {
     setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
   };
 
   const handleRoleChange = (e) => {
@@ -18,7 +23,7 @@ export default function AddUserPopup(props) {
     try {
       const data = {
         email: email,
-        password: "placeholder",
+        password: password ? password : null,
         role: selectedRole
       };
 
@@ -50,6 +55,12 @@ export default function AddUserPopup(props) {
           type="text"
           value={email}
           onChange={handleInputChange}
+        ></input>
+        <label htmlFor="ADMIN">Administrator</label>
+        <input
+          type="password"
+          value={password}
+          onChange={handlePasswordChange}
         ></input>
         <label htmlFor="ADMIN">Administrator</label>
         <input

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import MarkerTable from "../tables/MarkerTable";
 import MarkerTableForLoggedUsers from "../tables/MarkerTableForLoggedUsers";
 
-export default function LoggedUserView({markers, token, email, refreshTable}) {
+export default function LoggedUserView({markers, token, email, refreshTable, downloadTrigger, selectedMarkers, setSelectedMarkers, handleDownload}) {
 
     const [userMarkersVisible, setUserMarkersVisible] = useState(true);
     const [allMarkersVisible, setAllMarkersVisible] = useState(false);
@@ -21,10 +21,25 @@ export default function LoggedUserView({markers, token, email, refreshTable}) {
             <button className="UserMarkersButton" onClick={() => userMarkersHandler()}>Moje Znaczniki</button>
             <button className="AllMarkersButton" onClick={() => allMarkersHandler()}>Wszystkie Znaczniki</button>
             {userMarkersVisible && (
-                <MarkerTableForLoggedUsers markers={markers} token={token} email={email} role="USER" refreshTable={refreshTable}/>
+                <MarkerTableForLoggedUsers 
+                    markers={markers} 
+                    token={token} 
+                    email={email} 
+                    role="USER" 
+                    refreshTable={refreshTable}
+                    downloadTrigger={downloadTrigger}
+                    selectedMarkers={selectedMarkers} 
+                    setSelectedMarkers={setSelectedMarkers} 
+                    handleDownload={handleDownload}
+                />
             )}
             {allMarkersVisible && (
-                <MarkerTable markers={markers}/>
+                <MarkerTable markers={markers} 
+                    downloadTrigger={downloadTrigger}
+                    selectedMarkers={selectedMarkers} 
+                    setSelectedMarkers={setSelectedMarkers}
+                    handleDownload={handleDownload}
+                />
             )}
             
             

@@ -2,7 +2,7 @@ import React, {useState, useEffect, useCallback} from "react";
 import AddUserPopup from "../popups/AddUserPopup";
 import EditUserPopup from "../popups/EditUserPopup";
 import axios from 'axios';
-import { sortUsers, generateTableHeaders, handleHeaderClick, baseURL } from "../functions";
+import { sortUsers, generateTableHeaders, handleHeaderClick, baseURL, config } from "../functions";
 
 export default function UserTable( {token, email} ) {
 
@@ -18,13 +18,7 @@ export default function UserTable( {token, email} ) {
 
     const fetchData = useCallback(async () => {
         try {
-          const config = {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-            },
-          };
-      
-          const response = await axios.get(`${baseURL}/api/users`, config);
+          const response = await axios.get(`${baseURL}/api/users`, config(token));
           setUsers(response.data);
         } catch (error) {
           console.error('Error while fetching data:', error);

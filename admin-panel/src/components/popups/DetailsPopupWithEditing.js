@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { baseURL } from "../functions";
+import { baseURL, config } from "../functions";
 
 export default function DetailsPopupWithEditing(props) {
     const [role] = useState(props.role);
@@ -12,6 +12,17 @@ export default function DetailsPopupWithEditing(props) {
     const [title, setTitle] = useState(props.marker.title);
     const [description, setDescription] = useState(props.marker.description);
     const [verified, setVerified] = useState(props.marker.verified);
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    const [isImageFullScreen, setIsImageFullScreen] = useState(false);
+
+    const openFullScreenImage = () => {
+        setIsImageFullScreen(true);
+    };
+
+    const closeFullScreenImage = () => {
+        setIsImageFullScreen(false);
+    };
 
     const handleClose = () => {
         props.setTrigger(false);
@@ -33,21 +44,35 @@ export default function DetailsPopupWithEditing(props) {
         setDescription(e.target.value);
     };
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+      
+        if (file) {
+          const reader = new FileReader();
+      
+          reader.onloadend = () => {
+            const binaryData = reader.result;
+      
+            const binaryString = String.fromCharCode.apply(null, new Uint8Array(binaryData));
+      
+            const imageData = { name: title, data: btoa(binaryString) };
+            setSelectedFile(imageData);
+          };
+      
+          reader.readAsArrayBuffer(file);
+        }
+    };
+
     const handleDelete = async () => {
-        const config = {
-            headers: {
-              'Authorization': `Bearer ${props.token}`,
-            },
-        };
         if (role === "ADMIN") {
             try {
-                await axios.delete(`${baseURL}/api/admin/markers/${props.marker.id}`, config);
+                await axios.delete(`${baseURL}/api/admin/markers/${props.marker.id}`, config(props.token));
             } catch (error) {
                 console.error("Błąd podczas usuwania rekordu", error);
             }
         } else {
             try {
-                await axios.delete(`${baseURL}/api/markers/${props.marker.id}`, config);
+                await axios.delete(`${baseURL}/api/markers/${props.marker.id}`, config(props.token));
             } catch (error) {
                 console.error("Błąd podczas usuwania rekordu", error);
             }
@@ -71,23 +96,19 @@ export default function DetailsPopupWithEditing(props) {
             userEmail: props.marker.userEmail,
             CrayfishType: crayfishType,
             date: date.toISOString().split('T')[0],
-            verified: verified
-        };
-        const config = {
-            headers: {
-              'Authorization': `Bearer ${props.token}`,
-            },
+            verified: verified,
+            image: selectedFile ? selectedFile : null
         };
         if (role === "ADMIN") {
             try {
-                await axios.patch(`${baseURL}/api/admin/markers`, data, config);
+                await axios.patch(`${baseURL}/api/admin/markers`, data, config(props.token));
     
             } catch (error) {
                 console.error("Błąd podczas patchowania", error);
             }
         } else {
             try {
-                await axios.patch(`${baseURL}/api/markers`, data, config);
+                await axios.patch(`${baseURL}/api/markers`, data, config(props.token));
             } catch (error) {
                 console.error("Błąd podczas patchowania", error);
             }
@@ -112,12 +133,7 @@ export default function DetailsPopupWithEditing(props) {
                 date: props.marker.date,
                 verified: !verified
             };
-            const config = {
-                headers: {
-                  'Authorization': `Bearer ${props.token}`,
-                },
-            };
-            await axios.patch(`${baseURL}/api/admin/markers`, data, config);
+            await axios.patch(`${baseURL}/api/admin/markers`, data, config(props.token));
             // props.setTrigger(false);
             setVerified(!verified);
             props.refreshTable(true);
@@ -134,7 +150,15 @@ export default function DetailsPopupWithEditing(props) {
                 <div className="DetailsPopupContent">
                     <iframe className="DetailsIframe" title={title} src={`https://maps.google.com/maps?q=${props.marker.lat},${props.marker.lng}&z=14&output=embed`} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
                     <div className="Details">
-                        <label htmlFor="dpicker"><strong>Data dodania: </strong></label>
+                        {props.marker.image && (
+                            <img
+                                className="MarkerImg"
+                                src={`data:image/jpeg;base64,${props.marker.image.data}`}
+                                alt="Marker"
+                                onClick={openFullScreenImage}
+                            />
+                        )}
+                        <br/><label htmlFor="dpicker"><strong>Data dodania: </strong></label>
                             <DatePicker
                                 id="dpicker"
                                 selected={date}
@@ -158,6 +182,7 @@ export default function DetailsPopupWithEditing(props) {
                             : <p><strong>Status: </strong>{verified === true ? "Zweryfikowany" : "Niezweryfikowany" }</p>
                         }
                         <p><strong>Dodane przez: </strong>{props.marker.userEmail}</p>
+                        <input className="FileLoader" type="file" accept="image/*" onChange={handleFileChange} /><br/>
                         <button onClick={handleSubmit}>Prześlij zmiany</button>
                     </div>
                 </div>
@@ -165,6 +190,15 @@ export default function DetailsPopupWithEditing(props) {
                     <span role="img" aria-label="Delete">🗑️</span> Usuń
                 </button>
             </div>
+            {isImageFullScreen && (
+                <div className="FullScreenImageOverlay" onClick={closeFullScreenImage}>
+                    <img
+                        className="FullScreenImage"
+                        src={`data:image/jpeg;base64,${props.marker.image.data}`}
+                        alt="Marker"
+                    />
+                </div>
+            )}
         </div>
     ) : "";
 }

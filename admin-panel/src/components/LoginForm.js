@@ -24,9 +24,9 @@ export default function LoginForm( props ) {
             }
             const response = await axios.post(`${baseURL}/api/auth`, data);
             if (response.data.role[0].authority === "ROLE_ADMIN") {
-                props.onLoginSuccess(response.data.accessToken, response.data.refreshToken, response.data.email, "ADMIN");
+                props.onLoginSuccess(response.data.accessToken, response.data.email, "ADMIN");
             } else {
-                props.onLoginSuccess(response.data.accessToken, response.data.refreshToken, response.data.email, "USER");
+                props.onLoginSuccess(response.data.accessToken, response.data.email, "USER");
             }
             props.setTrigger(false);
             
@@ -41,7 +41,7 @@ export default function LoginForm( props ) {
             <div className='PopupInner'>
                 <button onClick={ () => props.setTrigger(false) } className="CloseButton">Zamknij</button>
                 <h2>Proszę się zalogować</h2>
-                <a href={`${baseURL}/login`}><img src='/web_light_sq_SI@1x.png' alt='Zaloguj poprzez Google'/></a>
+                <a href={`${baseURL}/oauth2/authorization/google`}><img src='/web_light_sq_SI@1x.png' alt='Zaloguj poprzez Google'/></a>
                 <div>
                 <input type='text' id='email' autoComplete="on" onChange={handleEmailChange} placeholder='E-Mail'></input>
                 <input type='password' id='pass' autoComplete="on" onChange={handlePasswordChange} placeholder='Hasło'></input>

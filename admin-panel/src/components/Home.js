@@ -50,8 +50,6 @@ export default function Home() {
                     withCredentials: true
                 });
                 handleFetchedData(response.data.email, response.data.role);
-                
-                console.log(response.data.email);
             } catch (error) {
                 console.error('Error while fetching data:', error);
             }
@@ -91,7 +89,7 @@ export default function Home() {
         setTriggerAndClearArr(false);
     };
 
-    const handleLoginSuccess = (token, refreshToken, email, role) => {
+    const handleLoginSuccess = (token, email, role) => {
         setIsLogged(true);
         setToken(token);
         setEmail(email);
@@ -101,6 +99,12 @@ export default function Home() {
     const handleLoginError = (error) => {
         console.error("Błąd logowania:", error);
     };
+
+    const handleLogout = () => {
+        setIsAdmin(false);
+        setIsLogged(false);
+        window.location.href = `${baseURL}/logout`;
+    }
     
     return (
         <>
@@ -115,20 +119,41 @@ export default function Home() {
             <div className="PanelPart">
                 {isAdmin && isLogged && (
                     <div className="ListContainer">
-                        <button onClick={ () => {setIsAdmin(false); setIsLogged(false)} } className="LogoutButton">Wyloguj</button><br/>
-                        <AdminView markers={markers} token={token} email={email} refreshTable={setRefreshTable}/>
+                        <button onClick={ handleLogout } className="LogoutButton">Wyloguj</button><br/>
+                        <AdminView 
+                            markers={markers} 
+                            token={token} 
+                            email={email} 
+                            refreshTable={setRefreshTable}
+                            downloadTrigger={downloadTrigger} selectedMarkers={selectedMarkers} setSelectedMarkers={setSelectedMarkers} handleDownload={handleDownload}
+                        />
                     </div>
                 )}
                 {isLogged && !isAdmin && (
                     <>
-                    <button onClick={ () => setIsLogged(false) } className="LogoutButton">Wyloguj</button><br/>
-                    <LoggedUserView markers={markers} token={token} email={email} refreshTable={setRefreshTable}/>
+                    <button onClick={ handleLogout } className="LogoutButton">Wyloguj</button><br/>
+                    <LoggedUserView 
+                        markers={markers} 
+                        token={token} 
+                        email={email} 
+                        refreshTable={setRefreshTable}
+                        downloadTrigger={downloadTrigger} 
+                        selectedMarkers={selectedMarkers} 
+                        setSelectedMarkers={setSelectedMarkers} 
+                        handleDownload={handleDownload}
+                    />
                     </>
                 )}
                 {!isLogged && !isAdmin && (
                     <>
                     <button onClick={ () => setLoginPopupButton(true) } className="LogoutButton">Zaloguj</button><br/>
-                    <MarkerTable markers={markers} downloadTrigger={downloadTrigger} setDownloadTrigger={setDownloadTrigger} selectedMarkers={selectedMarkers} setSelectedMarkers={setSelectedMarkers} handleDownload={handleDownload}/>
+                    <MarkerTable 
+                        markers={markers} 
+                        downloadTrigger={downloadTrigger}
+                        selectedMarkers={selectedMarkers} 
+                        setSelectedMarkers={setSelectedMarkers} 
+                        handleDownload={handleDownload}
+                    />
                     </>
                 )}
             </div>

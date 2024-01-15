@@ -1,9 +1,9 @@
 import React, {useState} from "react";
 import AddMarkerPopupFN from "../popups/AddMarkerPopupFN";
-import { crayfishTypeSwitch, sortMarkers, generateTableHeaders, handleHeaderClick, handleDetailsClick } from "../functions";
+import { crayfishTypeSwitch, sortMarkers, generateTableHeaders, handleHeaderClick, handleDetailsClick, handleCheckboxChange } from "../functions";
 import DetailsPopupWithEditing from "../popups/DetailsPopupWithEditing";
 
-export default function MarkerTableForLoggedUsers({markers, token, email, role, refreshTable}) {
+export default function MarkerTableForLoggedUsers({markers, token, email, role, refreshTable, downloadTrigger, selectedMarkers, setSelectedMarkers, handleDownload}) {
 
     const [DetailsPopupButton, setDetailsPopupButton] = useState(false);
     const [AddMarkerPopupButton, setAddMarkerPopupButton] = useState(false);
@@ -11,7 +11,7 @@ export default function MarkerTableForLoggedUsers({markers, token, email, role, 
     const [currentHeader, setCurrentHeader] = useState("Status");
     const [sortAs, setSortAs] = useState("asc");
 
-    const headers = ["Data", "Typ", "Status"];
+    const headers = ["Data", "Tytuł", "Typ", "Status"];
 
     const handleHeaderClickWrapper = (header) => {
         handleHeaderClick(header, currentHeader, sortAs, setCurrentHeader, setSortAs);
@@ -29,6 +29,7 @@ export default function MarkerTableForLoggedUsers({markers, token, email, role, 
         <table className="MarkerTable">
             <thead>
             <tr>
+                {downloadTrigger ? <th><button onClick={handleDownload}>Pobierz</button></th> : ""}
                 {generateTableHeaders(headers,currentHeader,sortAs,handleHeaderClickWrapper)}
                 <th><button onClick={() => setAddMarkerPopupButton(true)} className="TableButton">Dodaj</button></th>
             </tr>
@@ -36,7 +37,18 @@ export default function MarkerTableForLoggedUsers({markers, token, email, role, 
             <tbody>
                 {role === "ADMIN" ? sortMarkers(markers, currentHeader, sortAs).map( (marker, index) => (
                     <tr key={index}>
+                        {downloadTrigger ? 
+                            <td>
+                                <input
+                                    type="checkbox"
+                                    value={marker}
+                                    checked={selectedMarkers.includes(marker)}
+                                    onChange={() => handleCheckboxChange(marker, selectedMarkers, setSelectedMarkers)}
+                                />
+                            </td> : ""
+                        }
                         <td>{marker.date}</td>
+                        <td>{marker.mapMarker.title}</td>
                         <td>{crayfishTypeSwitch(marker.CrayfishType)}</td>
                         <td className={marker.verified ? "" : "UnverifiedText"}>
                             {marker.verified ? "Zweryfikowany" : "Niezweryfikowany"}
@@ -45,7 +57,18 @@ export default function MarkerTableForLoggedUsers({markers, token, email, role, 
                     </tr>
                 )) : sortMarkers(filteredMarkers, currentHeader, sortAs).map( (marker, index) => (
                     <tr key={index}>
+                        {downloadTrigger ? 
+                            <td>
+                                <input
+                                    type="checkbox"
+                                    value={marker}
+                                    checked={selectedMarkers.includes(marker)}
+                                    onChange={() => handleCheckboxChange(marker, selectedMarkers, setSelectedMarkers)}
+                                />
+                            </td> : ""
+                        }
                         <td>{marker.date}</td>
+                        <td>{marker.mapMarker.title}</td>
                         <td>{crayfishTypeSwitch(marker.CrayfishType)}</td>
                         <td className={marker.verified ? "" : "UnverifiedText"}>
                             {marker.verified ? "Zweryfikowany" : "Niezweryfikowany"}

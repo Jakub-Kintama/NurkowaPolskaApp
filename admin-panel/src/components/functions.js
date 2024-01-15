@@ -1,4 +1,14 @@
 export const baseURL = "http://172.19.100.10.nip.io:8080";
+// export const baseURL = "http://localhost:8080";
+
+export const config = (token) => {
+    return ({
+        headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+          withCredentials: true
+        });
+};
 
 export function crayfishTypeSwitch(param) {
     switch(param) {
@@ -40,16 +50,36 @@ export const handleHeaderClick = (header, currentHeader, sortAs, setCurrentHeade
 
 export const handleDetailsClick = (marker, setDetailsPopupButton, setMarkerDetails) => {
     setDetailsPopupButton(true);
-    setMarkerDetails({
-        id: marker._id,
-        lat: marker.mapMarker.position.lat,
-        lng: marker.mapMarker.position.lng,
-        crayfishType: marker.CrayfishType, 
-        date: marker.date,
-        title: marker.mapMarker.title,
-        description: marker.mapMarker.description,
-        verified: marker.verified,
-        userEmail: marker.userEmail});
+    if (marker.image) {
+        setMarkerDetails({
+            id: marker._id,
+            lat: marker.mapMarker.position.lat,
+            lng: marker.mapMarker.position.lng,
+            crayfishType: marker.CrayfishType, 
+            date: marker.date,
+            title: marker.mapMarker.title,
+            description: marker.mapMarker.description,
+            verified: marker.verified,
+            userEmail: marker.userEmail,
+            image: {
+                name: marker.image.name,
+                data: marker.image.data
+            }
+        });
+    } else {
+        setMarkerDetails({
+            id: marker._id,
+            lat: marker.mapMarker.position.lat,
+            lng: marker.mapMarker.position.lng,
+            crayfishType: marker.CrayfishType, 
+            date: marker.date,
+            title: marker.mapMarker.title,
+            description: marker.mapMarker.description,
+            verified: marker.verified,
+            userEmail: marker.userEmail
+        });
+    }
+    
 };
 
 export const sortMarkers = (data, header, sortAs) => {
@@ -103,4 +133,16 @@ export const sortUsers = (data, header, sortAs) => {
             return data.sort( (a,b) => a.role.localeCompare(b.role));
     }
     
+};
+
+export const handleCheckboxChange = (marker, selectedMarkers, setSelectedMarkers) => {
+    const isSelected = selectedMarkers.some((selectedMarker) => selectedMarker === marker);
+
+    if (isSelected) {
+      setSelectedMarkers((prevSelectedMarkers) =>
+        prevSelectedMarkers.filter((selectedMarker) => selectedMarker !== marker)
+      );
+    } else {
+      setSelectedMarkers((prevSelectedMarkers) => [...prevSelectedMarkers, marker]);
+    }
 };

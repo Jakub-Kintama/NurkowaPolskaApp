@@ -6,9 +6,11 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.User
 import org.springframework.web.bind.annotation.*
 import pjatk.pjwstk.pl.api.model.Marker
 import pjatk.pjwstk.pl.api.service.MarkerService
+import pjatk.pjwstk.pl.api.service.oauth2.GoogleOAuth2User
 import java.time.LocalDate
 
 @RestController
@@ -61,7 +63,11 @@ class MarkersController(private val service: MarkerService) {
         SecurityRequirement(name = "oauth2")
     )
     fun updateMarker(@RequestBody marker: Marker): Marker {
-        val userEmail = SecurityContextHolder.getContext().authentication.name
+        val userEmail = when (val principal = SecurityContextHolder.getContext().authentication.principal) {
+            is GoogleOAuth2User -> principal.getUser().email
+            is User -> principal.username
+            else -> "Unknown user"
+        }
         if (userEmail != marker.userEmail) throw AccessDeniedException("You can only update your own markers.")
 
         return service.updateMarker(Marker(

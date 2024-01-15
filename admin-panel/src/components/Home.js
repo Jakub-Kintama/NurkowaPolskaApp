@@ -33,17 +33,31 @@ export default function Home() {
         setRefreshTable(false);
     }, [refreshTable, fetchData]);
 
+    const handleFetchedData = (email, role) => {
+        setEmail(email);
+        if (role === "ADMIN") {
+            setIsAdmin(true);
+            setIsLogged(true);
+        } else if (role === "USER") {
+            setIsLogged(true);
+        }
+    }
+
     useEffect(() => {
-        const fetchData = async () => {
+        const whoAmI = async () => {
             try {
-                const response = await axios.get(`${baseURL}/me`);
-                console.log(response);
+                const response = await axios.get(`${baseURL}/me`, {
+                    withCredentials: true
+                });
+                handleFetchedData(response.data.email, response.data.role);
+                
+                console.log(response.data.email);
             } catch (error) {
                 console.error('Error while fetching data:', error);
             }
         };
     
-        fetchData();
+        whoAmI();
     }, []);
 
     const setTriggerAndClearArr = (trigger) => {

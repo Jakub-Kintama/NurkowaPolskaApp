@@ -1,5 +1,5 @@
-package pjatk.pjwstk.pl.api.model.enums;
+package pjatk.pjwstk.pl.api.model.enums
 
 enum class Role {
-    USER, ADMIN
+    USER, ADMIN, NONE
 }

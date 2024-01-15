@@ -17,7 +17,6 @@ class JwtAuthenticationFilter(
     private val userDetailsService: CustomUserDetailsService,
     private val tokenService: TokenService
 ) : OncePerRequestFilter() {
-
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -25,7 +24,7 @@ class JwtAuthenticationFilter(
     ) {
         val authHeader: String? = request.getHeader("Authorization")
 
-        if (authHeader.doesNotContainBearerToken()) {
+        if (authHeader.doesNotContainBearerToken() ) {
             filterChain.doFilter(request, response)
             return
         }

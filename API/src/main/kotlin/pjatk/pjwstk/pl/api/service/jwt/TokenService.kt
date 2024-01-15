@@ -40,7 +40,6 @@ class TokenService(
 
     fun isValid(token: String, userDetails: UserDetails): Boolean {
         val email = extractEmail(token)
-
         return userDetails.username == email && !isExpired(token)
     }
 

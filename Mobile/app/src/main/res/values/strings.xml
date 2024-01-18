@@ -1,18 +1,16 @@
 <resources>
-    <string name="map_id">"54a125cc0263c7a7"</string>
     <string name="app_name">NurkowaPolskaApp</string>
-    <string name="testImage">testImage</string>
     <string name="username">Użytkownik</string>
-    <string name="username_placeholder">Podaj nazwę użytkownika</string>
     <string name="password">Hasło</string>
-    <string name="password_placeholder">Podaj hasło użytkownika</string>
     <string name="reporting_crayfish">Zgłaszanie Raka</string>
     <string name="first_aid_header">Numery Alarmowe:</string>
     <string name="title_activity_call_emergency_service">CallEmergencyService</string>
+    <string name="marker_type_crayfish">Rak</string>
+    <string name="marker_type_danger">Niebezpieczeństwo</string>
+    <string name="marker_type_pollution">Zanieczyszczenie</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
     <!-- strings dla znaczników -->
-    <string name="web_client_id">891152688913-t8a6hgjj4a87p1h56eqfbtkhqv61bkft.apps.googleusercontent.com</string>
     <string name="marker_crayfish">Rak</string>
     <string name="marker_danger">Niebezpieczeństwo</string>
     <string name="marker_pollution">Zanieczyszczenia</string>

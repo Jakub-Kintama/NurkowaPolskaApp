@@ -1,11 +1,27 @@
 @mainColor: #333;
+@closeBtnColor: #d12a2a;
+@closeBtnColorOnHover: #d9534f;
+
+.App {
+    width: auto;
+    text-align: center;
+}
+
+.Topnav {
+    display: flex;
+    width: 100%;
+    height: 40px;
+    background-color: @mainColor;
+}
 
 button {
+    cursor: pointer;
     white-space: nowrap;
     border: none;
     background-color: @mainColor;
     color: white;
     padding: 7px;
+    border-radius: 4px;
 }
 
 .TopnavButton {
@@ -13,37 +29,95 @@ button {
     font-size: 18px;
 }
 
-.TableButton {
-    width: 100%;
-    height: 30px;
-}
-
-.LogoutButton {
-    position: absolute;
-    top: 66px;
-    right: 16px;
-}
-
-button:hover {
-    cursor: pointer;
-}
-
 .TopnavButton:hover {
     background-color: #4e4e4e;
 }
 
-#homeButton {
-    margin-right: auto;
-    margin-left: 5px;
-}
-
 #cancelButton {
     margin-right: 5px;
+    margin-left: auto;
     background-color: #d9534f;
 }
 
+#cancelButton:hover {
+    background-color: #d93731;
+}
+
+#exportAllButton {
+    margin-left: 5px;
+    margin-right: auto;
+}
+
 #exportButton {
-    margin-right: 5px
+    margin-left: auto;
+    margin-right: 5px;
+}
+
+#exportChosenButton {
+    margin-right: 5px;
+}
+
+input[type="checkbox"] {
+    height: 17px;
+    width: 17px;
+}
+
+input, select  {
+    height: 20px;
+    width: 150px;
+    margin-bottom: 10px;
+}
+
+input[type="file"] {
+    height: auto;
+    width: auto;
+    margin-bottom: 10px;
+}
+
+.MarkerFileInput {
+    margin-left: 45px;
+}
+
+textarea {
+    height: auto;
+    width: auto;
+    margin-bottom: 10px;
+}
+
+.TableButton, .TableAddButton {
+    width: 100%;
+    height: 100%;
+}
+
+.TableAddButton {
+    color: @mainColor;
+    background-color: lightgray;
+    font-weight: bold;
+}
+
+.ButtonContainer {
+    margin-bottom: 10px;
+    height: 30px;
+}
+
+.ButtonContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+  
+.WhoAmI {
+    margin-right: 10px;
+    margin-left: auto;
+    font-size: smaller;
+}
+  
+.LogoutButton, .LoginButton {
+    margin-right: 10px;
+}
+
+button:hover {
+    cursor: pointer;
 }
 
 .MarkersButton, .UserMarkersButton {
@@ -58,36 +132,81 @@ button:hover {
     margin-top: 10px;
 }
 
+.CloseButton {
+    background-color: @closeBtnColor;
+    align-self: flex-end;
+    float: right;
+}
+
+.ConfirmLoginButton {
+    margin-top: 5px;
+}
+
+.DeleteButton {
+    align-self: flex-end;
+    float: right;
+    background-color: @closeBtnColor;
+    font-size: 14px;
+}
+  
+.DeleteButton:hover, .CloseButton:hover {
+    background-color: @closeBtnColorOnHover;
+}
+
+h2 {
+    color: @mainColor;
+}
+
 table {
-    min-width: 40%;
+    min-width: 35%;
+    margin: 25px 0;
     margin-left: auto;
     margin-right: auto;
-    border: 1px solid;
     border-collapse: collapse;
+    font-size: 0.9em;
+    text-align: left;
+}
+
+table thead tr {
+    background-color: @mainColor;
+    color: white;
+    text-align: left;
+    font-weight: bold;
+    height: 35px;
+}
+
+table .NormalTableThead {
+    height: 43px;
+}
+
+table th {
+    cursor: pointer;
 }
 
 table th,td {
-    border: 1px solid black;
     padding: 7px;
 }
 
-.App {
-    width: 100%;
-    text-align: center;
+table tbody tr {
+    border-bottom: 1px solid lightgray;
 }
 
-.Topnav {
-    display: flex;
-    width: 100%;
-    height: 50px;
-    background-color: @mainColor;
+table tbody tr:nth-child(even) {
+    background-color: rgb(231, 229, 229);
+}
+table tbody tr:nth-child(odd) {
+    background-color: rgb(251, 251, 251);
+}
+
+table tbody tr:last-child {
+    border-bottom: 2px solid @mainColor;
 }
 
 .PanelPart {
-    margin-top: 40px;
+    margin-top: 20px;
 }
 
-.Popup {
+.Popup, .DetailsPopup {
     position: fixed;
     top: 0;
     left: 0;
@@ -100,7 +219,17 @@ table th,td {
     align-items: center;
 }
 
-.PopupInner {
+.PopupInner, .DetailsPopupInner, .InfoPopupInner {
+    border: 1px solid @mainColor;
+    border-radius: 2%;
+}
+
+.InfoPopupInner a {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.PopupInner, .InfoPopupInner {
     position: relative;
     padding: 32px;
     min-width: 30%;
@@ -108,17 +237,37 @@ table th,td {
     background-color: white;
 }
 
-.DetailsPopup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: rgba(0,0,0,0.2);
+.InfoPopupInner .InfoImg {
+    height: 220px;
+}
 
+.PopupInner .inputs {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+}
+
+.LatLngContainer {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.LatInput {
+    margin-bottom: 10px;
+    margin-right: 5px;
+}
+
+a {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+a:hover {
+    text-decoration: none;
 }
 
 .DetailsPopupInner {
@@ -129,12 +278,8 @@ table th,td {
     width: auto;
     min-width: 50%;
     max-width: 80%;
-    height: 70%;
+    height: 70vh;
     background-color: white;
-}
-
-.CloseButton {
-    align-self: flex-end;
 }
 
 .DetailsPopupContent {
@@ -153,33 +298,31 @@ table th,td {
     overflow-wrap: break-word;
 }
 
-.DeleteButton {
-    align-self: flex-end;
-    margin-left: 10px;
-    padding: 8px;
-    cursor: pointer;
-    background-color: #ff6347; /* Kolor czerwony */
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 14px;
-}
-  
-.DeleteButton:hover, .DeleteUserButton:hover {
-    background-color: #d9534f; /* Kolor czerwony (ciemniejszy) po najechaniu myszką */
-}
-
-.ListContainer {
-    display: block;
-}
-
 .UnverifiedText {
     color: red;
 }
 
-.MarkerImg {
-    width: 50%;
-    cursor: pointer;
+.AdminRole {
+    color: rgb(0, 0, 220);
+}
+
+.RadioContainer, .RadioContainerUser {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.RadioContainer{
+ margin-left: -25px;
+}
+
+.RadioContainerUser {
+    margin-left: -33px;
+}
+  
+.RadioContainer label, .RadioContainerUser label {
+    margin-bottom: 0;
 }
 
 .FullScreenImageOverlay {
@@ -194,6 +337,11 @@ table th,td {
     align-items: center;
 }
 
+.MarkerImg {
+    width: 50%;
+    cursor: pointer;
+}
+
 .FullScreenImage {
     max-width: 90%;
     max-height: 90%;
@@ -202,4 +350,51 @@ table th,td {
 
 .FileLoader {
     margin-bottom: 5px;
+}
+
+.DetailsPopupInner, .DetailsPopup, .Popup, .PopupInner {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+
+
+@media only screen and (max-width: 600px) {
+    .Topnav {
+        height: auto;
+    }
+    .TopnavButton {
+        font-size: 12px;
+    }
+    .LogoutButton {
+        float: right;
+        margin-bottom: 10px;
+    }
+    .App {
+        word-wrap: break-word;
+    }
+
+    table thead {
+        display: none;
+    }
+    td, thead {
+        display: block;
+        border: 1px solid @mainColor;
+        border-radius: 2px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .InfoPopupInner {
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+    .DetailsPopupInner {
+        max-height: 90vh; /* Dla małych ekranów zmniejszamy maksymalną wysokość */
+        overflow-y: auto;
+    }
+}
+@media only screen and (max-height: 800px) {
+    .DetailsPopupInner {
+        max-height: 90vh; /* Dla małych ekranów zmniejszamy maksymalną wysokość */
+        overflow-y: auto;
+    }
 }

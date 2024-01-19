@@ -23,7 +23,7 @@ export function crayfishTypeSwitch(param) {
         case "OTHER":
             return "Inne";
         default:
-            return "WHAT IS THAT MELODY";
+            return "Błąd pobierania danych z bazy";
     }
 }
 

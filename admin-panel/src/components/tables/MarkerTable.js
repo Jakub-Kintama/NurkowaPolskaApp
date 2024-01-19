@@ -7,7 +7,7 @@ export default function MarkerTable({markers, downloadTrigger, selectedMarkers, 
     const [DetailsPopupButton, setDetailsPopupButton] = useState(false);
     const [markerDetails, setMarkerDetails] = useState({id: "", lat: "", lng: "", crayfishType: "", date: "", title: "", description: "", userEmail: ""});
     
-    const headers = ["Data","Tytuł", "Typ", "Status"];
+    const headers = ["Data","Tytuł", "Typ", "Status", ""];
     const [sortAs, setSortAs] = useState("asc");
     const [currentHeader, setCurrentHeader] = useState("Status");
 
@@ -23,9 +23,9 @@ export default function MarkerTable({markers, downloadTrigger, selectedMarkers, 
     <div className="MarkerList">
         <h2>Lista znaczników:</h2>
         <table className="MarkerTable">
-            <thead>
+            <thead className="NormalTableThead">
                 <tr>
-                    {downloadTrigger ? <th><button onClick={handleDownload}>Pobierz</button></th> : ""}
+                    {downloadTrigger ? <p/> : ""}
                     {generateTableHeaders(headers, currentHeader, sortAs, handleHeaderClickWrapper)}
                 </tr>
             </thead>
@@ -42,7 +42,6 @@ export default function MarkerTable({markers, downloadTrigger, selectedMarkers, 
                                 />
                             </td> : ""}
                         <td>{marker.date}</td>
-                        {/* <td>{marker.mapMarker.position.lat}, {marker.mapMarker.position.lng}</td> */}
                         <td>{marker.mapMarker.title}</td>
                         <td>{crayfishTypeSwitch(marker.CrayfishType)}</td>
                         <td className={marker.verified ? "" : "UnverifiedText"}>

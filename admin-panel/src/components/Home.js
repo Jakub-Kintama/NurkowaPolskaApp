@@ -3,9 +3,10 @@ import MarkerTable from "./tables/MarkerTable";
 import AdminView from "./views/AdminView"
 import axios from 'axios';
 import { saveAs } from 'file-saver';
-import LoginForm from "./LoginForm";
+import LoginForm from "./other/LoginForm";
 import LoggedUserView from "./views/LoggedUserView";
 import { baseURL } from "./functions";
+import LogoutButton from "./other/LogoutButton";
 
 export default function Home() {
 
@@ -110,28 +111,28 @@ export default function Home() {
         <>
         <div className="App">
             <div className="Topnav">
-                <button className='TopnavButton' id='homeButton'>Powrót</button>
+                {downloadTrigger ? <button className='TopnavButton' id='exportAllButton' onClick={exportAllMarkers}>Eksportuj wszystkie</button> : ""}
                 {downloadTrigger 
                     ? <button className='TopnavButton' id='cancelButton' onClick={cancelDownloading}>Anuluj</button>
                     : <button className='TopnavButton' id='exportButton' onClick={startExportingProcess}>Eksportuj znaczniki</button>}
-                {downloadTrigger ? <button className='TopnavButton' id='exportButton' onClick={exportAllMarkers}>Eksportuj wszystkie</button> : ""}
+                {downloadTrigger ? <button className='TopnavButton' id='exportChosenButton' onClick={handleDownload}>Pobierz wybrane</button> : ""}
             </div>
             <div className="PanelPart">
                 {isAdmin && isLogged && (
-                    <div className="ListContainer">
-                        <button onClick={ handleLogout } className="LogoutButton">Wyloguj</button><br/>
-                        <AdminView 
-                            markers={markers} 
-                            token={token} 
-                            email={email} 
-                            refreshTable={setRefreshTable}
-                            downloadTrigger={downloadTrigger} selectedMarkers={selectedMarkers} setSelectedMarkers={setSelectedMarkers} handleDownload={handleDownload}
-                        />
-                    </div>
+                    <>
+                    <LogoutButton handleLogout={handleLogout} email={email}/>
+                    <AdminView 
+                        markers={markers} 
+                        token={token} 
+                        email={email} 
+                        refreshTable={setRefreshTable}
+                        downloadTrigger={downloadTrigger} selectedMarkers={selectedMarkers} setSelectedMarkers={setSelectedMarkers} handleDownload={handleDownload}
+                    />
+                    </>
                 )}
                 {isLogged && !isAdmin && (
                     <>
-                    <button onClick={ handleLogout } className="LogoutButton">Wyloguj</button><br/>
+                    <LogoutButton handleLogout={handleLogout} email={email}/>
                     <LoggedUserView 
                         markers={markers} 
                         token={token} 
@@ -146,7 +147,9 @@ export default function Home() {
                 )}
                 {!isLogged && !isAdmin && (
                     <>
-                    <button onClick={ () => setLoginPopupButton(true) } className="LogoutButton">Zaloguj</button><br/>
+                    <div className="ButtonContainer">
+                        <button onClick={ () => setLoginPopupButton(true) } className="LoginButton">Zaloguj</button><br/>
+                    </div>
                     <MarkerTable 
                         markers={markers} 
                         downloadTrigger={downloadTrigger}

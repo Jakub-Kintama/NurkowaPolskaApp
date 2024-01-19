@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import AddMarkerPopupFN from "../popups/AddMarkerPopupFN";
+import AddMarkerPopupFN from "../popups/AddMarkerPopup";
 import { crayfishTypeSwitch, sortMarkers, generateTableHeaders, handleHeaderClick, handleDetailsClick, handleCheckboxChange } from "../functions";
 import DetailsPopupWithEditing from "../popups/DetailsPopupWithEditing";
 
@@ -29,9 +29,9 @@ export default function MarkerTableForLoggedUsers({markers, token, email, role, 
         <table className="MarkerTable">
             <thead>
             <tr>
-                {downloadTrigger ? <th><button onClick={handleDownload}>Pobierz</button></th> : ""}
+                {downloadTrigger ? <p/> : ""}
                 {generateTableHeaders(headers,currentHeader,sortAs,handleHeaderClickWrapper)}
-                <th><button onClick={() => setAddMarkerPopupButton(true)} className="TableButton">Dodaj</button></th>
+                <th><button onClick={() => setAddMarkerPopupButton(true)} className="TableAddButton">Dodaj</button></th>
             </tr>
             </thead>
             <tbody>
@@ -50,7 +50,7 @@ export default function MarkerTableForLoggedUsers({markers, token, email, role, 
                         <td>{marker.date}</td>
                         <td>{marker.mapMarker.title}</td>
                         <td>{crayfishTypeSwitch(marker.CrayfishType)}</td>
-                        <td className={marker.verified ? "" : "UnverifiedText"}>
+                        <td className={marker.verified ? "Verified" : "UnverifiedText"}>
                             {marker.verified ? "Zweryfikowany" : "Niezweryfikowany"}
                         </td>
                         <td><button className="TableButton" onClick={ () => handleDetailsClickWrapper(marker) }>Szczegóły</button></td>

@@ -146,7 +146,7 @@ export default function DetailsPopupWithEditing(props) {
         <div className="DetailsPopup">
             <div className="DetailsPopupInner">
                 <button onClick={ () => handleClose() } className="CloseButton">Zamknij</button>
-                <h2>Znacznik</h2>
+                <h2>{props.marker.title}</h2>
                 <div className="DetailsPopupContent">
                     <iframe className="DetailsIframe" title={title} src={`https://maps.google.com/maps?q=${props.marker.lat},${props.marker.lng}&z=14&output=embed`} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
                     <div className="Details">

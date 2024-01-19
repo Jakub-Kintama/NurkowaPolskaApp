@@ -4,17 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Repository
 import pjatk.pjwstk.pl.api.datasource.UserDataSource
-import pjatk.pjwstk.pl.api.model.Marker
-import pjatk.pjwstk.pl.api.model.User
-import pjatk.pjwstk.pl.api.model.UserEmailRole
+import pjatk.pjwstk.pl.api.model.database.Marker
+import pjatk.pjwstk.pl.api.model.database.User
+import pjatk.pjwstk.pl.api.model.responses.UserResponse
 import java.io.IOException
 
 @Repository("mongodbUser")
 class MongodbUserDataSource(
     @Autowired private val mongoTemplate: MongoTemplate,
-    //private val encoder: PasswordEncoder
+    private val encoder: PasswordEncoder
 ) : UserDataSource {
     override fun retrieveUsers(): Collection<User> {
         val users = mongoTemplate.findAll(User::class.java)
@@ -36,17 +37,17 @@ class MongodbUserDataSource(
             throw IllegalArgumentException("User with id $userId already exists.")
         }
         
-        //val updatedUser = user.copy(password = encoder.encode(user.password))
-        return mongoTemplate.save(user)
+        val updatedUser = user.copy(password = encoder.encode(user.password))
+        return mongoTemplate.save(updatedUser)
     }
 
-    override fun updateUser(userEmailRole: UserEmailRole): User {
-        val userEmail = userEmailRole.email
+    override fun updateUser(userResponse: UserResponse): User {
+        val userEmail = userResponse.email
         val query = Query.query(Criteria.where("_id").`is`(userEmail))
         var user = mongoTemplate.findOne(query, User::class.java)
-            ?: throw java.util.NoSuchElementException("Could not find a user with email $userEmailRole.")
+            ?: throw java.util.NoSuchElementException("Could not find a user with email $userResponse.")
 
-        user.role = userEmailRole.role
+        user.role = userResponse.role
         mongoTemplate.save(user)
         return user
     }

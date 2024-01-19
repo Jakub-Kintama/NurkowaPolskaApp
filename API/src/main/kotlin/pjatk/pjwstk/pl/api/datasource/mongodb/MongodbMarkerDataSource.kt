@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.stereotype.Repository
 import pjatk.pjwstk.pl.api.datasource.MarkerDataSource
-import pjatk.pjwstk.pl.api.model.Marker
+import pjatk.pjwstk.pl.api.model.database.Marker
 import java.io.IOException
 import java.time.LocalDate
 import java.time.ZoneId

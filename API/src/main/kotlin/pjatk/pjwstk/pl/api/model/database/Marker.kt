@@ -1,4 +1,4 @@
-package pjatk.pjwstk.pl.api.model
+package pjatk.pjwstk.pl.api.model.database
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -6,24 +6,23 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import pjatk.pjwstk.pl.api.model.enums.CrayfishType
 import java.time.LocalDate
-import java.util.*
 
 @Document("marker")
 data class Marker(
-    @Id
+        @Id
     @JsonProperty("_id")
     val id: String? = null,
-    @JsonProperty("mapMarker")
+        @JsonProperty("mapMarker")
     val mapMarker: MapMarker,
-    @JsonProperty("userEmail")
+        @JsonProperty("userEmail")
     val userEmail: String,
-    @JsonProperty("CrayfishType")
+        @JsonProperty("CrayfishType")
     val crayfishType: CrayfishType,
-    @JsonProperty("date")
+        @JsonProperty("date")
     @JsonFormat(pattern = "yyyy-MM-dd")
     val date: LocalDate,
-    @JsonProperty("verified")
+        @JsonProperty("verified")
     val verified: Boolean,
-    @JsonProperty("image")
+        @JsonProperty("image")
     val image: Image? = null
 )

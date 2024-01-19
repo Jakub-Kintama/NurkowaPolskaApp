@@ -6,7 +6,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException
 import org.springframework.stereotype.Service
 import pjatk.pjwstk.pl.api.datasource.UserDataSource
-import pjatk.pjwstk.pl.api.model.User
+import pjatk.pjwstk.pl.api.model.database.User
 import pjatk.pjwstk.pl.api.model.enums.Role
 
 @Service

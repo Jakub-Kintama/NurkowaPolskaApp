@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirements
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import pjatk.pjwstk.pl.api.model.Marker
+import pjatk.pjwstk.pl.api.model.database.Marker
 import pjatk.pjwstk.pl.api.service.MarkerService
 
 @RestController

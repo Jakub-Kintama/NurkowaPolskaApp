@@ -9,10 +9,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.*
-import pjatk.pjwstk.pl.api.model.LatLng
-import pjatk.pjwstk.pl.api.model.MapMarker
-import pjatk.pjwstk.pl.api.model.Marker
-import pjatk.pjwstk.pl.api.model.User
+import pjatk.pjwstk.pl.api.model.database.LatLng
+import pjatk.pjwstk.pl.api.model.database.MapMarker
+import pjatk.pjwstk.pl.api.model.database.Marker
+import pjatk.pjwstk.pl.api.model.database.User
 import pjatk.pjwstk.pl.api.model.enums.CrayfishType
 import java.time.LocalDate
 

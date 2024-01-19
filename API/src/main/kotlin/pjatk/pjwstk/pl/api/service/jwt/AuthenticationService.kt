@@ -19,14 +19,14 @@ import java.util.*
 
 @Service
 class AuthenticationService(
-    private val authManager: AuthenticationManager,
-    private val userDetailsService: CustomUserDetailsService,
-    private val tokenService: TokenService,
-    private val jwtProperties: JwtProperties,
-    private val dataSource: RefreshTokenDataSource
+        private val authManager: AuthenticationManager,
+        private val userDetailsService: CustomUserDetailsService,
+        private val tokenService: TokenService,
+        private val jwtProperties: JwtProperties,
+        private val dataSource: RefreshTokenDataSource
 ) {
-    fun exchangeToken(idToken: String): AuthenticationResponse{
-        if(isRs256(idToken)){
+    fun exchangeToken(idToken: String): AuthenticationResponse {
+        if (isRs256(idToken)) {
             val email = verifyGoogleIdToken(idToken) as String
             val user = userDetailsService.loadUserByUsername(email)
 
@@ -36,19 +36,19 @@ class AuthenticationService(
             dataSource.save(refreshToken, user)
 
             return AuthenticationResponse(
-                email = user.username, role = user.authorities, accessToken = accessToken, refreshToken = refreshToken
+                    email = user.username, role = user.authorities, accessToken = accessToken, refreshToken = refreshToken
             )
-        }else{
+        } else {
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid id token")
         }
     }
+
     fun authentication(authRequest: AuthenticationRequest): AuthenticationResponse {
 
-
         authManager.authenticate(
-            UsernamePasswordAuthenticationToken(
-                authRequest.email, authRequest.password
-            )
+                UsernamePasswordAuthenticationToken(
+                        authRequest.email, authRequest.password
+                )
         )
 
         val user = userDetailsService.loadUserByUsername(authRequest.email)
@@ -59,7 +59,7 @@ class AuthenticationService(
         dataSource.save(refreshToken, user)
 
         return AuthenticationResponse(
-            email = user.username, role = user.authorities, accessToken = accessToken, refreshToken = refreshToken
+                email = user.username, role = user.authorities, accessToken = accessToken, refreshToken = refreshToken
         )
     }
 
@@ -71,18 +71,18 @@ class AuthenticationService(
             val refreshTokenUserDetails = dataSource.findByToken(token)
 
             if (!tokenService.isExpired(token) && currentUserDetails.username == refreshTokenUserDetails?.username) generateAccessToken(
-                currentUserDetails
+                    currentUserDetails
             )
             else null
         }
     }
 
     private fun generateRefreshToken(user: UserDetails) = tokenService.generate(
-        userDetails = user, expirationDate = Date(System.currentTimeMillis() + jwtProperties.refreshTokenExpiration)
+            userDetails = user, expirationDate = Date(System.currentTimeMillis() + jwtProperties.refreshTokenExpiration)
     )
 
     private fun generateAccessToken(user: UserDetails) = tokenService.generate(
-        userDetails = user, expirationDate = Date(System.currentTimeMillis() + jwtProperties.accessTokenExpiration)
+            userDetails = user, expirationDate = Date(System.currentTimeMillis() + jwtProperties.accessTokenExpiration)
     )
 
     private fun isRs256(jwt: String): Boolean {

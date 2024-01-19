@@ -1,6 +1,6 @@
 package pjatk.pjwstk.pl.api.datasource
 
-import pjatk.pjwstk.pl.api.model.Marker
+import pjatk.pjwstk.pl.api.model.database.Marker
 import java.time.LocalDate
 
 interface MarkerDataSource {

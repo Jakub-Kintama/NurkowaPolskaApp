@@ -1,4 +1,4 @@
-package pjatk.pjwstk.pl.api.model
+package pjatk.pjwstk.pl.api.model.database
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.data.annotation.Id

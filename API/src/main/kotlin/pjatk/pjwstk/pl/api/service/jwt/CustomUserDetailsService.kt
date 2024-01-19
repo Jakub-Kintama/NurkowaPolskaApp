@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
 import pjatk.pjwstk.pl.api.datasource.UserDataSource
 
-typealias ApplicationUser = pjatk.pjwstk.pl.api.model.User
+typealias ApplicationUser = pjatk.pjwstk.pl.api.model.database.User
 
 @Service
 class CustomUserDetailsService(

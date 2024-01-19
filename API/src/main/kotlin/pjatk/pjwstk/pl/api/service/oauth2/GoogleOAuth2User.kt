@@ -3,7 +3,7 @@ package pjatk.pjwstk.pl.api.service.oauth2
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.oauth2.core.user.OAuth2User
-import pjatk.pjwstk.pl.api.model.User
+import pjatk.pjwstk.pl.api.model.database.User
 
 class GoogleOAuth2User(
     private var oAuth2User: OAuth2User,

@@ -3,7 +3,7 @@ package pjatk.pjwstk.pl.api.service
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 import pjatk.pjwstk.pl.api.datasource.MarkerDataSource
-import pjatk.pjwstk.pl.api.model.Marker
+import pjatk.pjwstk.pl.api.model.database.Marker
 import java.time.LocalDate
 
 @Service

@@ -5,8 +5,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirements
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import pjatk.pjwstk.pl.api.model.User
-import pjatk.pjwstk.pl.api.model.UserEmailRole
+import pjatk.pjwstk.pl.api.model.database.User
+import pjatk.pjwstk.pl.api.model.responses.UserResponse
 import pjatk.pjwstk.pl.api.service.UserService
 import java.util.*
 
@@ -27,13 +27,13 @@ class UserController(private val service: UserService) {
         ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
 
     @GetMapping
-    fun getUsers(): Collection<UserEmailRole> =
-        service.getUsers().map { UserEmailRole(it.email, it.role) }
+    fun getUsers(): Collection<UserResponse> =
+        service.getUsers().map { UserResponse(it.email, it.role) }
 
     @GetMapping("/{userEmail}")
-    fun getUserByEmail(@PathVariable userEmail: String): UserEmailRole {
+    fun getUserByEmail(@PathVariable userEmail: String): UserResponse {
         val user = service.getUserByEmail(userEmail)
-        return UserEmailRole(user.email, user.role)
+        return UserResponse(user.email, user.role)
     }
 
     @PostMapping
@@ -41,9 +41,9 @@ class UserController(private val service: UserService) {
     fun addUser(@RequestBody user: User): User = service.addUser(user)
 
     @PatchMapping
-    fun updateUser(@RequestBody userEmailRole: UserEmailRole): UserEmailRole {
-        val user = service.updateUser(userEmailRole)
-        return UserEmailRole(user.email, user.role)
+    fun updateUser(@RequestBody userResponse: UserResponse): UserResponse {
+        val user = service.updateUser(userResponse)
+        return UserResponse(user.email, user.role)
     }
 
     @DeleteMapping("/{userEmail}")

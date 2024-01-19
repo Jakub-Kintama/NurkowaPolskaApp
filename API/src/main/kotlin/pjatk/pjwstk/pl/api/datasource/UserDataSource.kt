@@ -1,13 +1,13 @@
 package pjatk.pjwstk.pl.api.datasource
 
-import pjatk.pjwstk.pl.api.model.User
-import pjatk.pjwstk.pl.api.model.UserEmailRole
+import pjatk.pjwstk.pl.api.model.database.User
+import pjatk.pjwstk.pl.api.model.responses.UserResponse
 
 interface UserDataSource {
     fun retrieveUsers(): Collection<User>
     fun retrieveUserByEmail(userId: String): User
     fun existsUser(userId: String): Boolean
     fun createUser(user: User): User
-    fun updateUser(userEmailRole: UserEmailRole): User
+    fun updateUser(userResponse: UserResponse): User
     fun deleteUser(userEmail: String)
 }

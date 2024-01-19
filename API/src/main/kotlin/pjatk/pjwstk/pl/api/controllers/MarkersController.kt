@@ -8,7 +8,7 @@ import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.User
 import org.springframework.web.bind.annotation.*
-import pjatk.pjwstk.pl.api.model.Marker
+import pjatk.pjwstk.pl.api.model.database.Marker
 import pjatk.pjwstk.pl.api.service.MarkerService
 import pjatk.pjwstk.pl.api.service.oauth2.GoogleOAuth2User
 import java.time.LocalDate

@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.springframework.data.mongodb.core.MongoTemplate
-import pjatk.pjwstk.pl.api.model.LatLng
-import pjatk.pjwstk.pl.api.model.MapMarker
-import pjatk.pjwstk.pl.api.model.Marker
+import pjatk.pjwstk.pl.api.model.database.LatLng
+import pjatk.pjwstk.pl.api.model.database.MapMarker
+import pjatk.pjwstk.pl.api.model.database.Marker
 import pjatk.pjwstk.pl.api.model.enums.CrayfishType
 import java.time.LocalDate
 

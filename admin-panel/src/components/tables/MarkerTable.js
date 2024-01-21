@@ -1,7 +1,8 @@
 import React, {useState} from "react";
 import DetailsPopup from "../popups/DetailsPopup";
-import { crayfishTypeSwitch, getSortedFilteredMarkers, generateTableHeaders, handleHeaderClick, handleDetailsClick, handleCheckboxChange } from "../functions";
+import { crayfishTypeSwitch, getSortedFilteredMarkers, generateTableHeaders, handleHeaderClick, handleDetailsClick, handleCheckboxChange, getSortedFilteredMarkersFromRange } from "../functions";
 import YearPicker from "../other/YearPicker";
+import PageChooser from "../other/PageChooser";
 
 export default function MarkerTable({markers, downloadTrigger, selectedMarkers, setSelectedMarkers}) {
 
@@ -14,6 +15,8 @@ export default function MarkerTable({markers, downloadTrigger, selectedMarkers, 
 
     const [selectedYear, setSelectedYear] = useState("");
 
+    const [page, setPage] = useState(1);
+
     const handleHeaderClickWrapper = (header) => {
         handleHeaderClick(header, currentHeader, sortAs, setCurrentHeader, setSortAs);
     };
@@ -25,7 +28,7 @@ export default function MarkerTable({markers, downloadTrigger, selectedMarkers, 
     return(
     <div className="MarkerList">
         <h2>Lista znaczników:</h2>
-        <YearPicker markers={markers} selectedYear={selectedYear} setSelectedYear={setSelectedYear}/>
+        <YearPicker markers={markers} selectedYear={selectedYear} setSelectedYear={setSelectedYear} setPage={setPage}/>
         <table className="MarkerTable">
             <thead className="NormalTableThead">
                 <tr>
@@ -34,7 +37,7 @@ export default function MarkerTable({markers, downloadTrigger, selectedMarkers, 
                 </tr>
             </thead>
             <tbody>
-                {getSortedFilteredMarkers(markers, selectedYear, currentHeader, sortAs).map( (marker, index) => (
+                {getSortedFilteredMarkersFromRange(markers, selectedYear, currentHeader, sortAs, page).map( (marker, index) => (
                     <tr key={index}>
                         {downloadTrigger ? 
                             <td>
@@ -54,9 +57,13 @@ export default function MarkerTable({markers, downloadTrigger, selectedMarkers, 
                         <td><button className="TableButton" onClick={ () => handleDetailsClickWrapper(marker)}>Szczegóły</button></td>
                     </tr>
                 ))}
-            </tbody>
-            
+            </tbody> 
         </table>
+        <PageChooser 
+            markers={getSortedFilteredMarkers(markers, selectedYear, currentHeader, sortAs)}
+            page={page}
+            setPage={setPage}
+        />
         {DetailsPopupButton && (
             <DetailsPopup trigger={DetailsPopupButton} setTrigger={setDetailsPopupButton} marker={markerDetails}/>          
         )}

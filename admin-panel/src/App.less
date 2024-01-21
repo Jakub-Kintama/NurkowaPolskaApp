@@ -106,7 +106,7 @@ input[type="file"] {
 }
 
 .MarkerFileInput {
-    margin-left: 45px;
+    margin-right: -90px;
 }
 
 textarea {
@@ -157,6 +157,8 @@ textarea::-webkit-scrollbar {
 
 button:hover {
     cursor: pointer;
+    background-color: #4e4e4e;
+    color: white;
 }
 
 .MarkersButton, .UserMarkersButton {
@@ -239,6 +241,15 @@ table tbody tr:nth-child(odd) {
 
 table tbody tr:last-child {
     border-bottom: 2px solid @mainColor;
+}
+
+.PageChooser {
+    margin-top: -10px;
+    margin-bottom: 20px;
+}
+
+.DetailsLabel {
+    margin-top: 10px;
 }
 
 .PanelPart {
@@ -435,6 +446,19 @@ input[type="radio"] {
 
 .MarkerFileInput {
     margin-top: 15px;
+}
+
+.PaginationButtonLeft,
+.PaginationButtonRight {
+    margin-left: auto;
+}
+
+.PaginationButtonRight {
+    margin-right: 5px;
+}
+
+.PaginationButtonLeft {
+    margin-right: 5px;
 }
 
 @media only screen and (max-width: 670px) {

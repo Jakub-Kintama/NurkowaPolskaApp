@@ -39,13 +39,13 @@ export default function LoginForm( props ) {
     return (props.trigger) ? (
         <div className='Popup'>
             <div className='PopupInner'>
-                <button onClick={ () => props.setTrigger(false) } className="CloseButton">Zamknij</button>
+                <button onClick={ () => props.setTrigger(false) } className="CloseButton">Zamknij</button><br/>
                 <h2>Proszę się zalogować</h2>
-                <a href={`${baseURL}/oauth2/authorization/google`}><img src='/web_light_sq_SI@1x.png' alt='Zaloguj poprzez Google'/></a>
-                <div>
-                <input type='text' id='email' autoComplete="on" onChange={handleEmailChange} placeholder='E-Mail'></input><br/>
-                <input type='password' id='pass' autoComplete="on" onChange={handlePasswordChange} placeholder='Hasło'></input><br/>
-                <button className='ConfirmLoginButton' onClick={handleSubmit} disabled={!email || !password}>Zaloguj</button>
+                <a href={`${baseURL}/oauth2/authorization/google`}><img className='GoogleLoginImg' src='/web_light_sq_SI@1x.png' alt='Zaloguj poprzez Google'/></a>
+                <div className='JWTInputs'>
+                    <input type='text' id='email' autoComplete="on" onChange={handleEmailChange} placeholder='E-Mail'></input><br/>
+                    <input type='password' id='pass' autoComplete="on" onChange={handlePasswordChange} placeholder='Hasło'></input><br/>
+                    <button className='ConfirmLoginButton' onClick={handleSubmit} disabled={!email || !password}>Zaloguj</button>
                 </div>
             </div>
         </div>

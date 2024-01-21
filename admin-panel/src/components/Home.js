@@ -23,7 +23,7 @@ export default function Home() {
     const fetchData = useCallback(async () => {
         try {
             const response = await axios.get(`${baseURL}/api/markers`);
-            setMarkers(response.data);
+            setMarkers(response.data.sort( (a,b) => b.date.localeCompare(a.date)));
         } catch (error) {
             console.error('Error while fetching data:', error);
         }
@@ -126,7 +126,9 @@ export default function Home() {
                         token={token} 
                         email={email} 
                         refreshTable={setRefreshTable}
-                        downloadTrigger={downloadTrigger} selectedMarkers={selectedMarkers} setSelectedMarkers={setSelectedMarkers} handleDownload={handleDownload}
+                        downloadTrigger={downloadTrigger} 
+                        selectedMarkers={selectedMarkers} 
+                        setSelectedMarkers={setSelectedMarkers}
                     />
                     </>
                 )}
@@ -140,8 +142,7 @@ export default function Home() {
                         refreshTable={setRefreshTable}
                         downloadTrigger={downloadTrigger} 
                         selectedMarkers={selectedMarkers} 
-                        setSelectedMarkers={setSelectedMarkers} 
-                        handleDownload={handleDownload}
+                        setSelectedMarkers={setSelectedMarkers}
                     />
                     </>
                 )}
@@ -154,8 +155,7 @@ export default function Home() {
                         markers={markers} 
                         downloadTrigger={downloadTrigger}
                         selectedMarkers={selectedMarkers} 
-                        setSelectedMarkers={setSelectedMarkers} 
-                        handleDownload={handleDownload}
+                        setSelectedMarkers={setSelectedMarkers}
                     />
                     </>
                 )}

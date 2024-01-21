@@ -117,14 +117,16 @@ export default function AddMarkerPopupFN(props) {
         <h2>Dodaj Znacznik</h2>
         <div className='inputs'>
           <div className="LatLngContainer">
-            <a href='#' onClick={showInfo}>Skąd wziąć długość i szerokość geograficzną?</a>
+            <a className='InfoLink' href='#' onClick={showInfo}>Skąd wziąć długość i szerokość geograficzną?</a>
             <input
+              className="SameLengthInputs"
               type="text"
               placeholder="Szerokość geograficzna"
               value={lat}
               onChange={handleLatChange}
             />
           <input
+            className="SameLengthInputs"
             type="text"
             placeholder="Długość geograficzna"
             value={lng}
@@ -132,17 +134,14 @@ export default function AddMarkerPopupFN(props) {
           />
           </div>
           <input
+            className="SameLengthInputs"
             type="text"
             placeholder="Tytuł"
             value={title}
             onChange={handleTitleChange}
           />
-          <textarea
-            placeholder="Opis"
-            value={description}
-            onChange={handleDescriptionChange}
-          />
           <DatePicker
+            className="SameLengthInputs"
             selected={date}
             onChange={handleDateChange}
             dateFormat="yyyy-MM-dd"
@@ -155,6 +154,12 @@ export default function AddMarkerPopupFN(props) {
             <option value="GALICIAN">Galicyjski</option>
             <option value="OTHER">Inne</option>
           </select>
+          <textarea
+            className='AddMarkerDescTextarea'
+            placeholder="Opis"
+            value={description}
+            onChange={handleDescriptionChange}
+          />
           <input className='MarkerFileInput' type="file" accept="image/*" onChange={handleFileChange} />
         </div>
         <button className="SubmitButton" onClick={handleSubmit}>Prześlij</button>

@@ -70,7 +70,7 @@ export default function EditUserPopup(props) {
               </div>
               </p>
               
-              <button onClick={handleSubmit}>Submit</button>
+              <button onClick={handleSubmit}>Prześlij zmiany</button>
               <br/>
               <button onClick={handleDelete} className="DeleteButton">
                   <span role="img" aria-label="Delete">🗑️</span> Usuń

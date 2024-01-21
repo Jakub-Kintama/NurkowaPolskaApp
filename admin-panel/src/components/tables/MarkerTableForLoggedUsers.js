@@ -1,8 +1,9 @@
 import React, {useState} from "react";
 import AddMarkerPopupFN from "../popups/AddMarkerPopup";
-import { crayfishTypeSwitch, sortMarkers, generateTableHeaders, handleHeaderClick, handleDetailsClick, handleCheckboxChange, getSortedFilteredMarkers } from "../functions";
+import { crayfishTypeSwitch, sortMarkers, generateTableHeaders, handleHeaderClick, handleDetailsClick, handleCheckboxChange, getSortedFilteredMarkers, getSortedFilteredMarkersFromRange } from "../functions";
 import DetailsPopupWithEditing from "../popups/DetailsPopupWithEditing";
 import YearPicker from "../other/YearPicker";
+import PageChooser from "../other/PageChooser";
 
 export default function MarkerTableForLoggedUsers({markers, token, email, role, refreshTable, downloadTrigger, selectedMarkers, setSelectedMarkers}) {
 
@@ -12,6 +13,8 @@ export default function MarkerTableForLoggedUsers({markers, token, email, role, 
     const [currentHeader, setCurrentHeader] = useState("Status");
     const [sortAs, setSortAs] = useState("asc");
     const [selectedYear, setSelectedYear] = useState("");
+
+    const [page, setPage] = useState(1);
 
     const headers = ["Data", "Tytuł", "Typ", "Status"];
 
@@ -28,7 +31,7 @@ export default function MarkerTableForLoggedUsers({markers, token, email, role, 
     return(
     <div className="AdminMarkerList">
         <h2>Lista znaczników:</h2>
-        <YearPicker markers={markers} selectedYear={selectedYear} setSelectedYear={setSelectedYear}/>
+        <YearPicker markers={markers} selectedYear={selectedYear} setSelectedYear={setSelectedYear} setPage={setPage}/>
         <table className="MarkerTable">
             <thead>
             <tr>
@@ -38,7 +41,7 @@ export default function MarkerTableForLoggedUsers({markers, token, email, role, 
             </tr>
             </thead>
             <tbody>
-                {role === "ADMIN" ? getSortedFilteredMarkers(markers, selectedYear, currentHeader, sortAs).map( (marker, index) => (
+                {role === "ADMIN" ? getSortedFilteredMarkersFromRange(markers, selectedYear, currentHeader, sortAs, page).map( (marker, index) => (
                     <tr key={index}>
                         {downloadTrigger ? 
                             <td>
@@ -58,7 +61,7 @@ export default function MarkerTableForLoggedUsers({markers, token, email, role, 
                         </td>
                         <td><button className="TableButton" onClick={ () => handleDetailsClickWrapper(marker) }>Szczegóły</button></td>
                     </tr>
-                )) : getSortedFilteredMarkers(personalMarkers, selectedYear, currentHeader, sortAs).map( (marker, index) => (
+                )) : getSortedFilteredMarkersFromRange(personalMarkers, selectedYear, currentHeader, sortAs, page).map( (marker, index) => (
                     <tr key={index}>
                         {downloadTrigger ? 
                             <td>
@@ -81,6 +84,19 @@ export default function MarkerTableForLoggedUsers({markers, token, email, role, 
                 ))}
             </tbody>  
         </table>
+        {role === "ADMIN" ? 
+        <PageChooser 
+            markers={getSortedFilteredMarkers(markers, selectedYear, currentHeader, sortAs)}
+            page={page}
+            setPage={setPage}
+        />
+        : 
+        <PageChooser 
+            markers={getSortedFilteredMarkers(personalMarkers, selectedYear, currentHeader, sortAs)}
+            page={page}
+            setPage={setPage}
+        />
+        }
         {DetailsPopupButton && (
             <DetailsPopupWithEditing role={role} trigger={DetailsPopupButton} setTrigger={setDetailsPopupButton} marker={markerDetails} token={token} refreshTable={refreshTable}/>
         )}

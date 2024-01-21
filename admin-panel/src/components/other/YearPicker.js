@@ -8,6 +8,7 @@ export default function YearPicker(props) {
 
     const handleChange = (e) => {
         props.setSelectedYear(e.target.value);
+        props.setPage(1);
     }
     
     const generateOptions = () => {

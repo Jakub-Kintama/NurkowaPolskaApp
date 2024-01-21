@@ -122,8 +122,19 @@ export const filterMarkers = (markers, selectedYear) => {
     }
 }
 
+export const getTenMarkersFromRange = (markers, x) => {
+    return markers.slice((x-1) * 10, x * 10);
+}
+
 export const getSortedFilteredMarkers = (markers, selectedYear, header, sortAs) => {
-    return sortMarkers(filterMarkers(markers,selectedYear), header, sortAs);
+    const filteredMarkers = filterMarkers(markers,selectedYear);
+    const sortedFilteredMarkers = sortMarkers(filteredMarkers, header, sortAs)
+    return sortedFilteredMarkers;
+}
+
+export const getSortedFilteredMarkersFromRange = (markers, selectedYear, header, sortAs, page) => {
+    const sortedFilteredMarkers = getSortedFilteredMarkers(markers, selectedYear, header, sortAs)
+    return getTenMarkersFromRange(sortedFilteredMarkers, page);
 }
 
 export const sortUsers = (data, header, sortAs) => {

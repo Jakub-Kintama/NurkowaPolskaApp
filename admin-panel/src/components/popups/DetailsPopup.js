@@ -35,11 +35,10 @@ export default function DetailsPopup(props) {
                                 onClick={openFullScreenImage}
                             />
                         )}
-                        <p><strong>Data dodania: </strong>{props.marker.date}</p>
-                        <p><strong>Typ: </strong>{crayfishTypeSwitch(props.marker.crayfishType)}</p>
-                        {/* <p><strong>Tytuł: </strong>{props.marker.title}</p> */}
-                        <p><strong>Opis: </strong>{props.marker.description}</p>
-                        <p><strong>Dodane przez: </strong>{props.marker.userEmail}</p>
+                        <strong className="DetailsLabel">Data dodania: </strong>{props.marker.date}
+                        <strong className="DetailsLabel">Typ: </strong>{crayfishTypeSwitch(props.marker.crayfishType)}
+                        <strong className="DetailsLabel">Opis: </strong>{props.marker.description}
+                        <strong className="DetailsLabel">Dodane przez: </strong>{props.marker.userEmail}
                     </div>
                 </div>
             </div>

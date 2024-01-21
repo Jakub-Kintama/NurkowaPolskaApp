@@ -148,7 +148,7 @@ export default function DetailsPopupWithEditing(props) {
                 <button onClick={ () => handleClose() } className="CloseButton">Zamknij</button>
                 <h2>{props.marker.title}</h2>
                 <div className="DetailsPopupContent">
-                    <iframe className="DetailsIframe" title={title} src={`https://maps.google.com/maps?q=${props.marker.lat},${props.marker.lng}&z=14&output=embed`} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+                    <iframe className="AdminsDetailsIframe" title={title} src={`https://maps.google.com/maps?q=${props.marker.lat},${props.marker.lng}&z=14&output=embed`} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
                     <div className="Details">
                         {props.marker.image && (
                             <img
@@ -160,30 +160,32 @@ export default function DetailsPopupWithEditing(props) {
                         )}
                         <br/><label htmlFor="dpicker"><strong>Data dodania: </strong></label>
                             <DatePicker
+                                className="SameLengthInputs"
                                 id="dpicker"
                                 selected={date}
                                 onChange={handleDateChange}
                                 dateFormat="yyyy-MM-dd"
                             />
                         
-                        <p><strong>Typ: </strong>
+                        <strong>Typ: </strong>
                             <select value={crayfishType} onChange={handleCrayfishTypeChange}>
                               <option value="SIGNAL">Sygnałowy</option>
                               <option value="AMERICAN">Amerykański</option>
                               <option value="NOBLE">Szlachetny</option>
                               <option value="GALICIAN">Galicyjski</option>
                               <option value="OTHER">Pozostałe</option>
-                            </select>
-                        </p>
-                        <p><strong>Tytuł: </strong><input type="text" value={title} onChange={handleTitleChange}/></p>
-                        <p><strong>Opis: </strong><textarea value={description} onChange={handleDescriptionChange}/></p>
+                        </select>
+                        
+                        <strong>Tytuł: </strong><input className="TitleInput" type="text" value={title} onChange={handleTitleChange}/>
+                        <strong>Opis: </strong><textarea className="DescriptionTextarea" value={description} onChange={handleDescriptionChange}/>
                         {role === "ADMIN" ? 
-                            <p><strong>Status: </strong><button onClick={handleStatusChange}>{verified === true ? "Zweryfikowany" : "Niezweryfikowany" }</button></p>
-                            : <p><strong>Status: </strong>{verified === true ? "Zweryfikowany" : "Niezweryfikowany" }</p>
+                            <><strong>Status: </strong><button className="DetailsButton" onClick={handleStatusChange}>{verified === true ? "Zweryfikowany" : "Niezweryfikowany" }</button></>
+                            : <><strong>Status: </strong>{verified === true ? "Zweryfikowany" : "Niezweryfikowany" }</>
                         }
-                        <p><strong>Dodane przez: </strong>{props.marker.userEmail}</p>
-                        <input className="FileLoader" type="file" accept="image/*" onChange={handleFileChange} /><br/>
-                        <button onClick={handleSubmit}>Prześlij zmiany</button>
+                        <strong className="AddedBy">Dodane przez: </strong>{props.marker.userEmail}
+                        <strong className="ChangePhoto">Zmień zdjęcie:</strong>
+                        <input className="FileLoader" type="file" accept="image/*" onChange={handleFileChange} />
+                        <button className="DetailsButton" onClick={handleSubmit}>Prześlij zmiany</button>
                     </div>
                 </div>
                 <button onClick={handleDelete} className="DeleteButton">

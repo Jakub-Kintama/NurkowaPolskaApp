@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import UserTable from "../tables/UserTable";
 import MarkerTableForLoggedUsers from "../tables/MarkerTableForLoggedUsers";
 
-export default function AdminView({markers, token, email, refreshTable, downloadTrigger, selectedMarkers, setSelectedMarkers, handleDownload}) {
+export default function AdminView({markers, token, email, refreshTable, downloadTrigger, selectedMarkers, setSelectedMarkers}) {
 
     const [markersVisible, setMarkersVisible] = useState(true);
     const [usersVisible, setUsersVisible] = useState(false);
@@ -29,8 +29,7 @@ export default function AdminView({markers, token, email, refreshTable, download
                     refreshTable={refreshTable}
                     downloadTrigger={downloadTrigger}
                     selectedMarkers={selectedMarkers} 
-                    setSelectedMarkers={setSelectedMarkers} 
-                    handleDownload={handleDownload}
+                    setSelectedMarkers={setSelectedMarkers}
                 />
             )}
             {usersVisible && (

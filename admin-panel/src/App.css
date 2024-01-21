@@ -43,15 +43,49 @@ button {
 #exportChosenButton {
   margin-right: 5px;
 }
+input[type="file"] {
+  box-shadow: none;
+}
 input[type="checkbox"] {
   height: 17px;
   width: 17px;
 }
-input,
+.SameLengthInputs {
+  width: 150px;
+}
+input[type="text"],
+input[type="password"],
 select {
   height: 20px;
-  width: 150px;
+  min-width: 150px;
   margin-bottom: 10px;
+  border-radius: 4px;
+  padding: 4px;
+  border: none;
+}
+.TitleInput {
+  min-width: 150px;
+  width: auto;
+}
+.DetailsPopupInner,
+.DetailsPopup,
+.Popup,
+.PopupInner,
+input[type="text"],
+input[type="password"],
+.GoogleLoginImg,
+select,
+textarea {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.192);
+}
+select {
+  height: 30px;
+  width: 158px;
+  padding: 5px;
+  border-radius: 4px;
+}
+.GoogleLoginImg {
+  width: 200px;
 }
 input[type="file"] {
   height: auto;
@@ -62,14 +96,20 @@ input[type="file"] {
   margin-left: 45px;
 }
 textarea {
-  height: auto;
-  width: auto;
   margin-bottom: 10px;
+  resize: none;
+  border: none;
+}
+textarea::-webkit-scrollbar {
+  width: 0px;
 }
 .TableButton,
 .TableAddButton {
   width: 100%;
   height: 100%;
+}
+.DetailsButton {
+  width: 150px;
 }
 .TableAddButton {
   color: #333;
@@ -235,21 +275,30 @@ a:hover {
   width: auto;
   min-width: 50%;
   max-width: 80%;
-  height: 70vh;
+  min-height: 68vh;
+  max-height: 79vh;
   background-color: white;
 }
 .DetailsPopupContent {
   display: flex;
 }
-.DetailsIframe {
+.DetailsIframe,
+.AdminsDetailsIframe {
   min-width: 55%;
   height: 50vh;
   border: 0;
+}
+.AdminsDetailsIframe {
+  margin-top: 6vh;
 }
 .Details {
   margin-left: 20px;
   text-align: left;
   overflow-wrap: break-word;
+}
+.Details {
+  display: flex;
+  flex-direction: column;
 }
 .UnverifiedText {
   color: red;
@@ -265,14 +314,34 @@ a:hover {
   width: 100%;
 }
 .RadioContainer {
-  margin-left: -25px;
+  margin-left: -18px;
 }
 .RadioContainerUser {
-  margin-left: -33px;
+  margin-left: -25px;
 }
 .RadioContainer label,
 .RadioContainerUser label {
-  margin-bottom: 0;
+  margin-bottom: 10px;
+  margin-left: 10px;
+}
+input[type="radio"] {
+  margin-bottom: 10px;
+  height: 20px;
+  width: 20px;
+}
+.DescriptionTextarea {
+  width: 100%;
+  height: 50px;
+}
+.AddMarkerDescTextarea {
+  width: 270px;
+  height: 50px;
+}
+.AddedBy {
+  margin-top: 10px;
+}
+.ChangePhoto {
+  margin-top: 10px;
 }
 .FullScreenImageOverlay {
   position: fixed;
@@ -297,13 +366,16 @@ a:hover {
 .FileLoader {
   margin-bottom: 5px;
 }
-.DetailsPopupInner,
-.DetailsPopup,
-.Popup,
-.PopupInner {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+.InfoLink {
+  margin-bottom: 20px;
 }
-@media only screen and (max-width: 600px) {
+.JWTInputs {
+  margin-top: 15px;
+}
+.MarkerFileInput {
+  margin-top: 15px;
+}
+@media only screen and (max-width: 670px) {
   .Topnav {
     height: auto;
   }
@@ -338,7 +410,7 @@ a:hover {
     overflow-y: auto;
   }
 }
-@media only screen and (max-height: 800px) {
+@media only screen and (max-height: 900px) {
   .DetailsPopupInner {
     max-height: 90vh;
     /* Dla małych ekranów zmniejszamy maksymalną wysokość */

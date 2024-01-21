@@ -1,8 +1,9 @@
 import React, {useState} from "react";
 import DetailsPopup from "../popups/DetailsPopup";
-import { crayfishTypeSwitch, sortMarkers, generateTableHeaders, handleHeaderClick, handleDetailsClick, handleCheckboxChange } from "../functions";
+import { crayfishTypeSwitch, getSortedFilteredMarkers, generateTableHeaders, handleHeaderClick, handleDetailsClick, handleCheckboxChange } from "../functions";
+import YearPicker from "../other/YearPicker";
 
-export default function MarkerTable({markers, downloadTrigger, selectedMarkers, setSelectedMarkers, handleDownload}) {
+export default function MarkerTable({markers, downloadTrigger, selectedMarkers, setSelectedMarkers}) {
 
     const [DetailsPopupButton, setDetailsPopupButton] = useState(false);
     const [markerDetails, setMarkerDetails] = useState({id: "", lat: "", lng: "", crayfishType: "", date: "", title: "", description: "", userEmail: ""});
@@ -10,6 +11,8 @@ export default function MarkerTable({markers, downloadTrigger, selectedMarkers, 
     const headers = ["Data","Tytuł", "Typ", "Status", ""];
     const [sortAs, setSortAs] = useState("asc");
     const [currentHeader, setCurrentHeader] = useState("Status");
+
+    const [selectedYear, setSelectedYear] = useState("");
 
     const handleHeaderClickWrapper = (header) => {
         handleHeaderClick(header, currentHeader, sortAs, setCurrentHeader, setSortAs);
@@ -22,6 +25,7 @@ export default function MarkerTable({markers, downloadTrigger, selectedMarkers, 
     return(
     <div className="MarkerList">
         <h2>Lista znaczników:</h2>
+        <YearPicker markers={markers} selectedYear={selectedYear} setSelectedYear={setSelectedYear}/>
         <table className="MarkerTable">
             <thead className="NormalTableThead">
                 <tr>
@@ -30,7 +34,7 @@ export default function MarkerTable({markers, downloadTrigger, selectedMarkers, 
                 </tr>
             </thead>
             <tbody>
-                {sortMarkers(markers, currentHeader, sortAs).map( (marker, index) => (
+                {getSortedFilteredMarkers(markers, selectedYear, currentHeader, sortAs).map( (marker, index) => (
                     <tr key={index}>
                         {downloadTrigger ? 
                             <td>

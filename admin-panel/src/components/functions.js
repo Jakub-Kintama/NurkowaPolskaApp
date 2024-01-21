@@ -83,7 +83,6 @@ export const handleDetailsClick = (marker, setDetailsPopupButton, setMarkerDetai
 };
 
 export const sortMarkers = (data, header, sortAs) => {
-    data.sort( (a,b) => b.date.localeCompare(a.date))
     switch(header){
         case "Status":
             if(sortAs === "asc"){
@@ -103,17 +102,30 @@ export const sortMarkers = (data, header, sortAs) => {
             }
             return data.sort( (a,b) => b.date.localeCompare(a.date));
 
-        case "Koordynaty":
+        case "Tytuł":
             if(sortAs === "asc"){
-                return data.sort( (a,b) => a.mapMarker.position.lat - b.mapMarker.position.lat);
+                return data.sort( (a,b) => a.mapMarker.title.localeCompare(b.mapMarker.title));
             }
-            return data.sort( (a,b) => b.mapMarker.position.lat - a.mapMarker.position.lat);
+            return data.sort( (a,b) => b.mapMarker.title.localeCompare(a.mapMarker.title));
 
         default:
             return data.sort( (a,b) => a.verified - b.verified);
     }
     
 };
+
+export const filterMarkers = (markers, selectedYear) => {
+    if (selectedYear === "") {
+        return markers;
+    } else {
+        return markers.filter((marker) => marker.date.substring(0,4) === selectedYear);
+    }
+}
+
+export const getSortedFilteredMarkers = (markers, selectedYear, header, sortAs) => {
+    return sortMarkers(filterMarkers(markers,selectedYear), header, sortAs);
+}
+
 export const sortUsers = (data, header, sortAs) => {
     data.sort( (a,b) => a.email.localeCompare(b.email));
     switch(header){

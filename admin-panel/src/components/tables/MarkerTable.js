@@ -1,15 +1,18 @@
 import React, {useState} from "react";
 import DetailsPopup from "../popups/DetailsPopup";
-import { crayfishTypeSwitch, sortMarkers, generateTableHeaders, handleHeaderClick, handleDetailsClick, handleCheckboxChange } from "../functions";
+import { crayfishTypeSwitch, getSortedFilteredMarkers, generateTableHeaders, handleHeaderClick, handleDetailsClick, handleCheckboxChange } from "../functions";
+import YearPicker from "../other/YearPicker";
 
-export default function MarkerTable({markers, downloadTrigger, selectedMarkers, setSelectedMarkers, handleDownload}) {
+export default function MarkerTable({markers, downloadTrigger, selectedMarkers, setSelectedMarkers}) {
 
     const [DetailsPopupButton, setDetailsPopupButton] = useState(false);
     const [markerDetails, setMarkerDetails] = useState({id: "", lat: "", lng: "", crayfishType: "", date: "", title: "", description: "", userEmail: ""});
     
-    const headers = ["Data","Tytuł", "Typ", "Status"];
+    const headers = ["Data","Tytuł", "Typ", "Status", ""];
     const [sortAs, setSortAs] = useState("asc");
     const [currentHeader, setCurrentHeader] = useState("Status");
+
+    const [selectedYear, setSelectedYear] = useState("");
 
     const handleHeaderClickWrapper = (header) => {
         handleHeaderClick(header, currentHeader, sortAs, setCurrentHeader, setSortAs);
@@ -22,15 +25,16 @@ export default function MarkerTable({markers, downloadTrigger, selectedMarkers, 
     return(
     <div className="MarkerList">
         <h2>Lista znaczników:</h2>
+        <YearPicker markers={markers} selectedYear={selectedYear} setSelectedYear={setSelectedYear}/>
         <table className="MarkerTable">
-            <thead>
+            <thead className="NormalTableThead">
                 <tr>
-                    {downloadTrigger ? <th><button onClick={handleDownload}>Pobierz</button></th> : ""}
+                    {downloadTrigger ? <p/> : ""}
                     {generateTableHeaders(headers, currentHeader, sortAs, handleHeaderClickWrapper)}
                 </tr>
             </thead>
             <tbody>
-                {sortMarkers(markers, currentHeader, sortAs).map( (marker, index) => (
+                {getSortedFilteredMarkers(markers, selectedYear, currentHeader, sortAs).map( (marker, index) => (
                     <tr key={index}>
                         {downloadTrigger ? 
                             <td>
@@ -42,7 +46,6 @@ export default function MarkerTable({markers, downloadTrigger, selectedMarkers, 
                                 />
                             </td> : ""}
                         <td>{marker.date}</td>
-                        {/* <td>{marker.mapMarker.position.lat}, {marker.mapMarker.position.lng}</td> */}
                         <td>{marker.mapMarker.title}</td>
                         <td>{crayfishTypeSwitch(marker.CrayfishType)}</td>
                         <td className={marker.verified ? "" : "UnverifiedText"}>

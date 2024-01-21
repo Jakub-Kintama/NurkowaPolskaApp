@@ -48,8 +48,7 @@ export default function EditUserPopup(props) {
                 <input type="text" onChange={handleInputChange} value={email}></input>
               </p>
               <p>
-                <strong>Rola: </strong>
-                <label htmlFor="ADMIN">Administrator</label>
+              <div className="RadioContainer">
                 <input
                   type="radio"
                   id="ADMIN"
@@ -57,7 +56,9 @@ export default function EditUserPopup(props) {
                   checked={role === "ADMIN"}
                   onChange={handleRoleChange}
                 ></input>
-                <label htmlFor="USER">Użytkownik</label>
+                <label htmlFor="ADMIN">Administrator</label>
+              </div>
+              <div className="RadioContainerUser">
                 <input
                   type="radio"
                   id="USER"
@@ -65,9 +66,11 @@ export default function EditUserPopup(props) {
                   checked={role === "USER"}
                   onChange={handleRoleChange}
                 ></input>
+                <label htmlFor="USER">Użytkownik</label>
+              </div>
               </p>
               
-              <button onClick={handleSubmit}>Submit</button>
+              <button onClick={handleSubmit}>Prześlij zmiany</button>
               <br/>
               <button onClick={handleDelete} className="DeleteButton">
                   <span role="img" aria-label="Delete">🗑️</span> Usuń

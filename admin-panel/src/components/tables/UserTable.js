@@ -51,14 +51,14 @@ export default function UserTable( {token, email} ) {
                 <thead>
                     <tr>
                         {generateTableHeaders(headers, currentHeader, sortAs, handleHeaderClickWrapper)}
-                        <th><button onClick={() => setAddUserPopupButton(true)} className="TableButton">Dodaj</button></th>
+                        <th><button onClick={() => setAddUserPopupButton(true)} className="TableAddButton">Dodaj</button></th>
                     </tr>
                 </thead>
                 <tbody>
                     {sortUsers(users, currentHeader, sortAs).map( (user, index) => (
                         <tr key={index} className="UserRow">
                             <td>{user.email}</td>
-                            <td>{user.role === "ADMIN" ? "Administrator" : "Użytkownik"}</td>
+                            <td className={user.role === "ADMIN" ? "AdminRole" : "UserRole"}>{user.role === "ADMIN" ? "Administrator" : "Użytkownik"}</td>
                             <td><button onClick={() => handleEditButton(user)} className="TableButton">Edytuj</button></td>
                         </tr>
                     ))}

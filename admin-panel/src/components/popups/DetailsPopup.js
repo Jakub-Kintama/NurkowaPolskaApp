@@ -16,7 +16,7 @@ export default function DetailsPopup(props) {
         <div className="DetailsPopup">
             <div className="DetailsPopupInner">
                 <button onClick={() => props.setTrigger(false)} className="CloseButton">Zamknij</button>
-                <h2>Znacznik</h2>
+                <h2>{props.marker.title}</h2>
                 <div className="DetailsPopupContent">
                     <iframe
                         className="DetailsIframe"
@@ -37,7 +37,7 @@ export default function DetailsPopup(props) {
                         )}
                         <p><strong>Data dodania: </strong>{props.marker.date}</p>
                         <p><strong>Typ: </strong>{crayfishTypeSwitch(props.marker.crayfishType)}</p>
-                        <p><strong>Tytuł: </strong>{props.marker.title}</p>
+                        {/* <p><strong>Tytuł: </strong>{props.marker.title}</p> */}
                         <p><strong>Opis: </strong>{props.marker.description}</p>
                         <p><strong>Dodane przez: </strong>{props.marker.userEmail}</p>
                     </div>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import MarkerTable from "../tables/MarkerTable";
 import MarkerTableForLoggedUsers from "../tables/MarkerTableForLoggedUsers";
 
-export default function LoggedUserView({markers, token, email, refreshTable, downloadTrigger, selectedMarkers, setSelectedMarkers, handleDownload}) {
+export default function LoggedUserView({markers, token, email, refreshTable, downloadTrigger, selectedMarkers, setSelectedMarkers}) {
 
     const [userMarkersVisible, setUserMarkersVisible] = useState(true);
     const [allMarkersVisible, setAllMarkersVisible] = useState(false);
@@ -29,8 +29,7 @@ export default function LoggedUserView({markers, token, email, refreshTable, dow
                     refreshTable={refreshTable}
                     downloadTrigger={downloadTrigger}
                     selectedMarkers={selectedMarkers} 
-                    setSelectedMarkers={setSelectedMarkers} 
-                    handleDownload={handleDownload}
+                    setSelectedMarkers={setSelectedMarkers}
                 />
             )}
             {allMarkersVisible && (
@@ -38,7 +37,6 @@ export default function LoggedUserView({markers, token, email, refreshTable, dow
                     downloadTrigger={downloadTrigger}
                     selectedMarkers={selectedMarkers} 
                     setSelectedMarkers={setSelectedMarkers}
-                    handleDownload={handleDownload}
                 />
             )}
             

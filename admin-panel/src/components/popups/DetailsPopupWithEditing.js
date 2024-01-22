@@ -148,7 +148,9 @@ export default function DetailsPopupWithEditing(props) {
                 <button onClick={ () => handleClose() } className="CloseButton">Zamknij</button>
                 <h2>{props.marker.title}</h2>
                 <div className="DetailsPopupContent">
-                    <iframe className="AdminsDetailsIframe" title={title} src={`https://maps.google.com/maps?q=${props.marker.lat},${props.marker.lng}&z=14&output=embed`} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+                    <div className="IframeDiv">
+                        <iframe className="AdminsDetailsIframe" title={title} src={`https://maps.google.com/maps?q=${props.marker.lat},${props.marker.lng}&z=14&output=embed`} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
                     <div className="Details">
                         {props.marker.image && (
                             <img

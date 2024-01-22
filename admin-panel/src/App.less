@@ -81,7 +81,7 @@ input[type="text"],input[type="password"] , select  {
 
 .TitleInput {
     min-width: 150px;
-    width: auto;
+    width: 90%;
 }
 
 .DetailsPopupInner, .DetailsPopup, .Popup, .PopupInner, input[type="text"],input[type="password"], .GoogleLoginImg, select, textarea {
@@ -113,6 +113,7 @@ textarea {
     margin-bottom: 10px;
     resize: none;
     border: none;
+    padding: 4px;
 }
 
 textarea::-webkit-scrollbar {
@@ -188,6 +189,7 @@ button:hover {
     float: right;
     background-color: @closeBtnColor;
     font-size: 14px;
+    border-top: 10px;
 }
   
 .DeleteButton:hover, .CloseButton:hover {
@@ -337,23 +339,32 @@ a:hover {
     display: flex;
 }
 
+.IframeDiv {
+    max-width: 55%;
+    width: 55%;
+}
+
 .DetailsIframe, .AdminsDetailsIframe {
-    min-width: 55%;
-    height: 50vh;
+    width: 100%;
+    height: 85%;
     border: 0;
+    max-width: 100%;
 }
 
 .AdminsDetailsIframe {
     margin-top: 6vh;
 }
 
-.Details {
-    margin-left: 20px;
-    text-align: left;
-    overflow-wrap: break-word;
+.DetailsIframe {
+    height: 50vh;
 }
 
 .Details {
+    width: 50%;
+    max-width: 50%;
+    margin-left: 20px;
+    text-align: left;
+    overflow-wrap: break-word;
     display: flex;
     flex-direction: column;
 }
@@ -393,7 +404,7 @@ input[type="radio"] {
 }
 
 .DescriptionTextarea {
-    width: 100%;
+    width: 90%;
     height: 50px;
 }
 
@@ -422,7 +433,8 @@ input[type="radio"] {
 }
 
 .MarkerImg {
-    width: 50%;
+    width: max-content;
+    max-height: 120px;
     cursor: pointer;
 }
 
@@ -461,7 +473,7 @@ input[type="radio"] {
     margin-right: 5px;
 }
 
-@media only screen and (max-width: 670px) {
+@media only screen and (max-width: 720px) {
     .Topnav {
         height: auto;
     }

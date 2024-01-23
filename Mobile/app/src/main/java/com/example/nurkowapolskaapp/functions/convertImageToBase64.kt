@@ -9,6 +9,7 @@ import android.util.Base64
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 
+// convert Image to Base64 format so it can be stored in database
 fun convertImageToBase64(uri: Uri?, context: Context): String? {
     try {
         val contentResolver: ContentResolver = context.contentResolver

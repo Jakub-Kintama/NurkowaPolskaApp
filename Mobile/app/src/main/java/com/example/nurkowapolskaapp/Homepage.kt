@@ -48,11 +48,7 @@ fun Homepage(navController: NavController, isUserSignedIn: Boolean, showSignInSh
                 }
             }) {
             Text(
-                text = if (isUserSignedIn) {
-                    "Lista Znaczników"
-                } else {
-                    "Zaloguj się"
-                },
+                text = "Lista Znaczników",
             )
         }
     }

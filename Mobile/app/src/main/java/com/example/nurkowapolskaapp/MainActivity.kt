@@ -59,7 +59,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         viewModelAuth.initSignInLauncher(this)
-
         viewModelApi.getMarkers()
 
         setContent {
@@ -124,7 +123,7 @@ fun AppScaffold(
         if(showSignInSheet.value) {
             ModalBottomSheet(onDismissRequest = { showSignInSheet.value = false }, sheetState = sheetSignInState) {
                 Box(modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 34.dp)) {
-                   SignInOutButton(activity, viewModelAuth, isUserSignedIn)
+                   SignInOutButton(activity, viewModelAuth, viewModelApi, isUserSignedIn)
                 }
             }
         }
@@ -143,6 +142,7 @@ fun AppScaffold(
 fun SignInOutButton(
     activity: ComponentActivity,
     viewModelAuth: ViewModelAuth,
+    viewModelApi: ViewModelApi,
     isUserSignedIn: Boolean
 ) {
     Column(
@@ -153,7 +153,7 @@ fun SignInOutButton(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (isUserSignedIn) {
-            SignedMessage(viewModelAuth.currentUserDisplayName.value, viewModelAuth)
+            SignedMessage(viewModelAuth.currentUserDisplayName.value, viewModelAuth, viewModelApi)
         } else {
             Text("Zaloguj się Google kontem")
             Button(onClick = { viewModelAuth.startSignIn(activity) }) {
@@ -165,9 +165,10 @@ fun SignInOutButton(
 }
 
 @Composable
-fun SignedMessage(userName: String, viewModelAuth: ViewModelAuth) {
+fun SignedMessage(userName: String, viewModelAuth: ViewModelAuth, viewModelApi: ViewModelApi) {
     Text("Jesteś zalogowany jako: $userName")
     val application = LocalContext.current.applicationContext as Application
+    viewModelApi.exchangeIdTokenForAccessToken(viewModelAuth.currentUserAccessToken.value)
     Button(onClick = {
         viewModelAuth.signOut(application)
     }) {

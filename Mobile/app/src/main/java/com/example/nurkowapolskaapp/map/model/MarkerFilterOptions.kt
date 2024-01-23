@@ -5,5 +5,5 @@ data class MarkerFilterOptions(
     var showOther: Boolean = false,
     var showUnverified: Boolean = false,
     var showVerified: Boolean = true,
-    var dateRange: DateRange? = null
+    var dateRange: DateRange
 )

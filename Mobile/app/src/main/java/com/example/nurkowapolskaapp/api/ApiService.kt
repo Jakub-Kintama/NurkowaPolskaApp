@@ -2,6 +2,7 @@ package com.example.nurkowapolskaapp.api
 
 import com.example.nurkowapolskaapp.map.model.Marker
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -24,6 +25,8 @@ interface ApiService {
     @DELETE("/api/markers/{markerId}")
     fun deleteMarker(@Header("Authorization") authHeader: String, @Path("markerId") markerId: String): Call<Void>
 
-    @PATCH("api/markers")
+    @PATCH("api/admin/markers")
     fun updateMarker(@Header("Authorization") authHeader: String, @Body updatedMarker: RequestBody): Call<Marker>
+//    @PATCH("api/admin/markers")
+//    fun updateMarker(@Header("Authorization") authHeader: String, @Body updatedMarker: RequestBody): Call<Marker>
 }

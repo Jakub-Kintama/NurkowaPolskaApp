@@ -2,7 +2,7 @@ package com.example.nurkowapolskaapp.map.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-typealias customLatLng = com.example.nurkowapolskaapp.map.model.LatLng
+typealias customLatLng = LatLng
 
 data class MapMarker(
     @JsonProperty("position")

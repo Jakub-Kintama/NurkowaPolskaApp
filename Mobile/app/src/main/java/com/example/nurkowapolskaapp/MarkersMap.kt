@@ -19,12 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.nurkowapolskaapp.api.ViewModelApi
+import com.example.nurkowapolskaapp.functions.isDateInRange
 import com.example.nurkowapolskaapp.map.CustomMarkerInfoWindow
 import com.example.nurkowapolskaapp.map.buttons.AddMarker
 import com.example.nurkowapolskaapp.map.buttons.FilterButton
 import com.example.nurkowapolskaapp.map.currentUserLocation
-import com.example.nurkowapolskaapp.map.markerList
 import com.example.nurkowapolskaapp.map.model.CrayfishType
+import com.example.nurkowapolskaapp.map.model.DateRange
 import com.example.nurkowapolskaapp.map.model.Marker
 import com.example.nurkowapolskaapp.map.model.MarkerFilterOptions
 import com.example.nurkowapolskaapp.signin.ViewModelAuth
@@ -48,7 +49,7 @@ fun MarkersMap(
 
     val myLocationEnabled = remember {mutableStateOf(false)}
 
-    val filterOptions = remember {mutableStateOf(MarkerFilterOptions())}
+    val filterOptions = remember {mutableStateOf(MarkerFilterOptions(dateRange = DateRange()))}
 
     val permissionCheck  = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -63,8 +64,6 @@ fun MarkersMap(
         }
     }
 
-
-
     DisposableEffect(context) {
         permissionCheck.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         onDispose {
@@ -72,9 +71,7 @@ fun MarkersMap(
     }
 
     LaunchedEffect(Unit) {
-        if(isUserSignedIn) {
-            viewModelApi.exchangeIdTokenForAccessToken(viewModelAuth.currentUserAccessToken.value)
-        }
+        viewModelApi.getMarkers()
     }
 
     val uiSettings = remember {
@@ -90,7 +87,6 @@ fun MarkersMap(
 
     val showFormWindow = remember { mutableStateOf(false) }
 
-
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(currentUserLocation, 5.5f)
     }
@@ -103,7 +99,9 @@ fun MarkersMap(
                 uiSettings = uiSettings,
                 properties = properties
             ) {
-                for(marker: Marker in markerList) {
+                val filterDateStart = filterOptions.value.dateRange.dateBegin
+                val filterDateEnd = filterOptions.value.dateRange.dateEnd
+                for(marker: Marker in viewModelApi.markerList.value) {
                     Log.d("DATE", "${marker.date}")
                     val position = marker.mapMarker.position
                     var lat: Double
@@ -113,7 +111,8 @@ fun MarkersMap(
                     lat = latString.toDouble()
                     lng = lngString.toDouble()
                     Log.d("position", position.toString())
-                    if(filterOptions.value.showCrayfish) {
+                    if(filterOptions.value.showCrayfish && isDateInRange(marker.date, filterOptions.value.dateRange.dateBegin, filterOptions.value.dateRange.dateEnd
+                    )) {
                         if (marker.CrayfishType != CrayfishType.OTHER && marker.verified) {
                             MarkerInfoWindow(
                                 state = MarkerState(
@@ -161,8 +160,8 @@ fun MarkersMap(
                             }
                         }
                     }
-                    if(filterOptions.value.showOther) {
-                        if(marker.CrayfishType != CrayfishType.OTHER && marker.verified) {
+                    if(filterOptions.value.showOther && isDateInRange(marker.date, filterDateStart, filterDateEnd)) {
+                        if(marker.CrayfishType == CrayfishType.OTHER && marker.verified) {
                             MarkerInfoWindow(
                                 state = MarkerState(position = LatLng(lat, lng)),
                                 icon = (BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)),

@@ -4,6 +4,7 @@ import android.content.Context
 import android.location.Geocoder
 import java.util.Locale
 
+// get current address name of device
 // TODO: Find alternative to deprecated method
 @Suppress("DEPRECATION")
 fun getAddress(lat: Double, lng: Double, context: Context): String {

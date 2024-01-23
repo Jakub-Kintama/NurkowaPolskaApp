@@ -1,6 +1,5 @@
 package com.example.nurkowapolskaapp.map.buttons
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -38,10 +37,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.example.nurkowapolskaapp.functions.convertMillisToLocalDate
 import com.example.nurkowapolskaapp.functions.millisToDateString
 import com.example.nurkowapolskaapp.map.model.DateRange
 import com.example.nurkowapolskaapp.map.model.MarkerFilterOptions
@@ -55,7 +54,9 @@ fun FilterButton(
     val openModalBottomSheet = remember { mutableStateOf(false) }
     val sheetStateModalBottom = rememberModalBottomSheetState()
 
-    val chosenDates = remember { mutableStateOf<Pair<String, String?>>("dd/mm/yyyy" to "dd/mm/yyyy") }
+    val dateBegin = DateRange().dateBegin
+    val dateEnd = DateRange().dateEnd
+    val chosenDates = remember { mutableStateOf<Pair<String, String?>>("$dateBegin" to "$dateEnd") }
 
     val state = rememberDateRangePickerState(
         initialDisplayMode = DisplayMode.Picker,
@@ -162,10 +163,10 @@ fun FilterButton(
                                 Button(onClick = { openModalBottomSheet.value = true }) {
                                     Text("Od: ${chosenDates.value.first} do: ${chosenDates.value.second}")
                                 }
-                                if(filterOptions.value.dateRange != null) {
+                                if(filterOptions.value.dateRange != DateRange()) {
                                     IconButton(onClick = {
-                                        chosenDates.value = Pair("dd/mm/yyyy", "dd/mm/yyyy")
-                                        filterOptions.value = MarkerFilterOptions(dateRange = null)
+                                        chosenDates.value = Pair("$dateBegin", "$dateEnd")
+                                        filterOptions.value = filterOptions.value.copy(dateRange = DateRange())
                                     }) {
                                         Icon(
                                             imageVector = Icons.Filled.Clear,
@@ -188,7 +189,7 @@ fun FilterButton(
                     ) {
                         DateRangePicker(
                             state = state,
-                            title = { Text(text = "Wybierz daty") },
+                            title = { Text(text = "     Wybierz daty") },
                             dateFormatter = DatePickerDefaults.dateFormatter("dd MM yyyy", "dd MM yyyy", "dd MM yyyy"),
                             headline = {
                                 val startDateString = state.selectedStartDateMillis?.let {
@@ -199,21 +200,24 @@ fun FilterButton(
                                 }
                                 val startDateLong = state.selectedStartDateMillis
                                 val endDateLong = state.selectedEndDateMillis
-
                                 // Filter dates values
-                                filterOptions.value.dateRange = DateRange(
-                                    dateBegin = startDateLong ?: 0L,
-                                    dateEnd = endDateLong ?: 0L
-                                )
+                                startDateLong?.let {
+                                    endDateLong?.let {
+                                        filterOptions.value = filterOptions.value.copy(dateRange = DateRange(
+                                            dateBegin = convertMillisToLocalDate(startDateLong),
+                                            dateEnd = convertMillisToLocalDate(endDateLong)
+                                        ))
+                                    }
+                                }
 
                                 // Visual dates for button
                                 chosenDates.value = Pair(
-                                    startDateString ?: "dd/MM/yyyy",
-                                    endDateString ?: "dd/MM/yyyy"
+                                    startDateString ?: "$dateBegin",
+                                    endDateString ?: "$dateEnd"
                                 )
 
-                                Log.d("DATA_START", "${filterOptions.value.dateRange!!.dateBegin}")
-                                Log.d("DATA_END", "${filterOptions.value.dateRange!!.dateEnd}")
+                                Log.d("DATA_START", "${filterOptions.value.dateRange.dateBegin}")
+                                Log.d("DATA_END", "${filterOptions.value.dateRange.dateEnd}")
                                 Row {
                                     Spacer(modifier = Modifier.width(26.dp))
                                     Text("Od: ${startDateString ?: "dd/mm/yyyy"} do ${endDateString ?: "dd/mm/yyyy"}")
@@ -226,18 +230,4 @@ fun FilterButton(
             }
         }
     }
-}
-
-@SuppressLint("UnrememberedMutableState")
-@Preview
-@Composable
-fun FilterButtonPreview() {
-    val filterOptions = mutableStateOf(MarkerFilterOptions(
-        showCrayfish = true,
-        showOther = false,
-        showUnverified = true,
-        dateRange = null)
-    )
-
-    FilterButton(filterOptions)
 }

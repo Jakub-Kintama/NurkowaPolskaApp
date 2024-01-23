@@ -171,7 +171,7 @@ fun AddMarker(
                             var selectedCrayfishTypeString by remember { mutableStateOf(crayfishTypesString[0]) }
 
                             if (selectedMarkerType == MarkerType.CRAYFISH) {
-                                Spacer(modifier = Modifier.height(25.dp))
+                                Spacer(modifier = Modifier.height(12.dp))
                                 Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 
                                     Text("Typ raka:")
@@ -333,7 +333,7 @@ fun AddMarker(
                                                                 image = image,
                                                             )
                                                             Log.d("MARKER", "$markerObject")
-                                                            viewModelApi.addMarker(markerObject)
+                                                            viewModelApi.addMarker(markerObject, viewModelApi)
                                                             openFormWindow.value = false
                                                         }
                                                     }

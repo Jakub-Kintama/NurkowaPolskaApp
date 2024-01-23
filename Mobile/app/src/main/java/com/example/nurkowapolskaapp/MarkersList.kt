@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -43,6 +44,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
@@ -52,6 +54,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import com.example.nurkowapolskaapp.api.ViewModelApi
 import com.example.nurkowapolskaapp.map.model.CrayfishType
 import com.example.nurkowapolskaapp.map.model.MapMarker
@@ -60,12 +63,14 @@ import com.example.nurkowapolskaapp.map.model.MarkerType
 import com.example.nurkowapolskaapp.functions.base64ToBitmap
 import com.example.nurkowapolskaapp.map.CircleShape
 import com.example.nurkowapolskaapp.map.markerImage
-import com.example.nurkowapolskaapp.map.markerList
 import com.example.nurkowapolskaapp.signin.ViewModelAuth
 import java.time.LocalDate
 
 @Composable
 fun MarkersList(viewModelAuth: ViewModelAuth, viewModelApi: ViewModelApi) {
+    LaunchedEffect(viewModelApi) {
+        viewModelApi.getMarkers()
+    }
     Column(modifier = Modifier.fillMaxSize()) {
         Row(modifier = Modifier
             .fillMaxWidth()
@@ -74,7 +79,7 @@ fun MarkersList(viewModelAuth: ViewModelAuth, viewModelApi: ViewModelApi) {
         }
         Row(modifier = Modifier.fillMaxWidth()) {
             LazyColumn {
-                this.items(markerList) { marker ->
+                this.items(viewModelApi.markerList.value) { marker ->
                     if(marker.userEmail == viewModelAuth.currentUserMail.value) {
                         Column(modifier = Modifier.padding(8.dp, 4.dp)) {
                             EditMarkerInfoWindow(
@@ -155,6 +160,10 @@ fun MarkerDescription(
     val showEditMarker = remember {
         mutableStateOf(false)
     }
+
+    val openAlertDialogWindow = remember {
+        mutableStateOf(false)
+    }
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
@@ -199,7 +208,7 @@ fun MarkerDescription(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ){
-        Button(onClick = { marker.id?.let { viewModelApi.deleteMarker(it) } }) {
+        Button(onClick = { openAlertDialogWindow.value = true }) {
             Text("Usuń znacznik")
         }
         Button(onClick = { showEditMarker.value = !showEditMarker.value }) {
@@ -208,7 +217,44 @@ fun MarkerDescription(
         if(showEditMarker.value) {
             UpdateMarkerInfo(showEditMarker = showEditMarker, marker = marker, viewModelApi = viewModelApi)
         }
+        if(openAlertDialogWindow.value) {
+            val markerId = marker.id
+            DeleteMarkerAlertDialog(openAlertDialogWindow, markerId, viewModelApi)
+        }
     }
+}
+
+@Composable
+fun DeleteMarkerAlertDialog(
+    openAlertDialogWindow: MutableState<Boolean>,
+    markerId: String?,
+    viewModelApi: ViewModelApi
+) {
+    AlertDialog(
+        onDismissRequest = { openAlertDialogWindow.value = false },
+        title = { Text("Potwierdź usunięcie") },
+        text = { Text("Jesteś pewny że chcesz usunąć ten znacznik? Ten proces jest nieodwracalny") },
+        confirmButton = {
+            Button(
+                onClick = {
+                    markerId?.let { viewModelApi.deleteMarker(it, viewModelApi) }
+                    viewModelApi.getMarkers()
+                    openAlertDialogWindow.value = false
+                }
+            ) {
+                Text("Usuń")
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick = {
+                    openAlertDialogWindow.value = false
+                }
+            ) {
+                Text("Anuluj")
+            }
+        }
+    )
 }
 
 
@@ -341,7 +387,7 @@ fun UpdateMarkerInfo(
 
                                 if (selectedMarkerType == MarkerType.CRAYFISH) {
                                     Spacer(modifier = Modifier.height(25.dp))
-                                    Column(modifier = Modifier.fillMaxWidth()) {
+                                    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 
                                         Text("Typ raka:")
                                         ExposedDropdownMenuBox(
@@ -446,8 +492,9 @@ fun UpdateMarkerInfo(
                                 Button(
                                     onClick = {
                                         if(description.isNotEmpty()) {
-                                            val image = markerImage(name = marker.image?.name, data = marker.image?.data)
+                                            val image = markerImage(name = marker.userEmail, data = marker.image?.data)
                                             val markerObject = Marker(
+                                                id = marker.id,
                                                 mapMarker = MapMarker(
                                                     position = marker.mapMarker.position,
                                                     title = title,
@@ -460,7 +507,7 @@ fun UpdateMarkerInfo(
                                                 image = image,
                                             )
                                             Log.d("MARKER", "$markerObject")
-                                            viewModelApi.updateMarker(markerObject)
+                                            viewModelApi.updateMarker(markerObject, viewModelApi)
                                             showEditMarker.value = false
                                         } else {
                                             Toast.makeText(
@@ -470,7 +517,7 @@ fun UpdateMarkerInfo(
                                             ).show()
                                         }
                                     }) {
-                                    Text(text = "Dodaj znacznik")
+                                    Text(text = "Edytuj znacznik")
                                 }
                             }
                         }

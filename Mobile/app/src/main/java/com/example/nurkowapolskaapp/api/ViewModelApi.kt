@@ -1,13 +1,19 @@
 package com.example.nurkowapolskaapp.api
 
 import android.util.Log
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.nurkowapolskaapp.map.model.Marker
-import com.example.nurkowapolskaapp.map.markerList
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,8 +31,10 @@ class ViewModelApi : ViewModel() {
         return jSessionId
     }
 
-    private val baseUrl = "http://192.168.1.73.nip.io:8080/"
-//    private val baseUrl = "http://172.19.100.10.nip.io:8080/"
+    private val _markerList = mutableStateOf<List<Marker>>(emptyList())
+    val markerList: State<List<Marker>> = _markerList
+
+    private val baseUrl = "http://172.19.100.10.nip.io:8080/"
     private val tag: String = "CHECK_RESPONSE"
 
     private val objectMapper: ObjectMapper = ObjectMapper().registerModule(JavaTimeModule())
@@ -38,20 +46,23 @@ class ViewModelApi : ViewModel() {
 
     fun getMarkers() {
         val fetchService = apiService.create(ApiService::class.java)
-        fetchService.getMarkers().enqueue(object: Callback<List<Marker>> {
-            override fun onResponse(call: Call<List<Marker>>, response: Response<List<Marker>>) {
-                if(response.isSuccessful) {
-                    response.body()?.let {
-                        markerList.addAll(it)
-                    }
-                }
-                Log.i(tag+"_FETCH", "onResponse: isSuccessful")
-            }
 
-            override fun onFailure(call: Call<List<Marker>>, t: Throwable) {
-                Log.e(tag+"_FETCH", "onFailure: ${t.message}")
-            }
-        })
+        viewModelScope.launch {
+            fetchService.getMarkers().enqueue(object: Callback<List<Marker>> {
+                override fun onResponse(call: Call<List<Marker>>, response: Response<List<Marker>>) {
+                    if(response.isSuccessful) {
+                        response.body()?.let {
+                            _markerList.value = it
+                        }
+                    }
+                    Log.i(tag+"_FETCH", "onResponse: isSuccessful")
+                }
+
+                override fun onFailure(call: Call<List<Marker>>, t: Throwable) {
+                    Log.e(tag+"_FETCH", "onFailure: ${t.message}")
+                }
+            })
+        }
     }
 
     fun exchangeIdTokenForAccessToken(idToken: String) {
@@ -68,6 +79,8 @@ class ViewModelApi : ViewModel() {
                 if (response.isSuccessful) {
                     val jwtToken = response.body()?.accessToken
                     jwtToken?.let { setJSessionId(it) }
+                    Log.i(tag + "_EXCHANGE", "${response.code()}")
+                    Log.i(tag + "_EXCHANGE", "${getJSessionId()}")
                     Log.i(tag + "_EXCHANGE", "onResponse: isSuccessful ${response.body()}")
                 } else {
                     Log.i(tag + "_EXCHANGE", "onResponse: isFailure ${response.code()}")
@@ -83,6 +96,7 @@ class ViewModelApi : ViewModel() {
 
     fun addMarker(
         marker: Marker,
+        viewModelApi: ViewModelApi
     ) {
         val addService = apiService.create(ApiService::class.java)
 
@@ -111,7 +125,6 @@ class ViewModelApi : ViewModel() {
         val idToken = getJSessionId()
 
         val authHeader = "Bearer $idToken"
-        Log.d(tag + "_ADD_MARKER", authHeader)
 
         val requestBody = jacksonString.toRequestBody("application/json".toMediaType())
 
@@ -121,7 +134,7 @@ class ViewModelApi : ViewModel() {
             override fun onResponse(call: Call<Marker>, response: Response<Marker>) {
                 if(response.isSuccessful) {
                     Log.i(tag + "_ADD_MARKER", "onResponse: isSuccessful ${response.code()}")
-                    ViewModelApi().getMarkers()
+                    viewModelApi.getMarkers()
                 } else {
                     Log.i(tag + "_ADD_MARKER", "onResponse: notSuccessful ${response.code()}")
                 }
@@ -132,33 +145,34 @@ class ViewModelApi : ViewModel() {
         })
     }
 
-    fun updateMarker(updatedMarker: Marker) {
+    fun updateMarker(updatedMarker: Marker, viewModelApi: ViewModelApi) {
         val updateService = apiService.create(ApiService::class.java)
 
-        val idToken = getJSessionId()
-        val authHeader = "Bearer $idToken"
-
         val jacksonString = """
-            {
-            "_id": ${updatedMarker.id},
-            "mapMarker": {
+    {
+        "_id": "${updatedMarker.id}",
+        "mapMarker": {
             "position": {
-              "lat": ${updatedMarker.mapMarker.position.lat},
-              "lng": ${updatedMarker.mapMarker.position.lng}
+                "lat": ${updatedMarker.mapMarker.position.lat},
+                "lng": ${updatedMarker.mapMarker.position.lng}
             },
             "title": "${updatedMarker.mapMarker.title}",
             "description": "${updatedMarker.mapMarker.description}"
-            },
-            "userEmail": "${updatedMarker.userEmail}",
-            "CrayfishType": "${updatedMarker.CrayfishType}",
-            "date": "${updatedMarker.date}",
-            "verified": ${updatedMarker.verified},
-            "image": {
+        },
+        "userEmail": "${updatedMarker.userEmail}",
+        "CrayfishType": "${updatedMarker.CrayfishType}",
+        "date": "${updatedMarker.date}",
+        "verified": ${updatedMarker.verified},
+        "image": {
             "name": "${updatedMarker.image?.name}",
             "data": "${updatedMarker.image?.data}"
-            }
-            }
-        """.trimIndent()
+        }
+    }
+""".trimIndent()
+
+        val idToken = getJSessionId()
+
+        val authHeader = "Bearer $idToken"
 
         val requestBody = jacksonString.toRequestBody("application/json".toMediaType())
 
@@ -168,19 +182,19 @@ class ViewModelApi : ViewModel() {
             override fun onResponse(call: Call<Marker>, response: Response<Marker>) {
                 if(response.isSuccessful) {
                     Log.i(tag + "_UPDATE_MARKER", "onResponse: isSuccessful ${response.code()}")
-                    ViewModelApi().getMarkers()
+                    Log.i(tag + "_UPDATE_MARKER", "${response.body()}")
+                    viewModelApi.getMarkers()
                 } else {
                     Log.i(tag + "_UPDATE_MARKER", "onResponse: notSuccessful ${response.code()}")
                 }
             }
             override fun onFailure(call: Call<Marker>, t: Throwable) {
-                Log.e(tag + "_ADD_MARKER", "onFailure: ${t.message}")
+                Log.e(tag + "_UPDATE_MARKER", "onFailure: ${t.message}")
             }
         })
-
     }
 
-    fun deleteMarker(markerId: String) {
+    fun deleteMarker(markerId: String, viewModelApi: ViewModelApi) {
         val deleteService = apiService.create(ApiService::class.java)
 
         val idToken = getJSessionId()
@@ -192,7 +206,7 @@ class ViewModelApi : ViewModel() {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if(response.isSuccessful) {
                     Log.i(tag + "_DELETE_MARKER", "onResponse: isSuccessful ${response.code()}")
-                    ViewModelApi().getMarkers()
+                    viewModelApi.getMarkers()
                 } else {
                     Log.i(tag + "_DELETE_MARKER", "onResponse: notSuccessful ${response.code()}")
                 }
